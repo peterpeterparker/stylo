@@ -183,10 +183,14 @@ export const hr: StyloPlugin = {
 };
 ```
 
+In addition, it is worth to note that `createParagraphs` is a promise. This gives you the ability to hi-jack the user flow to trigger some functions in your application before the DOM is actually modified. As for example opening a modal after a plugin as been selected by the user.
+
 Things to pay attention to:
 
 - when users are using your plugins, they should not end up trapped not being able to continue editing and create new paragraphs. That's why we advise to generate an empty `div` (in above example `createEmptyElement`) at the same time as your element(s)
 - Stylo expect all the direct children - the paragraphs - of the editable container to be HTML elements i.e. no text or comment nodes
+
+Find some custom plugins in DeckDeckGo [repo](https://github.com/deckgo/deckdeckgo/tree/main/studio/src/app/plugins).
 
 ## Events
 
