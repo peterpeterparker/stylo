@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  position: relative;
+
+  margin: var(--stylo-color-input-margin, 4px);
+
+  border-radius: var(--stylo-color-input-container-border-radius);
+  border: var(--stylo-color-input-container-border);
+}
+
+span {
+  width: var(--stylo-color-hash-width, 28px);
+  height: var(--stylo-color-hash-height, 28px);
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  background: var(--stylo-color-hash-background, rgb(240, 240, 240) none repeat scroll 0 0);
+  color: var(--stylo-color-hash-color, rgb(152, 161, 164));
+
+  border-radius: var(--stylo-color-hash-border-radius, 4px 0 0 4px);
+}
+
+input {
+  color: var(--stylo-color-input-color, rgb(102, 102, 102));
+  background: var(--stylo-color-input-background, inherit);
+
+  border: none;
+  outline: none;
+
+  height: var(--stylo-color-input-height, 28px);
+
+  box-shadow: var(--stylo-color-input-box-shadow, rgb(240, 240, 240) 0 0 0 1px inset);
+  border-radius: var(--stylo-color-input-border-radius, 0 4px 4px 0);
+
+  padding: var(--stylo-color-input-padding, 0 4px);
+
+  max-width: var(--stylo-color-input-max-width, 136px);
+
+  font-family: var(--stylo-color-input-font-family, inherit);
+}

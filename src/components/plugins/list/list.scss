@@ -1,0 +1,62 @@
+@use "../../../themes/variables";
+@use "../../../themes/button";
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  @include variables.colors;
+
+  /**
+   * @prop --stylo-list-background-active: Background on focus and hover in the list
+   * @default --light (see _variables.scss)
+   */
+  --background-active: var(--stylo-list-background-active, var(--light));
+
+  /**
+   * @prop --stylo-list-color-active: Color on focus and hover in the list
+   * @default --light-contrast (see _variables.scss)
+   */
+  --color-active: var(--stylo-list-color-active, var(--light-contrast));
+}
+
+button {
+  @include button.button;
+
+  justify-content: flex-start;
+  align-items: center;
+
+  font-size: inherit;
+
+  &:hover,
+  &:focus {
+    background: var(--background-active);
+    color: var(--color-active);
+  }
+}
+
+svg,
+span.placeholder {
+  width: 1.4rem;
+  height: 1.4rem;
+
+  border: 1px solid var(--background-active);
+  border-radius: 4px;
+
+  margin: 4px 8px;
+
+  background: var(--white);
+}
+
+svg {
+  padding: 8px;
+}
+
+span.placeholder {
+  padding: 10px 8px 6px;
+  font-size: 0.8rem;
+}
+
+span.placeholder::first-letter {
+  font-size: 125%;
+}

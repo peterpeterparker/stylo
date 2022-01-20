@@ -1,0 +1,21 @@
+@mixin colors {
+  --light: #f4f5f8;
+  --light-contrast: #000000;
+
+  --medium: #6e6d6f;
+  --medium-contrast: #000000;
+
+  --black: #000000;
+  --black-contrast: #ffffff;
+
+  --white: #ffffff;
+  --white-contrast: #000000;
+
+  --highlight: #3880ff;
+  --highlight-rgb: 56, 128, 255;
+  --highlight-contrast: #ffffff;
+}
+
+@mixin effects {
+  --box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.12);
+}

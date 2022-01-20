@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://stylojs.com/sitemap/sitemap-index.xml
+Host: https://stylojs.com

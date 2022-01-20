@@ -1,0 +1,98 @@
+@use "../../../themes/variables";
+
+.host {
+  @include variables.colors;
+}
+
+button {
+  pointer-events: initial;
+  cursor: pointer;
+
+  margin: 0;
+  padding: 4px 6px 6px;
+  height: 40px;
+
+  z-index: var(--stylo-toolbar-button-zindex, 2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 0;
+  color: var(--stylo-toolbar-button-color, black);
+
+  transition: 0.1s background-color, 0.1s border-color, 0.1s fill;
+
+  background: transparent;
+
+  font-size: var(--stylo-toolbar-button-font-size, 1.4rem);
+  font-family: var(--stylo-toolbar-button-font-family, inherit);
+
+  -webkit-touch-callout: none;
+  user-select: none;
+
+  outline: 0;
+
+  &.active {
+    color: var(--stylo-toolbar-button-color-active, var(--highlight));
+  }
+
+  &[disabled] {
+    color: var(--stylo-toolbar-button-color-disabled, var(--light));
+    display: var(--stylo-toolbar-button-display-disabled, none);
+  }
+
+  &.active {
+    > div {
+      background-color: var(--stylo-toolbar-button-color-active, var(--highlight));
+    }
+  }
+
+  &[disabled] {
+    > div {
+      background-color: var(--stylo-toolbar-button-color-disabled, var(--light));
+    }
+  }
+}
+
+:host(.mobile) {
+  button {
+    color: var(--stylo-toolbar-button-mobile-color, black);
+    padding: 0 4px;
+
+    &.active {
+      color: var(--stylo-toolbar-button-mobile-color-active, #3880ff);
+    }
+
+    &[disabled] {
+      color: var(--stylo-toolbar-button-mobile-color-disabled, var(--light));
+    }
+
+    > div {
+      background-color: var(--stylo-toolbar-button-mobile-color, black);
+    }
+
+    &.active {
+      > div {
+        background-color: var(--stylo-toolbar-button-mobile-color-active, #3880ff);
+      }
+    }
+
+    &[disabled] {
+      > div {
+        background-color: var(--stylo-toolbar-button-mobile-color-disabled, var(--light));
+      }
+    }
+  }
+}
+
+::slotted(*) {
+  pointer-events: none;
+}
+
+::slotted(svg) {
+  width: 20px;
+  height: 20px;
+
+  padding-bottom: 2px;
+}

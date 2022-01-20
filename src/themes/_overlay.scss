@@ -1,0 +1,8 @@
+@use "./variables";
+
+@mixin overlay {
+  @include variables.effects;
+
+  box-shadow: var(--stylo-box-shadow, var(--box-shadow));
+  border: var(--stylo-border);
+}

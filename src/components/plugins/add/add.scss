@@ -1,0 +1,39 @@
+@use "../../../themes/variables";
+@use "../../../themes/button";
+
+:host {
+  display: block;
+
+  position: absolute;
+  top: var(--actions-top);
+  left: var(--stylo-add-left, 0);
+
+  transition: top 0.1s ease;
+
+  @include variables.colors;
+}
+
+button {
+  @include button.button;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+
+  width: 1.4rem;
+  height: 1.4rem;
+
+  color: var(--medium);
+
+  &:hover,
+  &:focus {
+    color: var(--light-contrast);
+  }
+}
+
+svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}

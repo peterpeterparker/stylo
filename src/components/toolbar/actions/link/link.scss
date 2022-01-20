@@ -1,0 +1,34 @@
+:host {
+  width: 100%;
+  height: 100%;
+
+  z-index: var(--stylo-toolbar-link-zindex, 2);
+
+  input {
+    pointer-events: visible;
+
+    background: transparent;
+    width: 97%;
+    height: 100%;
+    color: var(--stylo-toolbar-link-color, black);
+    border: none;
+    outline: 0;
+    font-size: 16px;
+
+    &::placeholder {
+      color: var(--stylo-toolbar-link-placeholder-color, black);
+    }
+  }
+}
+
+:host(.tools-mobile) {
+  width: 100%;
+
+  input {
+    color: var(--stylo-toolbar-link-mobile-color, inherit);
+
+    &::placeholder {
+      color: var(--stylo-toolbar-link-mobile-placeholder-color, inherit);
+    }
+  }
+}

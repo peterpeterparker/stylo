@@ -1,0 +1,22 @@
+@mixin button {
+  display: flex;
+
+  position: relative;
+
+  isolation: isolate;
+
+  overflow: hidden;
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  cursor: pointer;
+
+  transition: color 0.25s ease-out, background 0.25s ease-out, transform 0.15s ease-out;
+
+  &:active {
+    box-shadow: none;
+    transform: translateX(1px) translateY(1px);
+  }
+}
