@@ -27,6 +27,8 @@
     "test:watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "format": "prettier . --write",
+    "format:md": "prettier \"src/**/*.md\" --write",
+    "postbuild": "npm run format:md",
     "copy:site": "node ./scripts/copy.site.js"
   },
   "dependencies": {
