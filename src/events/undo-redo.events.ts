@@ -54,7 +54,6 @@ export class UndoRedoEvents {
     this.observe();
 
     containerStore.state.ref.addEventListener('keydown', this.onKeydown);
-    containerStore.state.ref.addEventListener('focusin', this.onFocusIn);
 
     document.addEventListener('toolbarActivated', this.onSelectionChange);
 
@@ -76,20 +75,10 @@ export class UndoRedoEvents {
     this.disconnect();
 
     containerStore.state.ref?.removeEventListener('keydown', this.onKeydown);
-    containerStore.state.ref?.removeEventListener('focusin', this.onFocusIn);
-    containerStore.state.ref?.removeEventListener('focusout', this.onFocusOut);
 
     document.removeEventListener('toolbarActivated', this.onSelectionChange);
 
     this.unsubscribe?.();
-  }
-
-  private observeKeydown() {
-    containerStore.state.ref?.addEventListener('keydown', this.onKeydown);
-  }
-
-  private disconnectKeydown() {
-    containerStore.state.ref?.removeEventListener('keydown', this.onKeydown);
   }
 
   private onKeydown = async ($event: KeyboardEvent) => {
@@ -130,58 +119,6 @@ export class UndoRedoEvents {
 
     await this.undoRedo({undoRedo: redo});
   }
-
-  private onFocusIn = ({target}: FocusEvent) => {
-    const focusedElement: HTMLElement | undefined | null = toHTMLElement(target as Node);
-
-    // TODO: implement undo-redo for highlight-code too
-    if (!focusedElement || focusedElement.nodeName.toLowerCase() !== 'deckgo-highlight-code') {
-      return;
-    }
-
-    // We use the browser capability when editing a code block and once done, we stack in the custom undo-redo store the all modification
-    this.disconnectKeydown();
-    this.disconnect();
-
-    containerStore.state.ref.addEventListener('focusout', this.onFocusOut, {once: true});
-
-    this.undoUpdateParagraphs = [
-      {
-        outerHTML: focusedElement.outerHTML,
-        index: elementIndex(focusedElement),
-        paragraph: focusedElement
-      }
-    ];
-  };
-
-  private onFocusOut = ({target}: FocusEvent) => {
-    // Should not happen
-    if (this.undoUpdateParagraphs.length <= 0) {
-      this.observeKeydown();
-      this.observe();
-      return;
-    }
-
-    const focusedElement: HTMLElement | undefined | null = toHTMLElement(target as Node);
-
-    // Should not happen neither
-    if (!focusedElement || focusedElement.nodeName.toLowerCase() !== 'deckgo-highlight-code') {
-      this.observeKeydown();
-      this.observe();
-      return;
-    }
-
-    if (focusedElement.outerHTML === this.undoUpdateParagraphs[0].outerHTML) {
-      this.observeKeydown();
-      this.observe();
-      return;
-    }
-
-    stackUndoUpdate({paragraphs: this.undoUpdateParagraphs, container: containerStore.state.ref});
-
-    this.observeKeydown();
-    this.observe();
-  };
 
   private stackUndoInput() {
     if (!this.undoInput || this.undoUpdateParagraphs.length > 0) {
