@@ -9,15 +9,11 @@ export const injectHeadCSS = () => {
   style.setAttribute('stylo-editor', '');
   style.innerHTML = `
     .stylo-container > * {
-      position: relative;
       white-space: pre-wrap;
     }
 
     .stylo-container > *:after {
       content: attr(placeholder);
-      position: absolute;
-      top: 0;
-      left: 0;
       color: #6e6d6f;
     }
   `;

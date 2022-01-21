@@ -15,6 +15,7 @@ interface ConfigStore {
   plugins: StyloPlugin[];
   toolbar: StyloToolbar;
   events?: StyloEvents;
+  placeholders: string[];
 }
 
 export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, img, code, hr];
@@ -31,9 +32,12 @@ export const DEFAULT_TOOLBAR: StyloToolbar = {
   }
 };
 
+export const DEFAULT_PLACEHOLDERS = ['div', 'p', 'span'];
+
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,
-  toolbar: DEFAULT_TOOLBAR
+  toolbar: DEFAULT_TOOLBAR,
+  placeholders: DEFAULT_PLACEHOLDERS
 });
 
 export default {state, onChange};

@@ -9,6 +9,7 @@ import {
   Listen,
   State
 } from '@stencil/core';
+import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
 import i18n from '../../../stores/i18n.store';
 import {createEmptyElement} from '../../../utils/create-element.utils';
@@ -117,7 +118,7 @@ export class Add implements ComponentInterface {
 
   @Listen('addParagraphs', {target: 'document', passive: true})
   onAddParagraphs({detail: addedParagraphs}: CustomEvent<HTMLElement[]>) {
-    this.initParagraph(addedParagraphs[addedParagraphs.length - 1]);
+    this.initParagraph(addedParagraphs[0]);
   }
 
   private hide() {
@@ -155,6 +156,10 @@ export class Add implements ComponentInterface {
     }
 
     if (isParagraphNotEditable({paragraph: this.paragraph})) {
+      return;
+    }
+
+    if (!configStore.state.placeholders.includes(this.paragraph?.nodeName.toLowerCase())) {
       return;
     }
 
