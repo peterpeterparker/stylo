@@ -163,7 +163,7 @@ export class Add implements ComponentInterface {
       return;
     }
 
-    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 150);
+    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 250);
   }
 
   private removePlaceholder() {
