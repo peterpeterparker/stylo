@@ -95,6 +95,10 @@ export class Add implements ComponentInterface {
       return;
     }
 
+    if (!this.paragraph || !this.paragraph.isConnected) {
+      return;
+    }
+
     if (!isParagraphEmpty({paragraph: this.paragraph})) {
       this.hidePlugins.emit();
       return;
