@@ -32,8 +32,7 @@ interface UndoUpdateParagraphs extends UndoRedoUpdateParagraph {
 }
 
 export class UndoRedoEvents {
-  private inputObserver: MutationObserver | undefined;
-  private treeObserver: MutationObserver | undefined;
+  private observer: MutationObserver | undefined;
   private attributesObserver: MutationObserver | undefined;
 
   private undoInput: UndoRedoInput | undefined = undefined;
@@ -47,8 +46,7 @@ export class UndoRedoEvents {
     this.undoInput = undefined;
     this.undoUpdateParagraphs = [];
 
-    this.inputObserver = new MutationObserver(this.onCharacterDataMutation);
-    this.treeObserver = new MutationObserver(this.onTreeMutation);
+    this.observer = new MutationObserver(this.onMutation);
     this.attributesObserver = new MutationObserver(this.onAttributesMutation);
 
     this.observe();
@@ -121,7 +119,7 @@ export class UndoRedoEvents {
   }
 
   private stackUndoInput() {
-    if (!this.undoInput || this.undoUpdateParagraphs.length > 0) {
+    if (!this.undoInput) {
       return;
     }
 
@@ -129,6 +127,8 @@ export class UndoRedoEvents {
       data: this.undoInput,
       container: containerStore.state.ref
     });
+
+    this.copySelectedParagraphs({filterEmptySelection: false});
 
     this.undoInput = undefined;
   }
@@ -143,18 +143,12 @@ export class UndoRedoEvents {
   }
 
   private observe() {
-    this.treeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
-    this.inputObserver.observe(containerStore.state.ref, {
-      characterData: true,
-      subtree: true,
-      characterDataOldValue: true
-    });
+    this.observer.observe(containerStore.state.ref, {childList: true, characterData: true, characterDataOldValue: true, subtree: true});
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true, subtree: true});
   }
 
   private disconnect() {
-    this.treeObserver?.disconnect();
-    this.inputObserver?.disconnect();
+    this.observer?.disconnect();
     this.attributesObserver?.disconnect();
   }
 
@@ -184,7 +178,7 @@ export class UndoRedoEvents {
     }));
   }
 
-  private onCharacterDataMutation = (mutations: MutationRecord[]) => {
+  private onCharacterDataMutation(mutations: MutationRecord[]) {
     if (!this.undoInput) {
       const mutation: MutationRecord = mutations[0];
 
@@ -220,9 +214,15 @@ export class UndoRedoEvents {
     this.debounceUpdateInput();
   };
 
-  private onTreeMutation = (mutations: MutationRecord[]) => {
+  private onMutation = (mutations: MutationRecord[]) => {
     this.onParagraphsMutations(mutations);
-    this.onNodesParagraphsMutation(mutations);
+
+    const didUpdate: boolean = this.onNodesParagraphsMutation(mutations);
+    if (didUpdate) {
+      return;
+    }
+
+    this.onCharacterDataMutation(mutations);
   };
 
   /**
@@ -277,9 +277,13 @@ export class UndoRedoEvents {
   }
 
   /**
-   * Nodes within paragraphs added and removed
+   * Nodes within paragraphs added and removed.
+   *
+   * If we stack an update of the paragraph we shall not also stack an "input" update at the same time.
+   *
+   * @return did update
    */
-  private onNodesParagraphsMutation(mutations: MutationRecord[]) {
+  private onNodesParagraphsMutation(mutations: MutationRecord[]): boolean {
     const addedNodesMutations: MutationRecord[] = findAddedNodesParagraphs({
       mutations,
       container: containerStore.state.ref
@@ -292,11 +296,12 @@ export class UndoRedoEvents {
     const needsUpdate: boolean = addedNodesMutations.length > 0 || removedNodesMutations.length > 0;
 
     if (!needsUpdate) {
-      return;
+      return false;
+
     }
 
     if (this.undoUpdateParagraphs.length <= 0) {
-      return;
+      return false;
     }
 
     const addedParagraphs: HTMLElement[] = findAddedParagraphs({
@@ -313,7 +318,7 @@ export class UndoRedoEvents {
 
     if (filterUndoUpdateParagraphs.length <= 0) {
       this.copySelectedParagraphs({filterEmptySelection: true});
-      return;
+      return false;
     }
 
     stackUndoUpdate({
@@ -322,6 +327,10 @@ export class UndoRedoEvents {
     });
 
     this.copySelectedParagraphs({filterEmptySelection: true});
+
+    this.undoInput = undefined;
+
+    return true;
   }
 
   private cleanOuterHTML(paragraph: HTMLElement): string {
