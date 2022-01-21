@@ -5,7 +5,11 @@ import {EnterEvents} from '../../events/enter.events';
 import {InputEvents} from '../../events/input.events';
 import {TabEvents} from '../../events/tab.events';
 import {UndoRedoEvents} from '../../events/undo-redo.events';
-import configStore, {DEFAULT_PLUGINS, DEFAULT_TOOLBAR} from '../../stores/config.store';
+import configStore, {
+  DEFAULT_PLACEHOLDERS,
+  DEFAULT_PLUGINS,
+  DEFAULT_TOOLBAR
+} from '../../stores/config.store';
 import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
 import {StyloConfig} from '../../types/config';
@@ -99,7 +103,7 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    const {plugins, toolbar, lang, events} = this.config;
+    const {plugins, toolbar, lang, events, placeholders} = this.config;
 
     i18n.state.lang = lang || 'en';
 
@@ -113,6 +117,8 @@ export class Editor implements ComponentInterface {
       : DEFAULT_TOOLBAR;
 
     configStore.state.events = events;
+
+    configStore.state.placeholders = placeholders || DEFAULT_PLACEHOLDERS;
   }
 
   private destroyEvents() {

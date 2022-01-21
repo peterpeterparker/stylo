@@ -9,6 +9,7 @@ import {
   Listen,
   State
 } from '@stencil/core';
+import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
 import i18n from '../../../stores/i18n.store';
 import {createEmptyElement} from '../../../utils/create-element.utils';
@@ -95,6 +96,10 @@ export class Add implements ComponentInterface {
       return;
     }
 
+    if (!this.paragraph || !this.paragraph.isConnected) {
+      return;
+    }
+
     if (!isParagraphEmpty({paragraph: this.paragraph})) {
       this.hidePlugins.emit();
       return;
@@ -113,7 +118,7 @@ export class Add implements ComponentInterface {
 
   @Listen('addParagraphs', {target: 'document', passive: true})
   onAddParagraphs({detail: addedParagraphs}: CustomEvent<HTMLElement[]>) {
-    this.initParagraph(addedParagraphs[addedParagraphs.length - 1]);
+    this.initParagraph(addedParagraphs[0]);
   }
 
   private hide() {
@@ -154,7 +159,16 @@ export class Add implements ComponentInterface {
       return;
     }
 
-    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 150);
+    if (!configStore.state.placeholders.includes(this.paragraph?.nodeName.toLowerCase())) {
+      return;
+    }
+
+    if (window.getComputedStyle(this.paragraph, ':after').getPropertyValue('content') !== '""') {
+      // An external source use :after to style this paragraph
+      return;
+    }
+
+    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 250);
   }
 
   private removePlaceholder() {
