@@ -184,9 +184,14 @@ export class UndoRedoEvents {
   }
 
   private onCharacterDataMutation(mutations: MutationRecord[]) {
-    if (!this.undoInput) {
-      const mutation: MutationRecord = mutations[0];
+    const mutation: MutationRecord | undefined = mutations[0];
 
+    // Not a character mutation
+    if (!mutation || !mutation.oldValue) {
+      return;
+    }
+
+    if (!this.undoInput) {
       const target: Node = mutation.target;
 
       const newValue: string = target.nodeValue;
