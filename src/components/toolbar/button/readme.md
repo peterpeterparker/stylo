@@ -2,7 +2,6 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property        | Attribute        | Description | Type      | Default     |
@@ -10,26 +9,25 @@
 | `cssClass`      | `css-class`      |             | `string`  | `undefined` |
 | `disableAction` | `disable-action` |             | `boolean` | `false`     |
 
-
 ## Events
 
 | Event    | Description | Type                   |
 | -------- | ----------- | ---------------------- |
 | `action` |             | `CustomEvent<UIEvent>` |
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-toolbar](../toolbar)
- - [stylo-toolbar-align](../actions/align)
- - [stylo-toolbar-font-size](../actions/font-size)
- - [stylo-toolbar-image](../actions/image)
- - [stylo-toolbar-list](../actions/list)
- - [stylo-toolbar-style](../actions/style)
+- [stylo-toolbar](../toolbar)
+- [stylo-toolbar-align](../actions/align)
+- [stylo-toolbar-font-size](../actions/font-size)
+- [stylo-toolbar-image](../actions/image)
+- [stylo-toolbar-list](../actions/list)
+- [stylo-toolbar-style](../actions/style)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-toolbar --> stylo-toolbar-button
@@ -41,6 +39,6 @@ graph TD;
   style stylo-toolbar-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

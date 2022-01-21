@@ -143,7 +143,12 @@ export class UndoRedoEvents {
   }
 
   private observe() {
-    this.observer.observe(containerStore.state.ref, {childList: true, characterData: true, characterDataOldValue: true, subtree: true});
+    this.observer.observe(containerStore.state.ref, {
+      childList: true,
+      characterData: true,
+      characterDataOldValue: true,
+      subtree: true
+    });
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true, subtree: true});
   }
 
@@ -212,7 +217,7 @@ export class UndoRedoEvents {
     }
 
     this.debounceUpdateInput();
-  };
+  }
 
   private onMutation = (mutations: MutationRecord[]) => {
     this.onParagraphsMutations(mutations);
@@ -297,7 +302,6 @@ export class UndoRedoEvents {
 
     if (!needsUpdate) {
       return false;
-
     }
 
     if (this.undoUpdateParagraphs.length <= 0) {
