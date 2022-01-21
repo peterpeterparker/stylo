@@ -2,14 +2,12 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property       | Attribute | Description                                                                                                         | Type                                                                                                                                                                                                                                                                                   | Default     |
 | -------------- | --------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; globalEvents?: boolean; command?: "native" \| "custom"; actions?: { img?: { anchor: string; propertyWidth: string; propertyCssFloat: string; }; list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; customActions?: string; }; }` | `undefined` |
 | `containerRef` | --        | To attach the inline editor event listeners to a specific container instead of the document                         | `HTMLElement`                                                                                                                                                                                                                                                                          | `undefined` |
-
 
 ## Events
 
@@ -21,13 +19,11 @@
 | `styleDidChange`   | Triggered when the style is modified (bold, italic, color, alignment, etc.). The event detail is the container            | `CustomEvent<HTMLElement>`   |
 | `toolbarActivated` |                                                                                                                           | `CustomEvent<boolean>`       |
 
-
 ## Slots
 
 | Slot | Description                           |
 | ---- | ------------------------------------- |
 |      | related to the customActions property |
-
 
 ## CSS Custom Properties
 
@@ -38,8 +34,8 @@
 | `--stylo-toolbar-border`                        | The border radius of the toolbar                                                   |
 | `--stylo-toolbar-border-radius`                 | The border radius of the toolbar @default 8px                                      |
 | `--stylo-toolbar-button-color`                  | The buttons color @default black                                                   |
-| `--stylo-toolbar-button-color-active`           | The color of the buttons when active @default --highlight (see _variables.scss)    |
-| `--stylo-toolbar-button-color-disabled`         | The color of the buttons when disabled @default --light (see _variables.scss)      |
+| `--stylo-toolbar-button-color-active`           | The color of the buttons when active @default --highlight (see \_variables.scss)   |
+| `--stylo-toolbar-button-color-disabled`         | The color of the buttons when disabled @default --light (see \_variables.scss)     |
 | `--stylo-toolbar-button-display-disabled`       | Per default the disable elements on title elements are not displayed @default none |
 | `--stylo-toolbar-button-font-family`            | The buttons font family @default inherit                                           |
 | `--stylo-toolbar-button-font-size`              | The buttons font size @default 1.4rem                                              |
@@ -67,12 +63,11 @@
 | `--stylo-toolbar-triangle-start`                | The left position of the triangle @default 8px                                     |
 | `--stylo-toolbar-zindex`                        | The z-Index of the toolbar @default 1                                              |
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-editor](../../editor)
+- [stylo-editor](../../editor)
 
 ### Depends on
 
@@ -88,6 +83,7 @@
 - [stylo-toolbar-separator](../separator)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-toolbar --> stylo-toolbar-triangle
@@ -112,6 +108,6 @@ graph TD;
   style stylo-toolbar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

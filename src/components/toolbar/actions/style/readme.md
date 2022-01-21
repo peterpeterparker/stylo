@@ -2,7 +2,6 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property        | Attribute        | Description | Type      | Default     |
@@ -13,25 +12,24 @@
 | `strikethrough` | `strikethrough`  |             | `boolean` | `undefined` |
 | `underline`     | `underline`      |             | `boolean` | `undefined` |
 
-
 ## Events
 
 | Event         | Description | Type                             |
 | ------------- | ----------- | -------------------------------- |
 | `execCommand` |             | `CustomEvent<ExecCommandAction>` |
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-toolbar](../../toolbar)
+- [stylo-toolbar](../../toolbar)
 
 ### Depends on
 
 - [stylo-toolbar-button](../../button)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-toolbar-style --> stylo-toolbar-button
@@ -39,6 +37,6 @@ graph TD;
   style stylo-toolbar-style fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

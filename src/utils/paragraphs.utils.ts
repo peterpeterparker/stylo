@@ -34,11 +34,7 @@ export const findAddedNodesParagraphs = ({
 }): MutationRecord[] => {
   return mutations
     .filter(({addedNodes}: MutationRecord) => addedNodes?.length > 0)
-    .filter(({addedNodes}: MutationRecord) => {
-      const node: Node = addedNodes[0];
-
-      return !isParagraph({element: node, container}) && node?.nodeName.toLowerCase() !== 'br';
-    });
+    .filter(({addedNodes}: MutationRecord) => !isParagraph({element: addedNodes[0], container}));
 };
 
 export const findRemovedNodesParagraphs = ({

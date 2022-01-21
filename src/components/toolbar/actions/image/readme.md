@@ -2,7 +2,6 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property       | Attribute | Description | Type                        | Default     |
@@ -11,19 +10,17 @@
 | `containerRef` | --        |             | `HTMLElement`               | `undefined` |
 | `imgDidChange` | --        |             | `EventEmitter<HTMLElement>` | `undefined` |
 
-
 ## Events
 
 | Event         | Description | Type                |
 | ------------- | ----------- | ------------------- |
 | `imgModified` |             | `CustomEvent<void>` |
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-toolbar](../../toolbar)
+- [stylo-toolbar](../../toolbar)
 
 ### Depends on
 
@@ -31,6 +28,7 @@
 - [stylo-toolbar-separator](../../separator)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-toolbar-image --> stylo-toolbar-button
@@ -39,6 +37,6 @@ graph TD;
   style stylo-toolbar-image fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

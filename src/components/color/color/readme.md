@@ -121,7 +121,6 @@ export const DEFAULT_PALETTE: StyloPalette[] = [
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property   | Attribute   | Description                                                                                                      | Type             | Default                 |
@@ -131,13 +130,11 @@ export const DEFAULT_PALETTE: StyloPalette[] = [
 | `inputAlt` | `input-alt` | An accessibility label for the color input field                                                                 | `string`         | `'Input a color (hex)'` |
 | `palette`  | --          | The palette of color.                                                                                            | `StyloPalette[]` | `DEFAULT_PALETTE`       |
 
-
 ## Events
 
 | Event         | Description             | Type                             |
 | ------------- | ----------------------- | -------------------------------- |
 | `colorChange` | Emit the selected color | `CustomEvent<StyloPaletteColor>` |
-
 
 ## CSS Custom Properties
 
@@ -168,18 +165,18 @@ export const DEFAULT_PALETTE: StyloPalette[] = [
 | `--stylo-color-overflow`                      | Component overflow @default visible                                    |
 | `--stylo-color-padding`                       | Component padding @default 8px                                         |
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-toolbar-color](../../toolbar/actions/color)
+- [stylo-toolbar-color](../../toolbar/actions/color)
 
 ### Depends on
 
 - [stylo-color-input](../input)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-color --> stylo-color-input
@@ -187,6 +184,6 @@ graph TD;
   style stylo-color fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

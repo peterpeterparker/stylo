@@ -2,14 +2,12 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property       | Attribute | Description                                                                                                                                                           | Type          | Default     |
 | -------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- |
 | `config`       | --        | Optional editor configuration. - Language - Plugin, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config | `StyloConfig` | `undefined` |
 | `containerRef` | --        | The container (e.g. an article, a div, etc.) that contains the content, the paragraphs. Must have the attribute `contenteditable` set to `true`.                      | `HTMLElement` | `undefined` |
-
 
 ## Dependencies
 
@@ -20,6 +18,7 @@
 - [stylo-toolbar](../toolbar/toolbar)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-editor --> stylo-add
@@ -47,6 +46,6 @@ graph TD;
   style stylo-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

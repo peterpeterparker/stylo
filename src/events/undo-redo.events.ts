@@ -32,8 +32,7 @@ interface UndoUpdateParagraphs extends UndoRedoUpdateParagraph {
 }
 
 export class UndoRedoEvents {
-  private inputObserver: MutationObserver | undefined;
-  private treeObserver: MutationObserver | undefined;
+  private observer: MutationObserver | undefined;
   private attributesObserver: MutationObserver | undefined;
 
   private undoInput: UndoRedoInput | undefined = undefined;
@@ -47,14 +46,12 @@ export class UndoRedoEvents {
     this.undoInput = undefined;
     this.undoUpdateParagraphs = [];
 
-    this.inputObserver = new MutationObserver(this.onCharacterDataMutation);
-    this.treeObserver = new MutationObserver(this.onTreeMutation);
+    this.observer = new MutationObserver(this.onMutation);
     this.attributesObserver = new MutationObserver(this.onAttributesMutation);
 
     this.observe();
 
     containerStore.state.ref.addEventListener('keydown', this.onKeydown);
-    containerStore.state.ref.addEventListener('focusin', this.onFocusIn);
 
     document.addEventListener('toolbarActivated', this.onSelectionChange);
 
@@ -76,20 +73,10 @@ export class UndoRedoEvents {
     this.disconnect();
 
     containerStore.state.ref?.removeEventListener('keydown', this.onKeydown);
-    containerStore.state.ref?.removeEventListener('focusin', this.onFocusIn);
-    containerStore.state.ref?.removeEventListener('focusout', this.onFocusOut);
 
     document.removeEventListener('toolbarActivated', this.onSelectionChange);
 
     this.unsubscribe?.();
-  }
-
-  private observeKeydown() {
-    containerStore.state.ref?.addEventListener('keydown', this.onKeydown);
-  }
-
-  private disconnectKeydown() {
-    containerStore.state.ref?.removeEventListener('keydown', this.onKeydown);
   }
 
   private onKeydown = async ($event: KeyboardEvent) => {
@@ -131,60 +118,8 @@ export class UndoRedoEvents {
     await this.undoRedo({undoRedo: redo});
   }
 
-  private onFocusIn = ({target}: FocusEvent) => {
-    const focusedElement: HTMLElement | undefined | null = toHTMLElement(target as Node);
-
-    // TODO: implement undo-redo for highlight-code too
-    if (!focusedElement || focusedElement.nodeName.toLowerCase() !== 'deckgo-highlight-code') {
-      return;
-    }
-
-    // We use the browser capability when editing a code block and once done, we stack in the custom undo-redo store the all modification
-    this.disconnectKeydown();
-    this.disconnect();
-
-    containerStore.state.ref.addEventListener('focusout', this.onFocusOut, {once: true});
-
-    this.undoUpdateParagraphs = [
-      {
-        outerHTML: focusedElement.outerHTML,
-        index: elementIndex(focusedElement),
-        paragraph: focusedElement
-      }
-    ];
-  };
-
-  private onFocusOut = ({target}: FocusEvent) => {
-    // Should not happen
-    if (this.undoUpdateParagraphs.length <= 0) {
-      this.observeKeydown();
-      this.observe();
-      return;
-    }
-
-    const focusedElement: HTMLElement | undefined | null = toHTMLElement(target as Node);
-
-    // Should not happen neither
-    if (!focusedElement || focusedElement.nodeName.toLowerCase() !== 'deckgo-highlight-code') {
-      this.observeKeydown();
-      this.observe();
-      return;
-    }
-
-    if (focusedElement.outerHTML === this.undoUpdateParagraphs[0].outerHTML) {
-      this.observeKeydown();
-      this.observe();
-      return;
-    }
-
-    stackUndoUpdate({paragraphs: this.undoUpdateParagraphs, container: containerStore.state.ref});
-
-    this.observeKeydown();
-    this.observe();
-  };
-
   private stackUndoInput() {
-    if (!this.undoInput || this.undoUpdateParagraphs.length > 0) {
+    if (!this.undoInput) {
       return;
     }
 
@@ -192,6 +127,8 @@ export class UndoRedoEvents {
       data: this.undoInput,
       container: containerStore.state.ref
     });
+
+    this.copySelectedParagraphs({filterEmptySelection: false});
 
     this.undoInput = undefined;
   }
@@ -206,18 +143,17 @@ export class UndoRedoEvents {
   }
 
   private observe() {
-    this.treeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
-    this.inputObserver.observe(containerStore.state.ref, {
+    this.observer.observe(containerStore.state.ref, {
+      childList: true,
       characterData: true,
-      subtree: true,
-      characterDataOldValue: true
+      characterDataOldValue: true,
+      subtree: true
     });
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true, subtree: true});
   }
 
   private disconnect() {
-    this.treeObserver?.disconnect();
-    this.inputObserver?.disconnect();
+    this.observer?.disconnect();
     this.attributesObserver?.disconnect();
   }
 
@@ -247,7 +183,7 @@ export class UndoRedoEvents {
     }));
   }
 
-  private onCharacterDataMutation = (mutations: MutationRecord[]) => {
+  private onCharacterDataMutation(mutations: MutationRecord[]) {
     if (!this.undoInput) {
       const mutation: MutationRecord = mutations[0];
 
@@ -281,11 +217,17 @@ export class UndoRedoEvents {
     }
 
     this.debounceUpdateInput();
-  };
+  }
 
-  private onTreeMutation = (mutations: MutationRecord[]) => {
+  private onMutation = (mutations: MutationRecord[]) => {
     this.onParagraphsMutations(mutations);
-    this.onNodesParagraphsMutation(mutations);
+
+    const didUpdate: boolean = this.onNodesParagraphsMutation(mutations);
+    if (didUpdate) {
+      return;
+    }
+
+    this.onCharacterDataMutation(mutations);
   };
 
   /**
@@ -340,9 +282,13 @@ export class UndoRedoEvents {
   }
 
   /**
-   * Nodes within paragraphs added and removed
+   * Nodes within paragraphs added and removed.
+   *
+   * If we stack an update of the paragraph we shall not also stack an "input" update at the same time.
+   *
+   * @return did update
    */
-  private onNodesParagraphsMutation(mutations: MutationRecord[]) {
+  private onNodesParagraphsMutation(mutations: MutationRecord[]): boolean {
     const addedNodesMutations: MutationRecord[] = findAddedNodesParagraphs({
       mutations,
       container: containerStore.state.ref
@@ -355,11 +301,11 @@ export class UndoRedoEvents {
     const needsUpdate: boolean = addedNodesMutations.length > 0 || removedNodesMutations.length > 0;
 
     if (!needsUpdate) {
-      return;
+      return false;
     }
 
     if (this.undoUpdateParagraphs.length <= 0) {
-      return;
+      return false;
     }
 
     const addedParagraphs: HTMLElement[] = findAddedParagraphs({
@@ -376,7 +322,7 @@ export class UndoRedoEvents {
 
     if (filterUndoUpdateParagraphs.length <= 0) {
       this.copySelectedParagraphs({filterEmptySelection: true});
-      return;
+      return false;
     }
 
     stackUndoUpdate({
@@ -385,6 +331,10 @@ export class UndoRedoEvents {
     });
 
     this.copySelectedParagraphs({filterEmptySelection: true});
+
+    this.undoInput = undefined;
+
+    return true;
   }
 
   private cleanOuterHTML(paragraph: HTMLElement): string {

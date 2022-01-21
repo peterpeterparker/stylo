@@ -2,15 +2,15 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-toolbar](../toolbar)
- - [stylo-toolbar-image](../actions/image)
+- [stylo-toolbar](../toolbar)
+- [stylo-toolbar-image](../actions/image)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-toolbar --> stylo-toolbar-separator
@@ -18,6 +18,6 @@ graph TD;
   style stylo-toolbar-separator fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

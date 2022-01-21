@@ -2,18 +2,18 @@
 
 <!-- Auto Generated Below -->
 
-
 ## Dependencies
 
 ### Used by
 
- - [stylo-editor](../../editor)
+- [stylo-editor](../../editor)
 
 ### Depends on
 
 - [stylo-list](../list)
 
 ### Graph
+
 ```mermaid
 graph TD;
   stylo-plugins --> stylo-list
@@ -21,6 +21,6 @@ graph TD;
   style stylo-plugins fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_
