@@ -734,6 +734,10 @@ export class Toolbar implements ComponentInterface {
   private onAttributesChangesInitStyle() {
     const anchorNode: HTMLElement | null = getAnchorElement(this.selection);
 
+    if (!anchorNode) {
+      return;
+    }
+
     const observer: MutationObserver = new MutationObserver(() => {
       observer.disconnect();
 
