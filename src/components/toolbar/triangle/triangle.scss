@@ -3,7 +3,7 @@
 :host(.top) {
   div.triangle {
     bottom: unset;
-    top: -34px;
+    top: -33px;
     transform: scale(0.7) translate(50%, 0);
   }
 }
@@ -12,7 +12,7 @@ div.triangle {
   z-index: 1;
 
   position: absolute;
-  bottom: -34px;
+  bottom: -33px;
   left: var(--stylo-toolbar-triangle-start);
 
   width: 40px;
