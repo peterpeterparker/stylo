@@ -9,7 +9,7 @@ Another kind of rich text editor.
 
 A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations, documents and blog posts.
 
-[![GitHub release](https://img.shields.io/github/release/deckgo/stylo/all?logo=GitHub)](https://github.com/deckgo/stylo/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/deckgo/stylo/all?logo=GitHub&color=lightgrey)](https://github.com/deckgo/stylo/releases/latest)
 [![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fstylojs.com)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fstylojs.com&text=Another%20kind%20of%20rich%20text%20editor%20by%20%40deckdeckgo)
 
 ## Table of contents
