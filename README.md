@@ -21,6 +21,7 @@ A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations
 - [Config](#config)
 - [Plugins](#plugins)
 - [Events](#events)
+- [Listener](#listener)
 - [Contributing](#contributing)
 - [i18n](#i18n)
 - [License](#license)
@@ -207,6 +208,12 @@ Each paragraph is a direct child of the editable container.
 Unlike `addParagraphs` and `deleteParagraphs` that are triggered only if elements are such level are added or removed, `updateParagraphs` is triggered if the paragraphs themselves or any of their children (HTML elements and text nodes) are modified.
 
 Changes following keyboard inputs are debounced.
+
+## Listener
+
+If you are manipulating the `contenteditable` - i.e. the DOM - on your side, you might want to add these changes to the "undo-redo" history.
+
+For such purpose, the editor is listening for the events `snapshotParagraph` of type `CustomEvent<void>` that can be triggered from the child of the editable element you are about to modify.
 
 ## Contributing
 

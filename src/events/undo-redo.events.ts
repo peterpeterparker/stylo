@@ -51,9 +51,10 @@ export class UndoRedoEvents {
 
     this.observe();
 
-    containerStore.state.ref.addEventListener('keydown', this.onKeydown);
+    containerStore.state.ref?.addEventListener('keydown', this.onKeydown);
+    containerStore.state.ref?.addEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
-    document.addEventListener('toolbarActivated', this.onSelectionChange);
+    document.addEventListener('toolbarActivated', this.onToolbarActivated);
 
     this.unsubscribe = undoRedoStore.onChange('observe', (observe: boolean) => {
       if (observe) {
@@ -73,8 +74,9 @@ export class UndoRedoEvents {
     this.disconnect();
 
     containerStore.state.ref?.removeEventListener('keydown', this.onKeydown);
+    containerStore.state.ref?.removeEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
-    document.removeEventListener('toolbarActivated', this.onSelectionChange);
+    document.removeEventListener('toolbarActivated', this.onToolbarActivated);
 
     this.unsubscribe?.();
   }
@@ -157,8 +159,20 @@ export class UndoRedoEvents {
     this.attributesObserver?.disconnect();
   }
 
-  private onSelectionChange = () => {
+  private onToolbarActivated = () => {
     this.copySelectedParagraphs({filterEmptySelection: true});
+  };
+
+  private onSnapshotParagraph = ({target}: CustomEvent<void>) => {
+    const paragraph: HTMLElement | undefined = toHTMLElement(
+      findParagraph({element: target as Node, container: containerStore.state.ref})
+    );
+
+    if (!paragraph) {
+      return;
+    }
+
+    this.undoUpdateParagraphs = this.toUpdateParagraphs([paragraph]);
   };
 
   // Copy current paragraphs value to a local state so we can add it to the undo redo global store in case of modifications

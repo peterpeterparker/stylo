@@ -6,7 +6,6 @@ import {h3} from '../plugins/h3.plugin';
 import {hr} from '../plugins/hr.plugin';
 import {img} from '../plugins/img.plugin';
 import {ul} from '../plugins/ul.plugin';
-import {StyloEvents} from '../types/events';
 import {DEFAULT_PALETTE} from '../types/palette';
 import {StyloPlugin} from '../types/plugin';
 import {StyloToolbar} from '../types/toolbar';
@@ -14,7 +13,6 @@ import {StyloToolbar} from '../types/toolbar';
 interface ConfigStore {
   plugins: StyloPlugin[];
   toolbar: StyloToolbar;
-  events?: StyloEvents;
   placeholders: string[];
 }
 

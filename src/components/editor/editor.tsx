@@ -103,7 +103,7 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    const {plugins, toolbar, lang, events, placeholders} = this.config;
+    const {plugins, toolbar, lang, placeholders} = this.config;
 
     i18n.state.lang = lang || 'en';
 
@@ -115,8 +115,6 @@ export class Editor implements ComponentInterface {
           ...toolbar
         }
       : DEFAULT_TOOLBAR;
-
-    configStore.state.events = events;
 
     configStore.state.placeholders = placeholders || DEFAULT_PLACEHOLDERS;
   }
