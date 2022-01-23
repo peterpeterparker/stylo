@@ -1,9 +1,7 @@
 import {debounce} from '@deckdeckgo/utils';
-import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {emitAddParagraphs, emitDeleteParagraphs, emitUpdateParagraphs} from '../utils/events.utils';
 import {isTextNode, toHTMLElement} from '../utils/node.utils';
-import {findParagraph} from '../utils/paragraph.utils';
 import {
   findAddedNodesParagraphs,
   findAddedParagraphs,
@@ -33,20 +31,12 @@ export class DataEvents {
 
     this.dataObserver = new MutationObserver(this.onDataMutation);
     this.dataObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
-
-    configStore.state.events?.updateCustomEvents?.forEach((customEvent: string) =>
-      containerStore.state.ref.addEventListener(customEvent, this.onCustomEventChange)
-    );
   }
 
   destroy() {
     this.treeObserver?.disconnect();
     this.attributesObserver?.disconnect();
     this.dataObserver?.disconnect();
-
-    configStore.state.events?.updateCustomEvents?.forEach((customEvent: string) =>
-      containerStore.state.ref?.removeEventListener(customEvent, this.onCustomEventChange)
-    );
   }
 
   private onTreeMutation = (mutations: MutationRecord[]) => {
@@ -64,22 +54,6 @@ export class DataEvents {
   private onDataMutation = (mutations: MutationRecord[]) => {
     this.stackDataMutations.push(...mutations);
     this.debounceUpdateInput();
-  };
-
-  private onCustomEventChange = ({detail}: CustomEvent<HTMLElement>) => {
-    const paragraph: Node | undefined = findParagraph({
-      element: detail,
-      container: containerStore.state.ref
-    });
-
-    if (!paragraph || isTextNode(paragraph)) {
-      return;
-    }
-
-    emitUpdateParagraphs({
-      editorRef: containerStore.state.ref,
-      updatedParagraphs: [toHTMLElement(paragraph)]
-    });
   };
 
   private addParagraphs(mutations: MutationRecord[]) {
