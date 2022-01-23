@@ -120,9 +120,13 @@
       }
 
       section:not(.info),
-      section.info > div,
       header {
         max-width: 1140px;
+        margin: 0 auto;
+      }
+
+      section.info > div {
+        max-width: calc(1140px - (2 * 2.45rem));
         margin: 0 auto;
       }
 
