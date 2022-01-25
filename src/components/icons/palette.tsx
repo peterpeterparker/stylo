@@ -9,10 +9,10 @@ export const IconPalette: FunctionalComponent = () => (
       stroke-miterlimit="10"
       stroke-width="32"
     />
-    <circle cx="144" cy="208" r="32" />
-    <circle cx="152" cy="311" r="32" />
-    <circle cx="224" cy="144" r="32" />
-    <circle cx="256" cy="367" r="48" />
-    <circle cx="328" cy="144" r="32" />
+    <circle cx="144" cy="208" r="32" fill="currentColor" />
+    <circle cx="152" cy="311" r="32" fill="currentColor" />
+    <circle cx="224" cy="144" r="32" fill="currentColor" />
+    <circle cx="256" cy="367" r="48" fill="currentColor" />
+    <circle cx="328" cy="144" r="32" fill="currentColor" />
   </svg>
 );
