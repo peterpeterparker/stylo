@@ -25,7 +25,6 @@ import configStore from '../../../stores/config.store';
 import {ExecCommandAction} from '../../../types/execcommand';
 import {
   StyloToolbar,
-  ToolbarAction,
   ToolbarActions,
   ToolbarAlign,
   ToolbarAnchorLink,
@@ -55,9 +54,6 @@ import {IconOl} from '../../icons/ol';
 import {IconPalette} from '../../icons/palette';
 import {IconUl} from '../../icons/ul';
 
-/**
- * @slot - related to the customActions property
- */
 @Component({
   tag: 'stylo-toolbar',
   styleUrl: 'toolbar.scss',
@@ -146,12 +142,6 @@ export class Toolbar implements ComponentInterface {
   styleDidChange: EventEmitter<HTMLElement>;
 
   private iOSTimerScroll: number;
-
-  /**
-   * Triggered when a custom action is selected. Its detail provide an action name, the Selection and an anchorLink
-   */
-  @Event()
-  customAction: EventEmitter<ToolbarAction>;
 
   private tools!: HTMLDivElement;
 
@@ -691,16 +681,6 @@ export class Toolbar implements ComponentInterface {
     this.toolbarActions = ToolbarActions.LIST;
   }
 
-  private onCustomAction($event: UIEvent, action: string) {
-    $event.stopPropagation();
-
-    this.customAction.emit({
-      action: action,
-      selection: this.selection,
-      anchorLink: this.anchorLink
-    });
-  }
-
   private onExecCommand($event: CustomEvent<ExecCommandAction>) {
     if (!$event || !$event.detail) {
       return;
@@ -781,8 +761,7 @@ export class Toolbar implements ComponentInterface {
             class={position === 'above' ? 'bottom' : 'top'}
             style={{
               '--stylo-toolbar-triangle-start': `${this.toolsPosition?.anchorLeft}px`
-            }}
-          ></stylo-toolbar-triangle>
+            }}></stylo-toolbar-triangle>
           {this.renderActions()}
         </div>
       </Host>
@@ -797,8 +776,9 @@ export class Toolbar implements ComponentInterface {
           toolbarActions={this.toolbarActions}
           anchorLink={this.anchorLink}
           linkCreated={this.linkCreated}
-          onLinkModified={($event: CustomEvent<boolean>) => this.reset($event.detail)}
-        ></stylo-toolbar-link>
+          onLinkModified={($event: CustomEvent<boolean>) =>
+            this.reset($event.detail)
+          }></stylo-toolbar-link>
       );
     }
 
@@ -812,8 +792,9 @@ export class Toolbar implements ComponentInterface {
           action={
             this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ? 'background-color' : 'color'
           }
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) => this.onExecCommand($event)}
-        ></stylo-toolbar-color>
+          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
+            this.onExecCommand($event)
+          }></stylo-toolbar-color>
       );
     }
 
@@ -823,8 +804,7 @@ export class Toolbar implements ComponentInterface {
           containerRef={this.containerRef}
           anchorEvent={this.anchorEvent}
           imgDidChange={this.imgDidChange}
-          onImgModified={() => this.reset(true)}
-        ></stylo-toolbar-image>
+          onImgModified={() => this.reset(true)}></stylo-toolbar-image>
       );
     }
 
@@ -834,8 +814,7 @@ export class Toolbar implements ComponentInterface {
           containerRef={this.containerRef}
           anchorEvent={this.anchorEvent}
           align={this.align}
-          onAlignModified={() => this.reset(true)}
-        ></stylo-toolbar-align>
+          onAlignModified={() => this.reset(true)}></stylo-toolbar-align>
       );
     }
 
@@ -844,8 +823,9 @@ export class Toolbar implements ComponentInterface {
         <stylo-toolbar-list
           disabledTitle={this.disabledTitle}
           list={this.list}
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) => this.onExecCommand($event)}
-        ></stylo-toolbar-list>
+          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
+            this.onExecCommand($event)
+          }></stylo-toolbar-list>
       );
     }
 
@@ -853,8 +833,9 @@ export class Toolbar implements ComponentInterface {
       return (
         <stylo-toolbar-font-size
           fontSize={this.fontSize}
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) => this.onExecCommand($event)}
-        ></stylo-toolbar-font-size>
+          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
+            this.onExecCommand($event)
+          }></stylo-toolbar-font-size>
       );
     }
 
@@ -870,8 +851,9 @@ export class Toolbar implements ComponentInterface {
           italic={this.italic === 'italic'}
           underline={this.underline === 'underline'}
           strikethrough={this.strikethrough === 'strikethrough'}
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) => this.onExecCommand($event)}
-        ></stylo-toolbar-style>
+          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
+            this.onExecCommand($event)
+          }></stylo-toolbar-style>
 
         {this.renderSeparator()}
 
@@ -889,12 +871,9 @@ export class Toolbar implements ComponentInterface {
 
         <stylo-toolbar-button
           onAction={() => this.toggleLink()}
-          cssClass={this.link ? 'active' : undefined}
-        >
+          cssClass={this.link ? 'active' : undefined}>
           <IconLink></IconLink>
         </stylo-toolbar-button>
-
-        {this.renderCustomActions()}
       </Fragment>
     );
   }
@@ -909,8 +888,7 @@ export class Toolbar implements ComponentInterface {
     if (configStore.state.toolbar.actions.backgroundColor) {
       result.push(
         <stylo-toolbar-button
-          onAction={() => this.openColorPicker(ToolbarActions.BACKGROUND_COLOR)}
-        >
+          onAction={() => this.openColorPicker(ToolbarActions.BACKGROUND_COLOR)}>
           <IconColor></IconColor>
         </stylo-toolbar-button>
       );
@@ -929,27 +907,6 @@ export class Toolbar implements ComponentInterface {
     }
 
     return this.renderSeparator();
-  }
-
-  private renderCustomActions() {
-    return configStore.state.toolbar.actions.customActions
-      ? configStore.state.toolbar.actions.customActions
-          .split(',')
-          .map((customAction: string) => this.renderCustomAction(customAction))
-      : undefined;
-  }
-
-  private renderCustomAction(customAction: string) {
-    return (
-      <Fragment>
-        {this.renderSeparator()}
-        <stylo-toolbar-button
-          onClick={($event: UIEvent) => this.onCustomAction($event, customAction)}
-        >
-          <slot name={customAction}></slot>
-        </stylo-toolbar-button>
-      </Fragment>
-    );
   }
 
   private renderListAction() {
