@@ -4,26 +4,19 @@
 
 ## Properties
 
-| Property       | Attribute | Description                                                                                                         | Type                                                                                                                                                                                                                                                                                   | Default     |
-| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; globalEvents?: boolean; command?: "native" \| "custom"; actions?: { img?: { anchor: string; propertyWidth: string; propertyCssFloat: string; }; list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; customActions?: string; }; }` | `undefined` |
-| `containerRef` | --        | To attach the inline editor event listeners to a specific container instead of the document                         | `HTMLElement`                                                                                                                                                                                                                                                                          | `undefined` |
+| Property       | Attribute | Description                                                                                                         | Type                                                                                                                                                                                                                                   | Default     |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; command?: "native" \| "custom"; actions?: { img?: { anchor: string; propertyWidth: string; propertyCssFloat: string; }; list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; }; }` | `undefined` |
+| `containerRef` | --        | To attach the inline editor event listeners to a specific container instead of the document                         | `HTMLElement`                                                                                                                                                                                                                          | `undefined` |
 
 ## Events
 
-| Event              | Description                                                                                                               | Type                         |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `customAction`     | Triggered when a custom action is selected. Its detail provide an action name, the Selection and an anchorLink            | `CustomEvent<ToolbarAction>` |
-| `imgDidChange`     | Triggered when an image is manipulated. Note: the event won't provide directly the image but rather its container element | `CustomEvent<HTMLElement>`   |
-| `linkCreated`      | Triggered when a link is created by the user. The event detail is the container                                           | `CustomEvent<HTMLElement>`   |
-| `styleDidChange`   | Triggered when the style is modified (bold, italic, color, alignment, etc.). The event detail is the container            | `CustomEvent<HTMLElement>`   |
-| `toolbarActivated` |                                                                                                                           | `CustomEvent<boolean>`       |
-
-## Slots
-
-| Slot | Description                           |
-| ---- | ------------------------------------- |
-|      | related to the customActions property |
+| Event              | Description                                                                                                               | Type                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `imgDidChange`     | Triggered when an image is manipulated. Note: the event won't provide directly the image but rather its container element | `CustomEvent<HTMLElement>` |
+| `linkCreated`      | Triggered when a link is created by the user. The event detail is the container                                           | `CustomEvent<HTMLElement>` |
+| `styleDidChange`   | Triggered when the style is modified (bold, italic, color, alignment, etc.). The event detail is the container            | `CustomEvent<HTMLElement>` |
+| `toolbarActivated` |                                                                                                                           | `CustomEvent<boolean>`     |
 
 ## CSS Custom Properties
 
@@ -78,9 +71,9 @@
 - [stylo-toolbar-align](../actions/align)
 - [stylo-toolbar-list](../actions/list)
 - [stylo-toolbar-font-size](../actions/font-size)
-- [stylo-toolbar-style](../actions/style)
-- [stylo-toolbar-button](../button)
 - [stylo-toolbar-separator](../separator)
+- [stylo-toolbar-button](../button)
+- [stylo-toolbar-style](../actions/style)
 
 ### Graph
 
@@ -93,9 +86,9 @@ graph TD;
   stylo-toolbar --> stylo-toolbar-align
   stylo-toolbar --> stylo-toolbar-list
   stylo-toolbar --> stylo-toolbar-font-size
-  stylo-toolbar --> stylo-toolbar-style
-  stylo-toolbar --> stylo-toolbar-button
   stylo-toolbar --> stylo-toolbar-separator
+  stylo-toolbar --> stylo-toolbar-button
+  stylo-toolbar --> stylo-toolbar-style
   stylo-toolbar-color --> stylo-color
   stylo-color --> stylo-color-input
   stylo-toolbar-image --> stylo-toolbar-button

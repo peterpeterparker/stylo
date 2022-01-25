@@ -6,10 +6,6 @@ export interface StyloToolbar {
    */
   palette: StyloPalette[];
   /**
-   * Handle the event "selection change" "manually". Useful if used in a shadowed context.
-   */
-  globalEvents: boolean;
-  /**
    * Use `document.execCommand` (= "native") to modify the document or, alternatively use the `custom` implementation
    */
   command: 'native' | 'custom';
@@ -50,11 +46,6 @@ export interface StyloToolbar {
      * To hide the option to select a background-color
      */
     backgroundColor: boolean;
-    /**
-     * You might to display and add further actions to the component ? Use this property to provide a comma separated list of actions.
-     * Comma separated list.
-     */
-    customActions?: string;
   };
 }
 
@@ -105,11 +96,4 @@ export enum ToolbarFontSize {
 export interface ToolbarAnchorLink {
   range: Range;
   text: string;
-  element: Element;
-}
-
-export interface ToolbarAction {
-  action: string;
-  selection: Selection;
-  anchorLink: ToolbarAnchorLink;
 }

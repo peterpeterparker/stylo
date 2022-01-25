@@ -32,9 +32,9 @@ graph TD;
   stylo-toolbar --> stylo-toolbar-align
   stylo-toolbar --> stylo-toolbar-list
   stylo-toolbar --> stylo-toolbar-font-size
-  stylo-toolbar --> stylo-toolbar-style
-  stylo-toolbar --> stylo-toolbar-button
   stylo-toolbar --> stylo-toolbar-separator
+  stylo-toolbar --> stylo-toolbar-button
+  stylo-toolbar --> stylo-toolbar-style
   stylo-toolbar-color --> stylo-color
   stylo-color --> stylo-color-input
   stylo-toolbar-image --> stylo-toolbar-button

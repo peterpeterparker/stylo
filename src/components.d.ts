@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { StyloPalette, StyloPaletteColor } from "./types/palette";
 import { StyloConfig } from "./types/config";
 import { StyloPlugin } from "./types/plugin";
-import { StyloToolbar, ToolbarAction, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
+import { StyloToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
 import { ExecCommandAction } from "./types/execcommand";
 import { EventEmitter } from "@stencil/core";
 export namespace Components {
@@ -301,10 +301,6 @@ declare namespace LocalJSX {
           * To attach the inline editor event listeners to a specific container instead of the document
          */
         "containerRef"?: HTMLElement | undefined;
-        /**
-          * Triggered when a custom action is selected. Its detail provide an action name, the Selection and an anchorLink
-         */
-        "onCustomAction"?: (event: CustomEvent<ToolbarAction>) => void;
         /**
           * Triggered when an image is manipulated. Note: the event won't provide directly the image but rather its container element
          */
