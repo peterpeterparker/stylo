@@ -16,6 +16,7 @@ import {
   EventEmitter,
   h,
   Host,
+  Listen,
   Prop,
   State,
   Watch
@@ -152,40 +153,21 @@ export class Toolbar implements ComponentInterface {
   private rtl: boolean = isRTL();
   private mobile: boolean = isMobile();
 
-  private unsubscribe: () => void | undefined;
-
   constructor() {
-    this.handleSelectionChange = this.handleSelectionChange.bind(this);
+    this.onSelectionChange = this.onSelectionChange.bind(this);
   }
 
   componentWillLoad() {
     this.initDefaultContentAlign();
-
-    this.unsubscribe = configStore.onChange('toolbar', ({globalEvents}: StyloToolbar) =>
-      this.onGlobalEventsChange(globalEvents)
-    );
-
     this.applyStandaloneConfig();
   }
 
   connectedCallback() {
-    this.attachSelectionChangeHandler();
-    this.attachListener();
+    this.addListener();
   }
 
   disconnectedCallback() {
-    this.detachSelectionChangeHandler();
-    this.detachListener();
-
-    this.unsubscribe?.();
-  }
-
-  private onGlobalEventsChange(changedValue: boolean) {
-    if (changedValue) {
-      this.attachSelectionChangeHandler();
-    } else {
-      this.detachSelectionChangeHandler();
-    }
+    this.removeListener();
   }
 
   @Watch('containerRef')
@@ -194,8 +176,8 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    this.detachListener();
-    this.attachListener();
+    this.removeListener();
+    this.addListener();
   }
 
   @Watch('config')
@@ -214,37 +196,40 @@ export class Toolbar implements ComponentInterface {
     };
   }
 
-  private attachSelectionChangeHandler() {
-    if (!configStore.state.toolbar.globalEvents) {
+  @Listen('selectionchange', {target: 'document', passive: true})
+  onSelectionChange() {
+    if (
+      this.toolbarActions === ToolbarActions.COLOR ||
+      this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ||
+      this.toolbarActions === ToolbarActions.LINK
+    ) {
       return;
     }
 
-    document.addEventListener('selectionchange', this.handleSelectionChange, {
-      passive: true
-    });
-  }
-
-  private detachSelectionChangeHandler() {
-    if (configStore.state.toolbar.globalEvents) {
+    const anchorImage: boolean = this.isAnchorImage();
+    if (this.toolbarActions === ToolbarActions.IMAGE && anchorImage) {
+      this.reset(false);
       return;
     }
 
-    document.removeEventListener('selectionchange', this.handleSelectionChange);
+    this.displayTools();
   }
 
-  private attachListener() {
+  @Listen('resize', {target: 'document'})
+  onResize() {
+    this.reset(true);
+  }
+
+  private addListener() {
     const listenerElement: HTMLElement | Document = this.containerRef || document;
     listenerElement?.addEventListener('mousedown', this.startSelection, {passive: true});
     listenerElement?.addEventListener('touchstart', this.startSelection, {passive: true});
-    document.addEventListener('resize', () => this.reset(true));
   }
 
-  private detachListener() {
+  private removeListener() {
     const listenerElement: HTMLElement | Document = this.containerRef || document;
-
     listenerElement?.removeEventListener('mousedown', this.startSelection);
     listenerElement?.removeEventListener('touchstart', this.startSelection);
-    document.removeEventListener('resize', () => this.reset(true));
   }
 
   private startSelection = ($event: MouseEvent | TouchEvent) => {
@@ -322,24 +307,6 @@ export class Toolbar implements ComponentInterface {
 
   private isAnchorImage() {
     return isAnchorImage(this.anchorEvent, configStore.state.toolbar.actions.img?.anchor);
-  }
-
-  private handleSelectionChange(_$event: UIEvent) {
-    if (
-      this.toolbarActions === ToolbarActions.COLOR ||
-      this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ||
-      this.toolbarActions === ToolbarActions.LINK
-    ) {
-      return;
-    }
-
-    const anchorImage: boolean = this.isAnchorImage();
-    if (this.toolbarActions === ToolbarActions.IMAGE && anchorImage) {
-      this.reset(false);
-      return;
-    }
-
-    this.displayTools();
   }
 
   private displayTools() {

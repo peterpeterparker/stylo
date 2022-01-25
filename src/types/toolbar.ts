@@ -6,10 +6,6 @@ export interface StyloToolbar {
    */
   palette: StyloPalette[];
   /**
-   * Handle the event "selection change" "manually". Useful if used in a shadowed context.
-   */
-  globalEvents: boolean;
-  /**
    * Use `document.execCommand` (= "native") to modify the document or, alternatively use the `custom` implementation
    */
   command: 'native' | 'custom';

@@ -76,7 +76,6 @@ describe('editor', () => {
 
     let config: StyloConfig = {
       toolbar: {
-        globalEvents: true,
         actions: {
           img: {
             anchor: 'img',
