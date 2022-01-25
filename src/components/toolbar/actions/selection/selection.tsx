@@ -27,7 +27,7 @@ interface SelectionProps {
   strikethrough: 'strikethrough' | 'initial' | undefined;
   link: boolean;
 
-  openToolbarActions: (actions: ToolbarActions) => void;
+  switchToolbarActions: (actions: ToolbarActions) => void;
   onExecCommand: ($event: CustomEvent<ExecCommandAction>) => void;
   toggleLink: () => void;
 }
@@ -36,7 +36,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
   align,
   list,
   fontSize,
-  openToolbarActions,
+  switchToolbarActions,
   disabledTitle,
   bold,
   italic,
@@ -62,7 +62,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
     }
 
     return (
-      <stylo-toolbar-button onAction={() => openToolbarActions(ToolbarActions.LIST)}>
+      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.LIST)}>
         {list === ToolbarList.UNORDERED ? <IconUl></IconUl> : <IconOl></IconOl>}
       </stylo-toolbar-button>
     );
@@ -74,7 +74,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
     }
 
     return (
-      <stylo-toolbar-button onAction={() => openToolbarActions(ToolbarActions.ALIGNMENT)}>
+      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.ALIGNMENT)}>
         {align === ToolbarAlign.LEFT ? (
           <IconAlignLeft></IconAlignLeft>
         ) : align === ToolbarAlign.CENTER ? (
@@ -93,7 +93,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
 
     return (
       <Fragment>
-        <stylo-toolbar-button onAction={() => openToolbarActions(ToolbarActions.FONT_SIZE)}>
+        <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.FONT_SIZE)}>
           <span>
             A<small>A</small>
           </span>
@@ -106,14 +106,14 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
 
   const renderColorActions = () => {
     const result = [
-      <stylo-toolbar-button onAction={() => openToolbarActions(ToolbarActions.COLOR)}>
+      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.COLOR)}>
         <IconPalette></IconPalette>
       </stylo-toolbar-button>
     ];
 
     if (configStore.state.toolbar.actions.backgroundColor) {
       result.push(
-        <stylo-toolbar-button onAction={() => openToolbarActions(ToolbarActions.BACKGROUND_COLOR)}>
+        <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.BACKGROUND_COLOR)}>
           <IconColor></IconColor>
         </stylo-toolbar-button>
       );

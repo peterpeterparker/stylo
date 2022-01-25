@@ -660,7 +660,10 @@ export class Toolbar implements ComponentInterface {
     }
   }
 
-  private openToolbarActions = (actions: ToolbarActions) => (this.toolbarActions = actions);
+  /***
+   * The toolbar is already displayed and we want to switch the actions
+   */
+  private switchToolbarActions = (actions: ToolbarActions) => (this.toolbarActions = actions);
 
   private onExecCommand = ($event: CustomEvent<ExecCommandAction>) => {
     if (!$event || !$event.detail) {
@@ -818,7 +821,7 @@ export class Toolbar implements ComponentInterface {
       <Selection
         align={this.align}
         list={this.list}
-        openToolbarActions={this.openToolbarActions}
+        switchToolbarActions={this.switchToolbarActions}
         bold={this.bold}
         disabledTitle={this.disabledTitle}
         fontSize={this.fontSize}
