@@ -97,7 +97,7 @@ export class Toolbar implements ComponentInterface {
   @State()
   private displayToolsActivated: boolean = false;
 
-  private debounceDisplayToolsActivated: () => void = debounce(() => {
+  private readonly debounceDisplayToolsActivated: () => void = debounce(() => {
     this.displayToolsActivated = true;
     this.toolbarActivated.emit(true);
   });
@@ -215,7 +215,7 @@ export class Toolbar implements ComponentInterface {
     this.displayTools();
   }
 
-  @Listen('resize', {target: 'document'})
+  @Listen('resize', {target: 'window'})
   onResize() {
     this.reset(true);
   }
@@ -562,18 +562,8 @@ export class Toolbar implements ComponentInterface {
     this.anchorLink = null;
     this.link = false;
 
-    if (window) {
-      window.removeEventListener('scroll', () => {
-        this.setStickyPositionIOS();
-      });
-      window.removeEventListener('resize', () => {
-        this.reset(true, true);
-      });
-    }
-
     if (
       blurActiveElement &&
-      document &&
       document.activeElement &&
       document.activeElement instanceof HTMLElement
     ) {
