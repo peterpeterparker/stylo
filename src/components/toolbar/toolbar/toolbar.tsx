@@ -14,7 +14,6 @@ import {
   Element,
   Event,
   EventEmitter,
-  Fragment,
   h,
   Host,
   Prop,
@@ -45,14 +44,7 @@ import {
   getUnderline,
   isAnchorImage
 } from '../../../utils/toolbar.utils';
-import {IconAlignCenter} from '../../icons/align-center';
-import {IconAlignLeft} from '../../icons/align-left';
-import {IconAlignRight} from '../../icons/align-right';
-import {IconColor} from '../../icons/color';
-import {IconLink} from '../../icons/link';
-import {IconOl} from '../../icons/ol';
-import {IconPalette} from '../../icons/palette';
-import {IconUl} from '../../icons/ul';
+import {Selection} from '../actions/selection/selection';
 
 @Component({
   tag: 'stylo-toolbar',
@@ -371,19 +363,20 @@ export class Toolbar implements ComponentInterface {
     const activated: boolean = this.activateToolbar(selection);
     this.setToolsActivated(activated);
 
-    if (this.toolsActivated) {
-      this.selection = selection;
+    if (!this.toolsActivated) {
+      return;
+    }
 
-      if (selection.rangeCount > 0) {
-        const range: Range = selection.getRangeAt(0);
-        this.anchorLink = {
-          range: range,
-          text: selection.toString(),
-          element: document.activeElement
-        };
+    this.selection = selection;
 
-        this.setToolbarAnchorPosition();
-      }
+    if (selection.rangeCount > 0) {
+      const range: Range = selection.getRangeAt(0);
+      this.anchorLink = {
+        range: range,
+        text: selection.toString()
+      };
+
+      this.setToolbarAnchorPosition();
     }
   }
 
@@ -394,52 +387,54 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    if (this.tools) {
-      const selection: Selection | null = getSelection();
-      const range: Range | undefined = selection?.getRangeAt(0);
-      const rect: DOMRect | undefined = range?.getBoundingClientRect();
-
-      const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
-
-      const eventX: number = unifyEvent(this.anchorEvent).clientX;
-      const eventY: number = unifyEvent(this.anchorEvent).clientY;
-
-      const x: number =
-        rect && containerRect
-          ? rect.left - containerRect.left + this.containerRef.offsetLeft + rect.width / 2
-          : eventX;
-      const y: number =
-        rect && containerRect ? rect.top - containerRect.top + this.containerRef.offsetTop : eventY;
-
-      const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
-
-      let top: number = position === 'above' ? y - 16 : y + (rect?.height || 0) + 8;
-
-      const innerWidth: number = isIOS() ? screen.width : window.innerWidth;
-
-      const fixedLeft: number = (rect?.left || eventX) - 40;
-
-      const safeAreaMarginX: number = 16;
-
-      // Limit overflow right
-      const overflowLeft: boolean = this.tools.offsetWidth / 2 + safeAreaMarginX > x;
-      const overflowRight: boolean =
-        innerWidth > 0 && fixedLeft > innerWidth - (this.tools.offsetWidth + safeAreaMarginX);
-
-      // To set the position of the tools
-      this.toolsPosition = {
-        top,
-        left: overflowRight ? `auto` : overflowLeft ? `${safeAreaMarginX}px` : `${x}px`,
-        right: overflowRight ? `${safeAreaMarginX}px` : `auto`,
-        position,
-        align: overflowRight ? 'end' : overflowLeft ? 'start' : 'center',
-        anchorLeft: overflowLeft
-          ? x - safeAreaMarginX
-          : overflowRight
-          ? x - (innerWidth - safeAreaMarginX - this.tools.offsetWidth)
-          : this.tools.offsetWidth / 2
-      };
+    if (!this.tools) {
+      return;
     }
+
+    const selection: Selection | null = getSelection();
+    const range: Range | undefined = selection?.getRangeAt(0);
+    const rect: DOMRect | undefined = range?.getBoundingClientRect();
+
+    const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
+
+    const eventX: number = unifyEvent(this.anchorEvent).clientX;
+    const eventY: number = unifyEvent(this.anchorEvent).clientY;
+
+    const x: number =
+      rect && containerRect
+        ? rect.left - containerRect.left + this.containerRef.offsetLeft + rect.width / 2
+        : eventX;
+    const y: number =
+      rect && containerRect ? rect.top - containerRect.top + this.containerRef.offsetTop : eventY;
+
+    const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
+
+    let top: number = position === 'above' ? y - 16 : y + (rect?.height || 0) + 8;
+
+    const innerWidth: number = isIOS() ? screen.width : window.innerWidth;
+
+    const fixedLeft: number = (rect?.left || eventX) - 40;
+
+    const safeAreaMarginX: number = 16;
+
+    // Limit overflow right
+    const overflowLeft: boolean = this.tools.offsetWidth / 2 + safeAreaMarginX > x;
+    const overflowRight: boolean =
+      innerWidth > 0 && fixedLeft > innerWidth - (this.tools.offsetWidth + safeAreaMarginX);
+
+    // To set the position of the tools
+    this.toolsPosition = {
+      top,
+      left: overflowRight ? `auto` : overflowLeft ? `${safeAreaMarginX}px` : `${x}px`,
+      right: overflowRight ? `${safeAreaMarginX}px` : `auto`,
+      position,
+      align: overflowRight ? 'end' : overflowLeft ? 'start' : 'center',
+      anchorLeft: overflowLeft
+        ? x - safeAreaMarginX
+        : overflowRight
+        ? x - (innerWidth - safeAreaMarginX - this.tools.offsetWidth)
+        : this.tools.offsetWidth / 2
+    };
   }
 
   private handlePositionIOS() {
@@ -619,14 +614,14 @@ export class Toolbar implements ComponentInterface {
     }
   }
 
-  private toggleLink() {
+  private toggleLink = () => {
     if (this.link) {
       this.removeLink();
       this.reset(true);
     } else {
       this.openLink();
     }
-  }
+  };
 
   private removeLink() {
     if (!this.selection) {
@@ -665,23 +660,9 @@ export class Toolbar implements ComponentInterface {
     }
   }
 
-  private openColorPicker(action: ToolbarActions.COLOR | ToolbarActions.BACKGROUND_COLOR) {
-    this.toolbarActions = action;
-  }
+  private openToolbarActions = (actions: ToolbarActions) => (this.toolbarActions = actions);
 
-  private openAlignmentActions() {
-    this.toolbarActions = ToolbarActions.ALIGNMENT;
-  }
-
-  private openFontSizeActions() {
-    this.toolbarActions = ToolbarActions.FONT_SIZE;
-  }
-
-  private openListActions() {
-    this.toolbarActions = ToolbarActions.LIST;
-  }
-
-  private onExecCommand($event: CustomEvent<ExecCommandAction>) {
+  private onExecCommand = ($event: CustomEvent<ExecCommandAction>) => {
     if (!$event || !$event.detail) {
       return;
     }
@@ -709,7 +690,7 @@ export class Toolbar implements ComponentInterface {
     }
 
     this.styleDidChange.emit(toHTMLElement(container));
-  }
+  };
 
   private onAttributesChangesInitStyle() {
     const anchorNode: HTMLElement | null = getAnchorElement(this.selection);
@@ -792,9 +773,7 @@ export class Toolbar implements ComponentInterface {
           action={
             this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ? 'background-color' : 'color'
           }
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
-            this.onExecCommand($event)
-          }></stylo-toolbar-color>
+          onExecCommand={this.onExecCommand}></stylo-toolbar-color>
       );
     }
 
@@ -823,9 +802,7 @@ export class Toolbar implements ComponentInterface {
         <stylo-toolbar-list
           disabledTitle={this.disabledTitle}
           list={this.list}
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
-            this.onExecCommand($event)
-          }></stylo-toolbar-list>
+          onExecCommand={this.onExecCommand}></stylo-toolbar-list>
       );
     }
 
@@ -833,127 +810,24 @@ export class Toolbar implements ComponentInterface {
       return (
         <stylo-toolbar-font-size
           fontSize={this.fontSize}
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
-            this.onExecCommand($event)
-          }></stylo-toolbar-font-size>
+          onExecCommand={this.onExecCommand}></stylo-toolbar-font-size>
       );
     }
 
-    return this.renderSelectionActions();
-  }
-
-  private renderSelectionActions() {
     return (
-      <Fragment>
-        <stylo-toolbar-style
-          disabledTitle={this.disabledTitle}
-          bold={this.bold === 'bold'}
-          italic={this.italic === 'italic'}
-          underline={this.underline === 'underline'}
-          strikethrough={this.strikethrough === 'strikethrough'}
-          onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
-            this.onExecCommand($event)
-          }></stylo-toolbar-style>
-
-        {this.renderSeparator()}
-
-        {this.renderFontSizeAction()}
-
-        {this.renderColorActions()}
-
-        {this.renderSeparator()}
-
-        {this.renderAlignAction()}
-
-        {this.renderListAction()}
-
-        {this.renderLinkSeparator()}
-
-        <stylo-toolbar-button
-          onAction={() => this.toggleLink()}
-          cssClass={this.link ? 'active' : undefined}>
-          <IconLink></IconLink>
-        </stylo-toolbar-button>
-      </Fragment>
-    );
-  }
-
-  private renderColorActions() {
-    const result = [
-      <stylo-toolbar-button onAction={() => this.openColorPicker(ToolbarActions.COLOR)}>
-        <IconPalette></IconPalette>
-      </stylo-toolbar-button>
-    ];
-
-    if (configStore.state.toolbar.actions.backgroundColor) {
-      result.push(
-        <stylo-toolbar-button
-          onAction={() => this.openColorPicker(ToolbarActions.BACKGROUND_COLOR)}>
-          <IconColor></IconColor>
-        </stylo-toolbar-button>
-      );
-    }
-
-    return result;
-  }
-
-  private renderSeparator() {
-    return <stylo-toolbar-separator></stylo-toolbar-separator>;
-  }
-
-  private renderLinkSeparator() {
-    if (!this.list && !this.align) {
-      return undefined;
-    }
-
-    return this.renderSeparator();
-  }
-
-  private renderListAction() {
-    if (!this.list) {
-      return undefined;
-    }
-
-    return (
-      <stylo-toolbar-button onAction={() => this.openListActions()}>
-        {this.list === ToolbarList.UNORDERED ? <IconUl></IconUl> : <IconOl></IconOl>}
-      </stylo-toolbar-button>
-    );
-  }
-
-  private renderAlignAction() {
-    if (!this.align) {
-      return undefined;
-    }
-
-    return (
-      <stylo-toolbar-button onAction={() => this.openAlignmentActions()}>
-        {this.align === ToolbarAlign.LEFT ? (
-          <IconAlignLeft></IconAlignLeft>
-        ) : this.align === ToolbarAlign.CENTER ? (
-          <IconAlignCenter></IconAlignCenter>
-        ) : (
-          <IconAlignRight></IconAlignRight>
-        )}
-      </stylo-toolbar-button>
-    );
-  }
-
-  private renderFontSizeAction() {
-    if (!this.fontSize) {
-      return undefined;
-    }
-
-    return (
-      <Fragment>
-        <stylo-toolbar-button onAction={() => this.openFontSizeActions()}>
-          <span>
-            A<small>A</small>
-          </span>
-        </stylo-toolbar-button>
-
-        {this.renderSeparator()}
-      </Fragment>
+      <Selection
+        align={this.align}
+        list={this.list}
+        openToolbarActions={this.openToolbarActions}
+        bold={this.bold}
+        disabledTitle={this.disabledTitle}
+        fontSize={this.fontSize}
+        italic={this.italic}
+        strikethrough={this.strikethrough}
+        underline={this.underline}
+        link={this.link}
+        onExecCommand={this.onExecCommand}
+        toggleLink={this.toggleLink}></Selection>
     );
   }
 }
