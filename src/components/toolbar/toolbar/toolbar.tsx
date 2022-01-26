@@ -468,9 +468,8 @@ export class Toolbar implements ComponentInterface {
     this.align = this.rtl ? ToolbarAlign.RIGHT : ToolbarAlign.LEFT;
   }
 
-  // TODO: Find a clever way to detect to root container
   // We iterate until we find the root container to detect if bold, underline or italic are active
-  private findStyle(node: Node) {
+  private findStyle(node: Node | undefined) {
     if (!node) {
       return;
     }
@@ -478,6 +477,30 @@ export class Toolbar implements ComponentInterface {
     // Just in case
     if (node.nodeName.toUpperCase() === 'HTML' || node.nodeName.toUpperCase() === 'BODY') {
       return;
+    }
+
+    if (this.bold === undefined) {
+      this.bold = getBold(toHTMLElement(node));
+    }
+
+    if (this.italic === undefined) {
+      this.italic = getItalic(toHTMLElement(node));
+    }
+
+    if (this.underline === undefined) {
+      this.underline = getUnderline(toHTMLElement(node));
+    }
+
+    if (this.strikethrough === undefined) {
+      this.strikethrough = getStrikeThrough(toHTMLElement(node));
+    }
+
+    if (this.list === undefined) {
+      this.list = getList(toHTMLElement(node));
+    }
+
+    if (this.fontSize === undefined) {
+      this.fontSize = getFontSize(toHTMLElement(node));
     }
 
     if (isParagraph({element: node, container: this.containerRef})) {
@@ -492,33 +515,11 @@ export class Toolbar implements ComponentInterface {
         nodeName === 'H6';
 
       this.align = getContentAlignment(toHTMLElement(node));
-    } else {
-      if (this.bold === undefined) {
-        this.bold = getBold(toHTMLElement(node));
-      }
 
-      if (this.italic === undefined) {
-        this.italic = getItalic(toHTMLElement(node));
-      }
-
-      if (this.underline === undefined) {
-        this.underline = getUnderline(toHTMLElement(node));
-      }
-
-      if (this.strikethrough === undefined) {
-        this.strikethrough = getStrikeThrough(toHTMLElement(node));
-      }
-
-      if (this.list === undefined) {
-        this.list = getList(toHTMLElement(node));
-      }
-
-      this.findStyle(node.parentNode);
-
-      if (this.fontSize === undefined) {
-        this.fontSize = getFontSize(toHTMLElement(node));
-      }
+      return;
     }
+
+    this.findStyle(node.parentNode);
   }
 
   private initLink(selection: Selection) {
@@ -760,7 +761,6 @@ export class Toolbar implements ComponentInterface {
     if (this.toolbarActions === ToolbarActions.LIST) {
       return (
         <stylo-toolbar-list
-          disabledTitle={this.disabledTitle}
           list={this.list}
           onExecCommand={this.onExecCommand}></stylo-toolbar-list>
       );
@@ -781,7 +781,6 @@ export class Toolbar implements ComponentInterface {
         switchToolbarActions={this.switchToolbarActions}
         bold={this.bold}
         disabledTitle={this.disabledTitle}
-        fontSize={this.fontSize}
         italic={this.italic}
         strikethrough={this.strikethrough}
         underline={this.underline}
