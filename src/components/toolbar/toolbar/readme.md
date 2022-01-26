@@ -4,10 +4,10 @@
 
 ## Properties
 
-| Property       | Attribute | Description                                                                                                         | Type                                                                                                                                                                                                                                   | Default     |
-| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; command?: "native" \| "custom"; actions?: { img?: { anchor: string; propertyWidth: string; propertyCssFloat: string; }; list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; }; }` | `undefined` |
-| `containerRef` | --        | To attach the inline editor event listeners to a specific container instead of the document                         | `HTMLElement`                                                                                                                                                                                                                          | `undefined` |
+| Property       | Attribute | Description                                                                                                         | Type                                                                                                                                                                                                                                 | Default     |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; command?: "native" \| "custom"; style?: { img?: { anchor: string; propertyWidth: string; propertyCssFloat: string; }; list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; }; }` | `undefined` |
+| `containerRef` | --        | To attach the inline editor event listeners to a specific container instead of the document                         | `HTMLElement`                                                                                                                                                                                                                        | `undefined` |
 
 ## Events
 
@@ -73,7 +73,7 @@
 - [stylo-toolbar-font-size](../actions/font-size)
 - [stylo-toolbar-separator](../separator)
 - [stylo-toolbar-button](../button)
-- [stylo-toolbar-style](../actions/style)
+- [stylo-toolbar-text](../actions/text)
 
 ### Graph
 
@@ -88,7 +88,7 @@ graph TD;
   stylo-toolbar --> stylo-toolbar-font-size
   stylo-toolbar --> stylo-toolbar-separator
   stylo-toolbar --> stylo-toolbar-button
-  stylo-toolbar --> stylo-toolbar-style
+  stylo-toolbar --> stylo-toolbar-text
   stylo-toolbar-color --> stylo-color
   stylo-color --> stylo-color-input
   stylo-toolbar-image --> stylo-toolbar-button
@@ -96,7 +96,7 @@ graph TD;
   stylo-toolbar-align --> stylo-toolbar-button
   stylo-toolbar-list --> stylo-toolbar-button
   stylo-toolbar-font-size --> stylo-toolbar-button
-  stylo-toolbar-style --> stylo-toolbar-button
+  stylo-toolbar-text --> stylo-toolbar-button
   stylo-editor --> stylo-toolbar
   style stylo-toolbar fill:#f9f,stroke:#333,stroke-width:4px
 ```

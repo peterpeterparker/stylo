@@ -36,7 +36,7 @@ export class Image {
   componentWillLoad() {
     const target: HTMLImageElement = this.anchorEvent.target as HTMLImageElement;
 
-    const {img} = configStore.state.toolbar.actions;
+    const {img} = configStore.state.toolbar.style;
 
     if (target.style.getPropertyValue(img?.propertyWidth) === '25%') {
       this.imageSize = ToolbarImageSize.SMALL;
@@ -85,7 +85,7 @@ export class Image {
   }
 
   private setImageWith = (size: ToolbarImageSize) => {
-    const {img} = configStore.state.toolbar.actions;
+    const {img} = configStore.state.toolbar.style;
 
     if (!img) {
       return;
@@ -96,7 +96,7 @@ export class Image {
   };
 
   private setImageAlignment = (align: ToolbarImageAlign) => {
-    const {img} = configStore.state.toolbar.actions;
+    const {img} = configStore.state.toolbar.style;
 
     if (!img) {
       return;
@@ -142,7 +142,7 @@ export class Image {
   }
 
   private isAnchorImage(): boolean {
-    return isAnchorImage(this.anchorEvent, configStore.state.toolbar.actions.img?.anchor);
+    return isAnchorImage(this.anchorEvent, configStore.state.toolbar.style.img?.anchor);
   }
 
   render() {

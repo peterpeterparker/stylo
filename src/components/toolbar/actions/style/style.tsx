@@ -1,123 +1,150 @@
-import {isMobile} from '@deckdeckgo/utils';
-import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
+import {Fragment, FunctionalComponent, h} from '@stencil/core';
+import configStore from '../../../../stores/config.store';
 import {ExecCommandAction} from '../../../../types/execcommand';
+import {ToolbarActions, ToolbarAlign, ToolbarList} from '../../../../types/toolbar';
+import {IconAlignCenter} from '../../../icons/align-center';
+import {IconAlignLeft} from '../../../icons/align-left';
+import {IconAlignRight} from '../../../icons/align-right';
+import {IconColor} from '../../../icons/color';
+import {IconLink} from '../../../icons/link';
+import {IconOl} from '../../../icons/ol';
+import {IconPalette} from '../../../icons/palette';
+import {IconUl} from '../../../icons/ul';
 
-@Component({
-  tag: 'stylo-toolbar-style',
-  styleUrl: 'style.scss',
-  shadow: true
-})
-export class Style {
-  @Prop()
-  disabledTitle: boolean = false;
+interface SelectionProps {
+  align: ToolbarAlign;
+  list: ToolbarList | undefined;
+  disabledTitle: boolean;
+  bold: 'bold' | 'initial' | undefined;
+  italic: 'italic' | 'initial' | undefined;
+  underline: 'underline' | 'initial' | undefined;
+  strikethrough: 'strikethrough' | 'initial' | undefined;
+  link: boolean;
 
-  @Prop()
-  bold: boolean;
+  switchToolbarActions: (actions: ToolbarActions) => void;
+  onExecCommand: ($event: CustomEvent<ExecCommandAction>) => void;
+  toggleLink: () => void;
+}
 
-  @Prop()
-  italic: boolean;
+export const Style: FunctionalComponent<SelectionProps> = ({
+  align,
+  list,
+  switchToolbarActions,
+  disabledTitle,
+  bold,
+  italic,
+  strikethrough,
+  underline,
+  link,
+  onExecCommand,
+  toggleLink
+}: SelectionProps) => {
+  const renderSeparator = () => <stylo-toolbar-separator></stylo-toolbar-separator>;
 
-  @Prop()
-  underline: boolean;
+  const renderLinkSeparator = () => {
+    if (!list && !align) {
+      return undefined;
+    }
 
-  @Prop()
-  strikethrough: boolean;
+    return renderSeparator();
+  };
 
-  @Event()
-  private execCommand: EventEmitter<ExecCommandAction>;
-
-  private mobile: boolean = isMobile();
-
-  private styleBold($event: UIEvent) {
-    $event.stopPropagation();
-
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'font-weight',
-        value: 'bold',
-        initial: (element: HTMLElement | null) => element && element.style['font-weight'] === 'bold'
-      }
-    });
-  }
-
-  private styleItalic($event: UIEvent) {
-    $event.stopPropagation();
-
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'font-style',
-        value: 'italic',
-        initial: (element: HTMLElement | null) =>
-          element && element.style['font-style'] === 'italic'
-      }
-    });
-  }
-
-  private styleUnderline($event: UIEvent) {
-    $event.stopPropagation();
-
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'text-decoration',
-        value: 'underline',
-        initial: (element: HTMLElement | null) =>
-          element && element.style['text-decoration'] === 'underline'
-      }
-    });
-  }
-
-  private styleStrikeThrough($event: UIEvent) {
-    $event.stopPropagation();
-
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'text-decoration',
-        value: 'line-through',
-        initial: (element: HTMLElement | null) =>
-          element && element.style['text-decoration'] === 'line-through'
-      }
-    });
-  }
-
-  render() {
-    const cssClass = this.mobile ? 'tools-mobile' : undefined;
+  const renderListAction = () => {
+    if (!configStore.state.toolbar.style.list) {
+      return undefined;
+    }
 
     return (
-      <Host class={cssClass}>
-        <stylo-toolbar-button
-          onAction={($event: CustomEvent<UIEvent>) => this.styleBold($event.detail)}
-          disableAction={this.disabledTitle}
-          cssClass={this.bold ? 'active' : undefined}
-          class="bold"
-        >
-          <span>B</span>
-        </stylo-toolbar-button>
-        <stylo-toolbar-button
-          onAction={($event: CustomEvent<UIEvent>) => this.styleItalic($event.detail)}
-          cssClass={this.italic ? 'active' : undefined}
-          class="italic"
-        >
-          <span>I</span>
-        </stylo-toolbar-button>
-        <stylo-toolbar-button
-          onAction={($event: CustomEvent<UIEvent>) => this.styleUnderline($event.detail)}
-          cssClass={this.underline ? 'active' : undefined}
-          class={this.underline ? 'active underline' : 'underline'}
-        >
-          <span>U</span>
-        </stylo-toolbar-button>
-        <stylo-toolbar-button
-          onAction={($event: CustomEvent<UIEvent>) => this.styleStrikeThrough($event.detail)}
-          cssClass={this.strikethrough ? 'active' : undefined}
-          class="strikethrough"
-        >
-          <span style={{'text-decoration': 'line-through'}}>S</span>
-        </stylo-toolbar-button>
-      </Host>
+      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.LIST)}>
+        {list === ToolbarList.UNORDERED ? <IconUl></IconUl> : <IconOl></IconOl>}
+      </stylo-toolbar-button>
     );
-  }
-}
+  };
+
+  const renderAlignAction = () => {
+    if (!configStore.state.toolbar.style.align) {
+      return undefined;
+    }
+
+    return (
+      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.ALIGNMENT)}>
+        {align === ToolbarAlign.LEFT ? (
+          <IconAlignLeft></IconAlignLeft>
+        ) : align === ToolbarAlign.CENTER ? (
+          <IconAlignCenter></IconAlignCenter>
+        ) : (
+          <IconAlignRight></IconAlignRight>
+        )}
+      </stylo-toolbar-button>
+    );
+  };
+
+  const renderFontSizeAction = () => {
+    if (!configStore.state.toolbar.style.fontSize) {
+      return undefined;
+    }
+
+    return (
+      <Fragment>
+        <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.FONT_SIZE)}>
+          <span>
+            A<small>A</small>
+          </span>
+        </stylo-toolbar-button>
+
+        {renderSeparator()}
+      </Fragment>
+    );
+  };
+
+  const renderColorActions = () => {
+    const result = [
+      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.COLOR)}>
+        <IconPalette></IconPalette>
+      </stylo-toolbar-button>
+    ];
+
+    if (configStore.state.toolbar.style.backgroundColor) {
+      result.push(
+        <stylo-toolbar-button
+          onAction={() => switchToolbarActions(ToolbarActions.BACKGROUND_COLOR)}>
+          <IconColor></IconColor>
+        </stylo-toolbar-button>
+      );
+    }
+
+    return result;
+  };
+
+  return (
+    <Fragment>
+      <stylo-toolbar-text
+        disabledTitle={disabledTitle}
+        bold={bold === 'bold'}
+        italic={italic === 'italic'}
+        underline={underline === 'underline'}
+        strikethrough={strikethrough === 'strikethrough'}
+        onExecCommand={($event: CustomEvent<ExecCommandAction>) =>
+          onExecCommand($event)
+        }></stylo-toolbar-text>
+
+      {renderSeparator()}
+
+      {renderFontSizeAction()}
+
+      {renderColorActions()}
+
+      {renderSeparator()}
+
+      {renderAlignAction()}
+
+      {renderListAction()}
+
+      {renderLinkSeparator()}
+
+      <stylo-toolbar-button onAction={toggleLink} cssClass={link ? 'active' : undefined}>
+        <IconLink></IconLink>
+      </stylo-toolbar-button>
+    </Fragment>
+  );
+};

@@ -34,7 +34,7 @@ graph TD;
   stylo-toolbar --> stylo-toolbar-font-size
   stylo-toolbar --> stylo-toolbar-separator
   stylo-toolbar --> stylo-toolbar-button
-  stylo-toolbar --> stylo-toolbar-style
+  stylo-toolbar --> stylo-toolbar-text
   stylo-toolbar-color --> stylo-color
   stylo-color --> stylo-color-input
   stylo-toolbar-image --> stylo-toolbar-button
@@ -42,7 +42,7 @@ graph TD;
   stylo-toolbar-align --> stylo-toolbar-button
   stylo-toolbar-list --> stylo-toolbar-button
   stylo-toolbar-font-size --> stylo-toolbar-button
-  stylo-toolbar-style --> stylo-toolbar-button
+  stylo-toolbar-text --> stylo-toolbar-button
   style stylo-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

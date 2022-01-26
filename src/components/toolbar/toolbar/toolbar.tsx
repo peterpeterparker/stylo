@@ -45,7 +45,7 @@ import {
   getUnderline,
   isAnchorImage
 } from '../../../utils/toolbar.utils';
-import {Selection} from '../actions/selection/selection';
+import {Style} from '../actions/style/style';
 
 @Component({
   tag: 'stylo-toolbar',
@@ -277,7 +277,7 @@ export class Toolbar implements ComponentInterface {
   }
 
   private displayImageActions($event: MouseEvent | TouchEvent) {
-    if (!configStore.state.toolbar.actions.img) {
+    if (!configStore.state.toolbar.style.img) {
       return;
     }
 
@@ -306,7 +306,7 @@ export class Toolbar implements ComponentInterface {
   }
 
   private isAnchorImage() {
-    return isAnchorImage(this.anchorEvent, configStore.state.toolbar.actions.img?.anchor);
+    return isAnchorImage(this.anchorEvent, configStore.state.toolbar.style.img?.anchor);
   }
 
   private displayTools() {
@@ -775,7 +775,7 @@ export class Toolbar implements ComponentInterface {
     }
 
     return (
-      <Selection
+      <Style
         align={this.align}
         list={this.list}
         switchToolbarActions={this.switchToolbarActions}
@@ -786,7 +786,7 @@ export class Toolbar implements ComponentInterface {
         underline={this.underline}
         link={this.link}
         onExecCommand={this.onExecCommand}
-        toggleLink={this.toggleLink}></Selection>
+        toggleLink={this.toggleLink}></Style>
     );
   }
 }
