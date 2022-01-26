@@ -1,12 +1,7 @@
 import {Fragment, FunctionalComponent, h} from '@stencil/core';
 import configStore from '../../../../stores/config.store';
 import {ExecCommandAction} from '../../../../types/execcommand';
-import {
-  ToolbarActions,
-  ToolbarAlign,
-  ToolbarFontSize,
-  ToolbarList
-} from '../../../../types/toolbar';
+import {ToolbarActions, ToolbarAlign, ToolbarList} from '../../../../types/toolbar';
 import {IconAlignCenter} from '../../../icons/align-center';
 import {IconAlignLeft} from '../../../icons/align-left';
 import {IconAlignRight} from '../../../icons/align-right';
@@ -19,7 +14,6 @@ import {IconUl} from '../../../icons/ul';
 interface SelectionProps {
   align: ToolbarAlign;
   list: ToolbarList | undefined;
-  fontSize: ToolbarFontSize | undefined;
   disabledTitle: boolean;
   bold: 'bold' | 'initial' | undefined;
   italic: 'italic' | 'initial' | undefined;
@@ -35,7 +29,6 @@ interface SelectionProps {
 export const Selection: FunctionalComponent<SelectionProps> = ({
   align,
   list,
-  fontSize,
   switchToolbarActions,
   disabledTitle,
   bold,
@@ -57,7 +50,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
   };
 
   const renderListAction = () => {
-    if (!list) {
+    if (!configStore.state.toolbar.actions.list) {
       return undefined;
     }
 
@@ -69,7 +62,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
   };
 
   const renderAlignAction = () => {
-    if (!align) {
+    if (!configStore.state.toolbar.actions.align) {
       return undefined;
     }
 
@@ -87,7 +80,7 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
   };
 
   const renderFontSizeAction = () => {
-    if (!fontSize) {
+    if (!configStore.state.toolbar.actions.fontSize) {
       return undefined;
     }
 
@@ -113,7 +106,8 @@ export const Selection: FunctionalComponent<SelectionProps> = ({
 
     if (configStore.state.toolbar.actions.backgroundColor) {
       result.push(
-        <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.BACKGROUND_COLOR)}>
+        <stylo-toolbar-button
+          onAction={() => switchToolbarActions(ToolbarActions.BACKGROUND_COLOR)}>
           <IconColor></IconColor>
         </stylo-toolbar-button>
       );

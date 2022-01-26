@@ -9,7 +9,7 @@ import {ToolbarFontSize} from '../../../../types/toolbar';
   shadow: true
 })
 export class FontSize {
-  @Prop()
+  @Prop({mutable: true})
   fontSize: ToolbarFontSize;
 
   @Event()
@@ -31,6 +31,8 @@ export class FontSize {
           element && element.style['font-size'] === value.toLowerCase().replace('_', '-')
       }
     });
+
+    this.fontSize = size;
   }
 
   render() {

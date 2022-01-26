@@ -12,9 +12,6 @@ import {IconUl} from '../../../icons/ul';
 })
 export class AlignActions {
   @Prop()
-  disabledTitle: boolean = false;
-
-  @Prop()
   list: ToolbarList;
 
   @Event()
@@ -37,7 +34,6 @@ export class AlignActions {
     return (
       <Host class={this.mobile ? 'tools-sticky' : undefined}>
         <stylo-toolbar-button
-          disableAction={this.disabledTitle}
           onAction={($event: CustomEvent<UIEvent>) => this.toggleList($event.detail, 'ol')}
           class={this.list === ToolbarList.ORDERED ? 'active' : undefined}
         >
@@ -45,7 +41,6 @@ export class AlignActions {
         </stylo-toolbar-button>
 
         <stylo-toolbar-button
-          disableAction={this.disabledTitle}
           onAction={($event: CustomEvent<UIEvent>) => this.toggleList($event.detail, 'ul')}
           class={this.list === ToolbarList.UNORDERED ? 'active' : undefined}
         >

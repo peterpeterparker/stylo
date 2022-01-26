@@ -4,10 +4,9 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type                                           | Default     |
-| --------------- | ---------------- | ----------- | ---------------------------------------------- | ----------- |
-| `disabledTitle` | `disabled-title` |             | `boolean`                                      | `false`     |
-| `list`          | `list`           |             | `ToolbarList.ORDERED \| ToolbarList.UNORDERED` | `undefined` |
+| Property | Attribute | Description | Type                                           | Default     |
+| -------- | --------- | ----------- | ---------------------------------------------- | ----------- |
+| `list`   | `list`    |             | `ToolbarList.ORDERED \| ToolbarList.UNORDERED` | `undefined` |
 
 ## Events
 

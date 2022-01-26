@@ -91,7 +91,6 @@ export namespace Components {
         "toolbarActions": ToolbarActions;
     }
     interface StyloToolbarList {
-        "disabledTitle": boolean;
         "list": ToolbarList;
     }
     interface StyloToolbarSeparator {
@@ -349,7 +348,6 @@ declare namespace LocalJSX {
         "toolbarActions"?: ToolbarActions;
     }
     interface StyloToolbarList {
-        "disabledTitle"?: boolean;
         "list"?: ToolbarList;
         "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
     }

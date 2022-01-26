@@ -45,12 +45,18 @@ export const getBold = (element: HTMLElement): 'bold' | 'initial' | undefined =>
     : undefined;
 };
 
-export const getFontSize = (element: HTMLElement): ToolbarFontSize | undefined => {
-  if (!element || !element.hasAttribute('size')) {
+export const getFontSize = (element: HTMLElement | undefined): ToolbarFontSize | undefined => {
+  if (!element) {
     return undefined;
   }
 
-  return element.getAttribute('size') as ToolbarFontSize;
+  if (element.hasAttribute('size')) {
+    return element.getAttribute('size') as ToolbarFontSize;
+  }
+
+  return element.style.fontSize !== ''
+    ? ToolbarFontSize[element.style.fontSize.replace('-', '_').toUpperCase()]
+    : undefined;
 };
 
 export const getContentAlignment = (element: HTMLElement): ToolbarAlign => {
