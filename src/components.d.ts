@@ -95,7 +95,7 @@ export namespace Components {
     }
     interface StyloToolbarSeparator {
     }
-    interface StyloToolbarStyle {
+    interface StyloToolbarText {
         "bold": boolean;
         "disabledTitle": boolean;
         "italic": boolean;
@@ -197,11 +197,11 @@ declare global {
         prototype: HTMLStyloToolbarSeparatorElement;
         new (): HTMLStyloToolbarSeparatorElement;
     };
-    interface HTMLStyloToolbarStyleElement extends Components.StyloToolbarStyle, HTMLStencilElement {
+    interface HTMLStyloToolbarTextElement extends Components.StyloToolbarText, HTMLStencilElement {
     }
-    var HTMLStyloToolbarStyleElement: {
-        prototype: HTMLStyloToolbarStyleElement;
-        new (): HTMLStyloToolbarStyleElement;
+    var HTMLStyloToolbarTextElement: {
+        prototype: HTMLStyloToolbarTextElement;
+        new (): HTMLStyloToolbarTextElement;
     };
     interface HTMLStyloToolbarTriangleElement extends Components.StyloToolbarTriangle, HTMLStencilElement {
     }
@@ -225,7 +225,7 @@ declare global {
         "stylo-toolbar-link": HTMLStyloToolbarLinkElement;
         "stylo-toolbar-list": HTMLStyloToolbarListElement;
         "stylo-toolbar-separator": HTMLStyloToolbarSeparatorElement;
-        "stylo-toolbar-style": HTMLStyloToolbarStyleElement;
+        "stylo-toolbar-text": HTMLStyloToolbarTextElement;
         "stylo-toolbar-triangle": HTMLStyloToolbarTriangleElement;
     }
 }
@@ -353,7 +353,7 @@ declare namespace LocalJSX {
     }
     interface StyloToolbarSeparator {
     }
-    interface StyloToolbarStyle {
+    interface StyloToolbarText {
         "bold"?: boolean;
         "disabledTitle"?: boolean;
         "italic"?: boolean;
@@ -380,7 +380,7 @@ declare namespace LocalJSX {
         "stylo-toolbar-link": StyloToolbarLink;
         "stylo-toolbar-list": StyloToolbarList;
         "stylo-toolbar-separator": StyloToolbarSeparator;
-        "stylo-toolbar-style": StyloToolbarStyle;
+        "stylo-toolbar-text": StyloToolbarText;
         "stylo-toolbar-triangle": StyloToolbarTriangle;
     }
 }
@@ -403,7 +403,7 @@ declare module "@stencil/core" {
             "stylo-toolbar-link": LocalJSX.StyloToolbarLink & JSXBase.HTMLAttributes<HTMLStyloToolbarLinkElement>;
             "stylo-toolbar-list": LocalJSX.StyloToolbarList & JSXBase.HTMLAttributes<HTMLStyloToolbarListElement>;
             "stylo-toolbar-separator": LocalJSX.StyloToolbarSeparator & JSXBase.HTMLAttributes<HTMLStyloToolbarSeparatorElement>;
-            "stylo-toolbar-style": LocalJSX.StyloToolbarStyle & JSXBase.HTMLAttributes<HTMLStyloToolbarStyleElement>;
+            "stylo-toolbar-text": LocalJSX.StyloToolbarText & JSXBase.HTMLAttributes<HTMLStyloToolbarTextElement>;
             "stylo-toolbar-triangle": LocalJSX.StyloToolbarTriangle & JSXBase.HTMLAttributes<HTMLStyloToolbarTriangleElement>;
         }
     }

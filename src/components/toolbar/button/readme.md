@@ -24,7 +24,7 @@
 - [stylo-toolbar-font-size](../actions/font-size)
 - [stylo-toolbar-image](../actions/image)
 - [stylo-toolbar-list](../actions/list)
-- [stylo-toolbar-style](../actions/style)
+- [stylo-toolbar-text](../actions/text)
 
 ### Graph
 
@@ -35,7 +35,7 @@ graph TD;
   stylo-toolbar-font-size --> stylo-toolbar-button
   stylo-toolbar-image --> stylo-toolbar-button
   stylo-toolbar-list --> stylo-toolbar-button
-  stylo-toolbar-style --> stylo-toolbar-button
+  stylo-toolbar-text --> stylo-toolbar-button
   style stylo-toolbar-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

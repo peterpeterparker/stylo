@@ -32,9 +32,9 @@
 
 ```mermaid
 graph TD;
-  stylo-toolbar-style --> stylo-toolbar-button
-  stylo-toolbar --> stylo-toolbar-style
-  style stylo-toolbar-style fill:#f9f,stroke:#333,stroke-width:4px
+  stylo-toolbar-text --> stylo-toolbar-button
+  stylo-toolbar --> stylo-toolbar-text
+  style stylo-toolbar-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ---

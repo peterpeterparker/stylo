@@ -21,7 +21,7 @@ export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, img, code, hr];
 export const DEFAULT_TOOLBAR: StyloToolbar = {
   palette: DEFAULT_PALETTE,
   command: 'native',
-  actions: {
+  style: {
     list: false,
     align: true,
     fontSize: true,

@@ -12,7 +12,7 @@ export interface StyloToolbar {
   /**
    * Configure some actions of the toolbar
    */
-  actions: {
+  style: {
     /**
      * Per default, the component will not consider images as editable.
      */

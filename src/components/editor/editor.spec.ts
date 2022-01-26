@@ -76,7 +76,7 @@ describe('editor', () => {
 
     let config: StyloConfig = {
       toolbar: {
-        actions: {
+        style: {
           img: {
             anchor: 'img',
             propertyCssFloat: 'float',
