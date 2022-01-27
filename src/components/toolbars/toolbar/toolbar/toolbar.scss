@@ -1,7 +1,10 @@
 @use "../../../../themes/overlay";
+@use "../../../../themes/variables";
 
 :host {
   direction: ltr;
+
+  @include variables.colors;
 }
 
 div.tools {
@@ -30,6 +33,7 @@ div.tools {
   z-index: var(--stylo-toolbar-zindex, 2);
 
   @include overlay.overlay;
+  @include overlay.dialog;
   @include overlay.toolbar;
 
   /**

@@ -13,6 +13,7 @@
 
   @include variables.colors;
   @include overlay.overlay;
+  @include overlay.dialog;
   @include overlay.toolbar;
 
   z-index: var(--stylo-toolbar-zindex, 1);

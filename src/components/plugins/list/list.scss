@@ -41,7 +41,7 @@ span.placeholder {
   height: 1.4rem;
 
   border: 1px solid var(--background-active);
-  border-radius: 4px;
+  border-radius: var(--stylo-border, 4px);
 
   margin: 4px 8px;
 

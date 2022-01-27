@@ -7,8 +7,13 @@
   border: var(--stylo-border);
 }
 
+@mixin dialog {
+  background: var(--stylo-background, var(--white));
+  color: var(--stylo-color, var(--white-contrast));
+
+  border-radius: var(--stylo-border, 4px);
+}
+
 @mixin toolbar {
-  background: var(--stylo-toolbar-background, white);
-  border-radius: var(--stylo-toolbar-border-radius, 8px);
   padding: var(--stylo-toolbar-padding, 0 8px);
 }
