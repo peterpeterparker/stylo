@@ -55,6 +55,7 @@ export class UndoRedoEvents {
     containerStore.state.ref?.addEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
     document.addEventListener('toolbarActivated', this.onToolbarActivated);
+    document.addEventListener('menuActivated', this.onMenuActivated);
 
     this.unsubscribe = undoRedoStore.onChange('observe', (observe: boolean) => {
       if (observe) {
@@ -77,6 +78,7 @@ export class UndoRedoEvents {
     containerStore.state.ref?.removeEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
     document.removeEventListener('toolbarActivated', this.onToolbarActivated);
+    document.removeEventListener('menuActivated', this.onMenuActivated);
 
     this.unsubscribe?.();
   }
@@ -162,6 +164,11 @@ export class UndoRedoEvents {
   private onToolbarActivated = () => {
     this.copySelectedParagraphs({filterEmptySelection: true});
   };
+
+  private onMenuActivated = ({detail}: CustomEvent<{paragraph: HTMLElement}>) => {
+    const {paragraph} = detail;
+    this.undoUpdateParagraphs = this.toUpdateParagraphs([paragraph]);
+  }
 
   private onSnapshotParagraph = ({target}: CustomEvent<void>) => {
     const paragraph: HTMLElement | undefined = toHTMLElement(

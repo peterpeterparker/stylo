@@ -288,6 +288,7 @@ declare namespace LocalJSX {
         "onCancelPlugins"?: (event: CustomEvent<void>) => void;
     }
     interface StyloMenus {
+        "onMenuActivated"?: (event: CustomEvent<{paragraph: HTMLElement}>) => void;
     }
     interface StyloPlugins {
     }

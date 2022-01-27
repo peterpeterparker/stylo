@@ -1,4 +1,4 @@
-import {Component, ComponentInterface, h, Host, JSX, Listen, State} from '@stencil/core';
+import { Component, ComponentInterface, Event, EventEmitter, h, Host, JSX, Listen, State } from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
 import i18n from '../../../stores/i18n.store';
@@ -18,6 +18,9 @@ export class Menus implements ComponentInterface {
 
   @State()
   private menu: StyloMenu | undefined = undefined;
+
+  @Event()
+  menuActivated: EventEmitter<{paragraph: HTMLElement}>;
 
   private paragraph: HTMLElement | undefined;
 
@@ -39,6 +42,8 @@ export class Menus implements ComponentInterface {
       this.hide();
       return;
     }
+
+    this.menuActivated.emit({paragraph: this.paragraph});
 
     this.menu = configStore.state.menus?.find(({match}: StyloMenu) =>
       match({paragraph: this.paragraph})
