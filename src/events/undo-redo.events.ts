@@ -293,7 +293,7 @@ export class UndoRedoEvents {
       changes.push({
         outerHTML: this.cleanOuterHTML(paragraph),
         mutation: 'remove',
-        index: index + lowerIndex
+        index: index + (Number.isFinite(lowerIndex) ? lowerIndex : 0)
       })
     );
 
