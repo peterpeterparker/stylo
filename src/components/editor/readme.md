@@ -15,8 +15,8 @@
 
 - [stylo-add](../plugins/add)
 - [stylo-plugins](../plugins/plugins)
-- [stylo-toolbar](../toolbar/toolbar)
-- [stylo-menus](../menu)
+- [stylo-toolbar](../toolbars/toolbar/toolbar)
+- [stylo-menus](../toolbars/menu)
 
 ### Graph
 
