@@ -168,7 +168,7 @@ export class UndoRedoEvents {
   private onMenuActivated = ({detail}: CustomEvent<{paragraph: HTMLElement}>) => {
     const {paragraph} = detail;
     this.undoUpdateParagraphs = this.toUpdateParagraphs([paragraph]);
-  }
+  };
 
   private onSnapshotParagraph = ({target}: CustomEvent<void>) => {
     const paragraph: HTMLElement | undefined = toHTMLElement(
@@ -284,13 +284,11 @@ export class UndoRedoEvents {
     });
 
     const lowerIndex: number = Math.min(
-      ...removedParagraphs.map(({previousSibling}: RemovedParagraph) =>
-        {
-          console.log(previousSibling)
+      ...removedParagraphs.map(({previousSibling}: RemovedParagraph) => {
+        console.log(previousSibling);
 
-          return previousSibling ? elementIndex(toHTMLElement(previousSibling)) + 1 : 0
-        }
-      )
+        return previousSibling ? elementIndex(toHTMLElement(previousSibling)) + 1 : 0;
+      })
     );
 
     removedParagraphs.forEach(({paragraph}: RemovedParagraph, index: number) =>

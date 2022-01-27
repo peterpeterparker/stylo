@@ -1,4 +1,14 @@
-import { Component, ComponentInterface, Event, EventEmitter, h, Host, JSX, Listen, State } from '@stencil/core';
+import {
+  Component,
+  ComponentInterface,
+  Event,
+  EventEmitter,
+  h,
+  Host,
+  JSX,
+  Listen,
+  State
+} from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
 import i18n from '../../../stores/i18n.store';

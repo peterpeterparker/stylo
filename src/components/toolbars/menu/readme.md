@@ -2,6 +2,12 @@
 
 <!-- Auto Generated Below -->
 
+## Events
+
+| Event           | Description | Type                                       |
+| --------------- | ----------- | ------------------------------------------ |
+| `menuActivated` |             | `CustomEvent<{ paragraph: HTMLElement; }>` |
+
 ## Dependencies
 
 ### Used by
