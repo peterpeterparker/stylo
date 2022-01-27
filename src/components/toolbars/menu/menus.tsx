@@ -1,17 +1,8 @@
-import {
-  Component,
-  ComponentInterface,
-  Event,
-  EventEmitter,
-  h,
-  Host,
-  JSX,
-  Listen,
-  State
-} from '@stencil/core';
+import {Component, ComponentInterface, h, Host, JSX, Listen, State} from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
-import {StyloMenu, StyloMenuAction, StyloMenuActionEvent} from '../../../types/menu';
+import i18n from '../../../stores/i18n.store';
+import {StyloMenu, StyloMenuAction} from '../../../types/menu';
 import {renderIcon} from '../../../utils/icon.utils';
 import {toHTMLElement} from '../../../utils/node.utils';
 import {findParagraph} from '../../../utils/paragraph.utils';
@@ -30,12 +21,6 @@ export class Menus implements ComponentInterface {
 
   private paragraph: HTMLElement | undefined;
 
-  /**
-   * An event triggered when user select one of the custom actions of the menus provided in your configuration
-   */
-  @Event()
-  menuAction: EventEmitter<StyloMenuActionEvent>;
-
   @Listen('keydown', {target: 'document', passive: true})
   onKeyDown() {
     this.hide();
@@ -50,20 +35,25 @@ export class Menus implements ComponentInterface {
 
     this.paragraph = toHTMLElement(paragraph);
 
-    this.menu = configStore.state.menus?.find(
-      ({nodeName}: StyloMenu) => this.paragraph?.nodeName.toLowerCase() === nodeName
-    );
-
-    this.top = this.menu && this.paragraph?.offsetTop;
-  }
-
-  private selectMenuAction({message}: StyloMenuAction) {
     if (!this.paragraph) {
       this.hide();
       return;
     }
 
-    this.menuAction.emit({paragraph: this.paragraph, message});
+    this.menu = configStore.state.menus?.find(({match}: StyloMenu) =>
+      match({paragraph: this.paragraph})
+    );
+
+    this.top = this.menu && this.paragraph?.offsetTop;
+  }
+
+  private async selectMenuAction({action}: StyloMenuAction) {
+    if (!this.paragraph) {
+      this.hide();
+      return;
+    }
+
+    await action({paragraph: this.paragraph});
 
     this.hide();
   }
@@ -100,7 +90,9 @@ export class Menus implements ComponentInterface {
     const icon: JSX.IntrinsicElements | undefined = renderIcon(iconSrc);
 
     return (
-      <stylo-toolbar-button onAction={() => this.selectMenuAction(action)} label={text}>
+      <stylo-toolbar-button
+        onAction={async () => await this.selectMenuAction(action)}
+        label={i18n.state.menus[text] || text}>
         {icon ? icon : <div class="icon" innerHTML={iconSrc}></div>}
       </stylo-toolbar-button>
     );

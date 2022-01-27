@@ -19,13 +19,6 @@ export const es: I18n = {
     align_center: 'Alinear al centro',
     align_right: 'Alinear a la derecha',
     font_size: 'Tamaño de fuente',
-    img_width_original: 'Ancho de la imagen original',
-    img_width_large: 'Ancho de imagen grande',
-    img_width_medium: 'Ancho de imagen medio',
-    img_width_small: 'Ancho de imagen pequeño',
-    img_align_standard: 'Alinear estándar de imagen',
-    img_align_start: 'Alinear inicio de imagen',
-    img_delete: 'Borrar imagen',
     list_ol: 'Lista ordenada',
     list_ul: 'Lista desordenada',
     style_list: 'Lista de estilos',
@@ -38,5 +31,12 @@ export const es: I18n = {
     italic: 'Cursiva',
     underline: 'Subrayado',
     strikethrough: 'Tachado'
+  },
+  menus: {
+    img_width_original: 'Ancho de la imagen original',
+    img_width_large: 'Ancho de imagen grande',
+    img_width_medium: 'Ancho de imagen medio',
+    img_width_small: 'Ancho de imagen pequeño',
+    img_delete: 'Borrar imagen'
   }
 };

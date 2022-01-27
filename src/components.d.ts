@@ -8,7 +8,6 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { StyloPalette, StyloPaletteColor } from "./types/palette";
 import { StyloConfig } from "./types/config";
 import { StyloPlugin } from "./types/plugin";
-import { StyloMenuActionEvent } from "./types/menu";
 import { StyloToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
 import { ExecCommandAction } from "./types/execcommand";
 import { EventEmitter } from "@stencil/core";
@@ -82,11 +81,6 @@ export namespace Components {
     }
     interface StyloToolbarFontSize {
         "fontSize": ToolbarFontSize;
-    }
-    interface StyloToolbarImage {
-        "anchorEvent": MouseEvent | TouchEvent;
-        "containerRef": HTMLElement | undefined;
-        "imgDidChange": EventEmitter<HTMLElement>;
     }
     interface StyloToolbarLink {
         "anchorLink": ToolbarAnchorLink;
@@ -183,12 +177,6 @@ declare global {
         prototype: HTMLStyloToolbarFontSizeElement;
         new (): HTMLStyloToolbarFontSizeElement;
     };
-    interface HTMLStyloToolbarImageElement extends Components.StyloToolbarImage, HTMLStencilElement {
-    }
-    var HTMLStyloToolbarImageElement: {
-        prototype: HTMLStyloToolbarImageElement;
-        new (): HTMLStyloToolbarImageElement;
-    };
     interface HTMLStyloToolbarLinkElement extends Components.StyloToolbarLink, HTMLStencilElement {
     }
     var HTMLStyloToolbarLinkElement: {
@@ -232,7 +220,6 @@ declare global {
         "stylo-toolbar-button": HTMLStyloToolbarButtonElement;
         "stylo-toolbar-color": HTMLStyloToolbarColorElement;
         "stylo-toolbar-font-size": HTMLStyloToolbarFontSizeElement;
-        "stylo-toolbar-image": HTMLStyloToolbarImageElement;
         "stylo-toolbar-link": HTMLStyloToolbarLinkElement;
         "stylo-toolbar-list": HTMLStyloToolbarListElement;
         "stylo-toolbar-separator": HTMLStyloToolbarSeparatorElement;
@@ -301,10 +288,6 @@ declare namespace LocalJSX {
         "onCancelPlugins"?: (event: CustomEvent<void>) => void;
     }
     interface StyloMenus {
-        /**
-          * An event triggered when user select one of the custom actions of the menus provided in your configuration
-         */
-        "onMenuAction"?: (event: CustomEvent<StyloMenuActionEvent>) => void;
     }
     interface StyloPlugins {
     }
@@ -317,10 +300,6 @@ declare namespace LocalJSX {
           * To attach the inline editor event listeners to a specific container instead of the document
          */
         "containerRef"?: HTMLElement | undefined;
-        /**
-          * Triggered when an image is manipulated. Note: the event won't provide directly the image but rather its container element
-         */
-        "onImgDidChange"?: (event: CustomEvent<HTMLElement>) => void;
         /**
           * Triggered when a link is created by the user. The event detail is the container
          */
@@ -351,12 +330,6 @@ declare namespace LocalJSX {
     interface StyloToolbarFontSize {
         "fontSize"?: ToolbarFontSize;
         "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
-    }
-    interface StyloToolbarImage {
-        "anchorEvent"?: MouseEvent | TouchEvent;
-        "containerRef"?: HTMLElement | undefined;
-        "imgDidChange"?: EventEmitter<HTMLElement>;
-        "onImgModified"?: (event: CustomEvent<void>) => void;
     }
     interface StyloToolbarLink {
         "anchorLink"?: ToolbarAnchorLink;
@@ -395,7 +368,6 @@ declare namespace LocalJSX {
         "stylo-toolbar-button": StyloToolbarButton;
         "stylo-toolbar-color": StyloToolbarColor;
         "stylo-toolbar-font-size": StyloToolbarFontSize;
-        "stylo-toolbar-image": StyloToolbarImage;
         "stylo-toolbar-link": StyloToolbarLink;
         "stylo-toolbar-list": StyloToolbarList;
         "stylo-toolbar-separator": StyloToolbarSeparator;
@@ -419,7 +391,6 @@ declare module "@stencil/core" {
             "stylo-toolbar-button": LocalJSX.StyloToolbarButton & JSXBase.HTMLAttributes<HTMLStyloToolbarButtonElement>;
             "stylo-toolbar-color": LocalJSX.StyloToolbarColor & JSXBase.HTMLAttributes<HTMLStyloToolbarColorElement>;
             "stylo-toolbar-font-size": LocalJSX.StyloToolbarFontSize & JSXBase.HTMLAttributes<HTMLStyloToolbarFontSizeElement>;
-            "stylo-toolbar-image": LocalJSX.StyloToolbarImage & JSXBase.HTMLAttributes<HTMLStyloToolbarImageElement>;
             "stylo-toolbar-link": LocalJSX.StyloToolbarLink & JSXBase.HTMLAttributes<HTMLStyloToolbarLinkElement>;
             "stylo-toolbar-list": LocalJSX.StyloToolbarList & JSXBase.HTMLAttributes<HTMLStyloToolbarListElement>;
             "stylo-toolbar-separator": LocalJSX.StyloToolbarSeparator & JSXBase.HTMLAttributes<HTMLStyloToolbarSeparatorElement>;

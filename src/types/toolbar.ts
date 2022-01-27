@@ -15,23 +15,6 @@ export interface StyloToolbar {
    */
   style: {
     /**
-     * Per default, the component will not consider images as editable.
-     */
-    img?: {
-      /**
-       * The type of element to attach the image toolbar.
-       */
-      anchor: 'img' | string;
-      /**
-       * In case you would like to use a specific property to specify the width on your image
-       */
-      propertyWidth: 'width' | string;
-      /**
-       * In case you would like to use a specific property to specify the float on your image
-       */
-      propertyCssFloat: 'float' | string;
-    };
-    /**
      * Enable actions to manipulate list. Disabled per default.
      */
     list: boolean;
@@ -53,7 +36,6 @@ export interface StyloToolbar {
 export enum ToolbarActions {
   STYLE,
   LINK,
-  IMAGE,
   COLOR,
   ALIGNMENT,
   LIST,
@@ -61,27 +43,15 @@ export enum ToolbarActions {
   BACKGROUND_COLOR
 }
 
-export enum ToolbarImageSize {
-  SMALL = '25%',
-  MEDIUM = '50%',
-  LARGE = '75%',
-  ORIGINAL = '100%'
-}
-
-export enum ToolbarImageAlign {
-  STANDARD,
-  START
+export enum ToolbarList {
+  ORDERED = 'insertOrderedList',
+  UNORDERED = 'insertUnorderedList'
 }
 
 export enum ToolbarAlign {
   LEFT = 'left',
   CENTER = 'center',
   RIGHT = 'right'
-}
-
-export enum ToolbarList {
-  ORDERED = 'insertOrderedList',
-  UNORDERED = 'insertUnorderedList'
 }
 
 export enum ToolbarFontSize {

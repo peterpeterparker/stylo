@@ -203,7 +203,7 @@ It is provided per default with Stylo but can also be used as a standalone compo
 
 ## Menus
 
-Optionally, menus can be defined for particular elements. They will be displayed with an absolute positioning on click events.
+Optionally, menus can be defined for particular elements - i.e. paragraphs. They will be displayed with an absolute positioning after click events.
 
 Custom menus can be configured following the ([src/types/menu.ts](src/types/menu.ts)) interface.
 
@@ -213,13 +213,16 @@ If for example you would like to display a custom menu for all `code` paragraphs
 export const editorConfig: Partial<StyloConfig> = {
   menus: [
     {
-      nodeName: 'code',
+      match: ({paragraph}: {paragraph: HTMLElement}) =>
+        paragraph.nodeName.toLowerCase() === 'code',
       actions: [
         {
           text: 'Edit code',
           icon: `<svg ...
           </svg>`,
-          message: 'myCodeMessage'
+          action: async ({paragraph}: {paragraph: HTMLElement}) => {
+            // Apply some modifications or any other actions of your choice
+          }
         }
       ]
     }
@@ -227,7 +230,7 @@ export const editorConfig: Partial<StyloConfig> = {
 };
 ```
 
-Each time an action of your custom menus is selected by the user, a related `CustomEvent` will be emitted providing both the `message` of the particular event and the related HTML element - i.e. the paragraph.
+Stylo provides a sample menu for images ([src/menus/img.menu.ts](src/menus/img.menu.ts)).
 
 ## Events
 

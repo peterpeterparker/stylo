@@ -19,13 +19,6 @@ interface I18Toolbar {
   align_center: string;
   align_right: string;
   font_size: string;
-  img_width_original: string;
-  img_width_large: string;
-  img_width_medium: string;
-  img_width_small: string;
-  img_align_standard: string;
-  img_align_start: string;
-  img_delete: string;
   list_ol: string;
   list_ul: string;
   style_list: string;
@@ -40,6 +33,14 @@ interface I18Toolbar {
   strikethrough: string;
 }
 
+interface I18Menus {
+  img_width_original: string;
+  img_width_large: string;
+  img_width_medium: string;
+  img_width_small: string;
+  img_delete: string;
+}
+
 type Languages = 'en' | 'es' | 'de' | 'nl';
 
 interface I18n {
@@ -47,4 +48,5 @@ interface I18n {
   plugins: I18nPlugins;
   add: I18nAdd;
   toolbar: I18Toolbar;
+  menus: I18Menus;
 }

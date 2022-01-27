@@ -19,13 +19,6 @@ export const nl: I18n = {
     align_center: 'Lijn midden uit',
     align_right: 'Rechts uitlijnen',
     font_size: 'Lettergrootte',
-    img_width_original: 'Oorspronkelijke afbeeldingsbreedte',
-    img_width_large: 'Grote afbeeldingsbreedte',
-    img_width_medium: 'Gemiddelde afbeeldingsbreedte',
-    img_width_small: 'Kleine afbeeldingsbreedte',
-    img_align_standard: 'Afbeeldingsstandaard uitlijnen',
-    img_align_start: 'Afbeelding begin uitlijnen',
-    img_delete: 'Verwijder afbeelding',
     list_ol: 'Geordende lijst',
     list_ul: 'Ongeordende lijst',
     style_list: 'Stijllijst',
@@ -38,5 +31,12 @@ export const nl: I18n = {
     italic: 'Cursief',
     underline: 'Onderstrepen',
     strikethrough: 'Doorstrepen'
+  },
+  menus: {
+    img_width_original: 'Oorspronkelijke afbeeldingsbreedte',
+    img_width_large: 'Grote afbeeldingsbreedte',
+    img_width_medium: 'Gemiddelde afbeeldingsbreedte',
+    img_width_small: 'Kleine afbeeldingsbreedte',
+    img_delete: 'Verwijder afbeelding'
   }
 };

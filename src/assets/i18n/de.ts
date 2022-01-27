@@ -19,13 +19,6 @@ export const de: I18n = {
     align_center: 'Zentriert ausrichten',
     align_right: 'Rechts ausrichten',
     font_size: 'Schriftgrösse',
-    img_width_original: 'Originalbildbreite',
-    img_width_large: 'Grosse Bildbreite',
-    img_width_medium: 'Mittlere Bildbreite',
-    img_width_small: 'Kleine Bildbreite',
-    img_align_standard: 'Bildstandard ausrichten',
-    img_align_start: 'Bildanfang ausrichten',
-    img_delete: 'Bild löschen',
     list_ol: 'Geordnete Liste',
     list_ul: 'Ungeordnete Liste',
     style_list: 'Stilliste',
@@ -38,5 +31,12 @@ export const de: I18n = {
     italic: 'Kursiv',
     underline: 'Unterstreichen',
     strikethrough: 'Durchgestrichen'
+  },
+  menus: {
+    img_width_original: 'Originalbildbreite',
+    img_width_large: 'Grosse Bildbreite',
+    img_width_medium: 'Mittlere Bildbreite',
+    img_width_small: 'Kleine Bildbreite',
+    img_delete: 'Bild löschen'
   }
 };

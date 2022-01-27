@@ -1,20 +1,15 @@
 import {StyloIcon} from './icon';
 
-export interface StyloMenuActionEvent {
-  paragraph: HTMLElement;
-  message: string;
-}
-
 export interface StyloMenuAction {
   text: string;
   icon: StyloIcon;
-  message: string;
+  action: (params: {paragraph: HTMLElement}) => Promise<void>;
 }
 
 /**
  * A list of custom actions to display for a specific type of paragraph
  */
 export interface StyloMenu {
-  nodeName: string;
+  match: (params: {paragraph: HTMLElement}) => boolean;
   actions: [StyloMenuAction, ...StyloMenuAction[]];
 }

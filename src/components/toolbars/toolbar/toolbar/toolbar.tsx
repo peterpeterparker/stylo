@@ -42,8 +42,7 @@ import {
   getItalic,
   getList,
   getStrikeThrough,
-  getUnderline,
-  isAnchorImage
+  getUnderline
 } from '../../../../utils/toolbar.utils';
 import {Style} from '../actions/style/style';
 
@@ -115,12 +114,6 @@ export class Toolbar implements ComponentInterface {
 
   @Event()
   toolbarActivated: EventEmitter<boolean>;
-
-  /**
-   * Triggered when an image is manipulated. Note: the event won't provide directly the image but rather its container element
-   */
-  @Event()
-  imgDidChange: EventEmitter<HTMLElement>;
 
   /**
    * Triggered when a link is created by the user. The event detail is the container
@@ -199,16 +192,10 @@ export class Toolbar implements ComponentInterface {
   @Listen('selectionchange', {target: 'document', passive: true})
   onSelectionChange() {
     if (
-      this.toolbarActions === ToolbarActions.COLOR ||
-      this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ||
-      this.toolbarActions === ToolbarActions.LINK
+      [ToolbarActions.COLOR, ToolbarActions.BACKGROUND_COLOR, ToolbarActions.LINK].includes(
+        this.toolbarActions
+      )
     ) {
-      return;
-    }
-
-    const anchorImage: boolean = this.isAnchorImage();
-    if (this.toolbarActions === ToolbarActions.IMAGE && anchorImage) {
-      this.reset(false);
       return;
     }
 
@@ -245,69 +232,8 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    if (this.toolbarActions !== ToolbarActions.IMAGE) {
-      this.anchorEvent = $event;
-    }
-
-    if (this.toolsActivated) {
-      this.resetImageToolbarActions($event);
-
-      return;
-    }
-
-    if (this.toolbarActions === ToolbarActions.IMAGE) {
-      this.anchorEvent = $event;
-    }
-
-    this.displayImageActions($event);
+    this.anchorEvent = $event;
   };
-
-  private resetImageToolbarActions($event: MouseEvent | TouchEvent) {
-    if (this.toolbarActions !== ToolbarActions.IMAGE) {
-      return;
-    }
-
-    if ($event && $event.target && $event.target instanceof HTMLElement) {
-      const target: HTMLElement = toHTMLElement($event.target);
-
-      if (target && target.nodeName && target.nodeName.toLowerCase() !== 'stylo-toolbar') {
-        this.reset(false);
-      }
-    }
-  }
-
-  private displayImageActions($event: MouseEvent | TouchEvent) {
-    if (!configStore.state.toolbar.style.img) {
-      return;
-    }
-
-    const isAnchorImg: boolean = this.isAnchorImage();
-    if (!isAnchorImg) {
-      return;
-    }
-
-    $event.stopImmediatePropagation();
-
-    this.reset(true);
-
-    setTimeout(
-      () => {
-        this.activateToolbarImage();
-        this.setToolbarAnchorPosition();
-      },
-      this.mobile ? 300 : 100
-    );
-  }
-
-  private activateToolbarImage() {
-    this.toolbarActions = ToolbarActions.IMAGE;
-
-    this.setToolsActivated(true);
-  }
-
-  private isAnchorImage() {
-    return isAnchorImage(this.anchorEvent, configStore.state.toolbar.style.img?.anchor);
-  }
 
   private displayTools() {
     const selection: Selection | null = getSelection();
@@ -735,16 +661,6 @@ export class Toolbar implements ComponentInterface {
             this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ? 'background-color' : 'color'
           }
           onExecCommand={this.onExecCommand}></stylo-toolbar-color>
-      );
-    }
-
-    if (this.toolbarActions === ToolbarActions.IMAGE) {
-      return (
-        <stylo-toolbar-image
-          containerRef={this.containerRef}
-          anchorEvent={this.anchorEvent}
-          imgDidChange={this.imgDidChange}
-          onImgModified={() => this.reset(true)}></stylo-toolbar-image>
       );
     }
 

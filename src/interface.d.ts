@@ -1,4 +1,5 @@
 export * from './components';
+export * from './menus/img.menu';
 export * from './plugins/code.plugin';
 export * from './plugins/h1.plugin';
 export * from './plugins/h2.plugin';

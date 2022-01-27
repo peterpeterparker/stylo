@@ -19,13 +19,6 @@ export const en: I18n = {
     align_center: 'Align center',
     align_right: 'Align right',
     font_size: 'Font size',
-    img_width_original: 'Original image width',
-    img_width_large: 'Large image width',
-    img_width_medium: 'Medium image width',
-    img_width_small: 'Small image width',
-    img_align_standard: 'Align image standard',
-    img_align_start: 'Align image start',
-    img_delete: 'Delete image',
     list_ol: 'Ordered list',
     list_ul: 'Unordered list',
     style_list: 'Style list',
@@ -38,5 +31,12 @@ export const en: I18n = {
     italic: 'Italic',
     underline: 'Underline',
     strikethrough: 'Strikethrough'
+  },
+  menus: {
+    img_width_original: 'Original image width',
+    img_width_large: 'Large image width',
+    img_width_medium: 'Medium image width',
+    img_width_small: 'Small image width',
+    img_delete: 'Delete image'
   }
 };

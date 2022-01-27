@@ -356,6 +356,8 @@
 
       section.editor article img {
         max-width: 100%;
+        margin: 0 auto;
+        display: block;
       }
 
       section.editor article mark {
@@ -612,7 +614,9 @@
       </a>
     </footer>
 
-    <script>
+    <script type="module">
+      import {imgMenu} from './build/index.esm.js';
+
       const isMobile = () => {
         const isTouchScreen = window.matchMedia('(any-pointer:coarse)').matches;
         const isMouseScreen = window.matchMedia('(any-pointer:fine)').matches;
@@ -628,6 +632,10 @@
 
           const article = document.querySelector('article');
           stylo.containerRef = article;
+
+          stylo.config = {
+            menus: [imgMenu]
+          };
 
           // stylo.addEventListener('addParagraphs', ($event) =>
           //   console.log('addParagraphs', $event)
