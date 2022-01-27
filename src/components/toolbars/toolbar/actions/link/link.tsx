@@ -129,7 +129,7 @@ export class Link implements ComponentInterface {
     }
 
     if (
-      this.toolbarActions === ToolbarActions.SELECTION &&
+      this.toolbarActions === ToolbarActions.STYLE &&
       ($event.key.toLowerCase() === 'backspace' || $event.key.toLowerCase() === 'delete')
     ) {
       this.linkModified.emit(false);

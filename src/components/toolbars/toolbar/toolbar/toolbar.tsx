@@ -111,7 +111,7 @@ export class Toolbar implements ComponentInterface {
   private link: boolean = false;
 
   @State()
-  private toolbarActions: ToolbarActions = ToolbarActions.SELECTION;
+  private toolbarActions: ToolbarActions = ToolbarActions.STYLE;
 
   @Event()
   toolbarActivated: EventEmitter<boolean>;
@@ -559,7 +559,7 @@ export class Toolbar implements ComponentInterface {
 
     this.selection = null;
 
-    this.toolbarActions = ToolbarActions.SELECTION;
+    this.toolbarActions = ToolbarActions.STYLE;
     this.anchorLink = null;
     this.link = false;
 

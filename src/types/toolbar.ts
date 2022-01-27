@@ -51,7 +51,7 @@ export interface StyloToolbar {
 }
 
 export enum ToolbarActions {
-  SELECTION,
+  STYLE,
   LINK,
   IMAGE,
   COLOR,
