@@ -20,6 +20,8 @@ A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations
 - [Usage](#usage)
 - [Config](#config)
 - [Plugins](#plugins)
+- [Toolbar](#toolbar)
+- [Menus](#menus)
 - [Events](#events)
 - [Listener](#listener)
 - [Contributing](#contributing)
@@ -192,6 +194,40 @@ Things to pay attention to:
 - Stylo expect all the direct children - the paragraphs - of the editable container to be HTML elements i.e. no text or comment nodes
 
 Find some custom plugins in DeckDeckGo [repo](https://github.com/deckgo/deckdeckgo/tree/main/studio/src/app/plugins).
+
+## Toolbar
+
+The inline editor that is uses to style texts (bold, italic, colors, etc.) is a web component named `<stylo-toolbar/>`. 
+
+It is provided per default with Stylo but can also be used as a standalone component.
+
+## Menus
+
+Optionally, menus can be defined for particular elements. They will be displayed with an absolute positioning on click events.
+
+Custom menus can be configured following the ([src/types/menu.ts](src/types/menu.ts)) interface.
+
+If for example you would like to display a custom menu for all `code` paragraphs, this can be done as following:
+
+```
+export const editorConfig: Partial<StyloConfig> = {
+  menus: [
+    {
+      nodeName: 'code',
+      actions: [
+        {
+          text: 'Edit code',
+          icon: `<svg ...
+          </svg>`,
+          message: 'myCodeMessage'
+        }
+      ]
+    }
+  ]
+};
+```
+
+Each time an action of your custom menus is selected by the user, a related `CustomEvent` will be emitted providing both the `message` of the particular event and the related HTML element - i.e. the paragraph.
 
 ## Events
 
