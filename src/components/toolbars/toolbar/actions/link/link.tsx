@@ -151,8 +151,7 @@ export class Link implements ComponentInterface {
           ref={(el) => (this.input = el as HTMLInputElement)}
           placeholder="Add a link..."
           onInput={($event: UIEvent) => this.handleLinkInput($event)}
-          onKeyUp={($event: KeyboardEvent) => this.handleLinkEnter($event)}
-        ></input>
+          onKeyUp={($event: KeyboardEvent) => this.handleLinkEnter($event)}></input>
       </Host>
     );
   }

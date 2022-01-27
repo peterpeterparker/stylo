@@ -13,6 +13,9 @@ export class Button {
   @Prop()
   cssClass: string;
 
+  @Prop()
+  label: string;
+
   @Event()
   action: EventEmitter<UIEvent>;
 
@@ -29,7 +32,7 @@ export class Button {
           onClick={($event: UIEvent) => this.action.emit($event)}
           disabled={this.disableAction}
           class={this.cssClass}
-        >
+          aria-label={this.label}>
           <slot></slot>
         </button>
       </Host>

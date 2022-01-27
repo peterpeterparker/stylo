@@ -11,7 +11,7 @@ import {
 } from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
-import { StyloMenu, StyloMenuAction, StyloMenuActionEvent } from '../../../types/menu';
+import {StyloMenu, StyloMenuAction, StyloMenuActionEvent} from '../../../types/menu';
 import {renderIcon} from '../../../utils/icon.utils';
 import {toHTMLElement} from '../../../utils/node.utils';
 import {findParagraph} from '../../../utils/paragraph.utils';
@@ -95,12 +95,12 @@ export class Menus implements ComponentInterface {
   }
 
   private renderAction(action: StyloMenuAction) {
-    const {icon: iconSrc} = action;
+    const {icon: iconSrc, text} = action;
 
     const icon: JSX.IntrinsicElements | undefined = renderIcon(iconSrc);
 
     return (
-      <stylo-toolbar-button onAction={() => this.selectMenuAction(action)}>
+      <stylo-toolbar-button onAction={() => this.selectMenuAction(action)} label={text}>
         {icon ? icon : <div class="icon" innerHTML={iconSrc}></div>}
       </stylo-toolbar-button>
     );

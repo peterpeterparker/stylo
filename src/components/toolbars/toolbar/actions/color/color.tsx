@@ -112,8 +112,7 @@ export class Color {
         <stylo-color
           color-rgb={this.colorRgb}
           onColorChange={($event: CustomEvent) => this.selectColor($event)}
-          palette={configStore.state.toolbar.palette}
-        ></stylo-color>
+          palette={configStore.state.toolbar.palette}></stylo-color>
       </Host>
     );
   }

@@ -8,6 +8,7 @@
 | --------------- | ---------------- | ----------- | --------- | ----------- |
 | `cssClass`      | `css-class`      |             | `string`  | `undefined` |
 | `disableAction` | `disable-action` |             | `boolean` | `false`     |
+| `label`         | `label`          |             | `string`  | `undefined` |
 
 ## Events
 

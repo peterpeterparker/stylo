@@ -1,6 +1,7 @@
 import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
+import i18n from '../../../../../stores/i18n.store';
 import {ToolbarAlign} from '../../../../../types/toolbar';
 import {execCommandAlign} from '../../../../../utils/execcommand-align.utils';
 import {execCommandNativeAlign} from '../../../../../utils/execcommnad-native.utils';
@@ -44,27 +45,27 @@ export class Align {
     return (
       <Host class={this.mobile ? 'tools-sticky' : undefined}>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.align_left}
           onAction={($event: CustomEvent<UIEvent>) =>
             this.justifyContent($event.detail, ToolbarAlign.LEFT)
           }
-          class={this.align === ToolbarAlign.LEFT ? 'active' : undefined}
-        >
+          class={this.align === ToolbarAlign.LEFT ? 'active' : undefined}>
           <IconAlignLeft></IconAlignLeft>
         </stylo-toolbar-button>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.align_center}
           onAction={($event: CustomEvent<UIEvent>) =>
             this.justifyContent($event.detail, ToolbarAlign.CENTER)
           }
-          class={this.align === ToolbarAlign.CENTER ? 'active' : undefined}
-        >
+          class={this.align === ToolbarAlign.CENTER ? 'active' : undefined}>
           <IconAlignCenter></IconAlignCenter>
         </stylo-toolbar-button>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.align_right}
           onAction={($event: CustomEvent<UIEvent>) =>
             this.justifyContent($event.detail, ToolbarAlign.RIGHT)
           }
-          class={this.align === ToolbarAlign.RIGHT ? 'active' : undefined}
-        >
+          class={this.align === ToolbarAlign.RIGHT ? 'active' : undefined}>
           <IconAlignRight></IconAlignRight>
         </stylo-toolbar-button>
       </Host>

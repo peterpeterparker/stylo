@@ -74,6 +74,7 @@ export namespace Components {
     interface StyloToolbarButton {
         "cssClass": string;
         "disableAction": boolean;
+        "label": string;
     }
     interface StyloToolbarColor {
         "action": 'color' | 'background-color';
@@ -339,6 +340,7 @@ declare namespace LocalJSX {
     interface StyloToolbarButton {
         "cssClass"?: string;
         "disableAction"?: boolean;
+        "label"?: string;
         "onAction"?: (event: CustomEvent<UIEvent>) => void;
     }
     interface StyloToolbarColor {

@@ -1,5 +1,6 @@
 import {Component, Event, EventEmitter, h, Prop, State} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
+import i18n from '../../../../../stores/i18n.store';
 import {ToolbarImageAlign, ToolbarImageSize} from '../../../../../types/toolbar';
 import {toHTMLElement} from '../../../../../utils/node.utils';
 import {findParagraph} from '../../../../../utils/paragraph.utils';
@@ -148,62 +149,62 @@ export class Image {
   render() {
     return [
       <stylo-toolbar-button
+        label={i18n.state.toolbar.img_width_original}
         onAction={($event: CustomEvent<UIEvent>) =>
           this.styleImage($event.detail, this.setImageWith, ToolbarImageSize.ORIGINAL)
         }
-        class={this.imageSize === ToolbarImageSize.ORIGINAL ? 'active' : undefined}
-      >
+        class={this.imageSize === ToolbarImageSize.ORIGINAL ? 'active' : undefined}>
         <IconImage></IconImage>
       </stylo-toolbar-button>,
       <stylo-toolbar-button
+        label={i18n.state.toolbar.img_width_large}
         onAction={($event: CustomEvent<UIEvent>) =>
           this.styleImage($event.detail, this.setImageWith, ToolbarImageSize.LARGE)
         }
-        class={this.imageSize === ToolbarImageSize.LARGE ? 'active' : undefined}
-      >
+        class={this.imageSize === ToolbarImageSize.LARGE ? 'active' : undefined}>
         <IconImage style={{width: '18px', height: '18px'}}></IconImage>
       </stylo-toolbar-button>,
       <stylo-toolbar-button
+        label={i18n.state.toolbar.img_width_medium}
         onAction={($event: CustomEvent<UIEvent>) =>
           this.styleImage($event.detail, this.setImageWith, ToolbarImageSize.MEDIUM)
         }
-        class={this.imageSize === ToolbarImageSize.MEDIUM ? 'active' : undefined}
-      >
+        class={this.imageSize === ToolbarImageSize.MEDIUM ? 'active' : undefined}>
         <IconImage style={{width: '14px', height: '14px'}}></IconImage>
       </stylo-toolbar-button>,
       <stylo-toolbar-button
+        label={i18n.state.toolbar.img_width_small}
         onAction={($event: CustomEvent<UIEvent>) =>
           this.styleImage($event.detail, this.setImageWith, ToolbarImageSize.SMALL)
         }
-        class={this.imageSize === ToolbarImageSize.SMALL ? 'active' : undefined}
-      >
+        class={this.imageSize === ToolbarImageSize.SMALL ? 'active' : undefined}>
         <IconImage style={{width: '10px', height: '10px'}}></IconImage>
       </stylo-toolbar-button>,
 
       <stylo-toolbar-separator></stylo-toolbar-separator>,
 
       <stylo-toolbar-button
+        label={i18n.state.toolbar.img_align_standard}
         onAction={($event: CustomEvent<UIEvent>) =>
           this.styleImage($event.detail, this.setImageAlignment, ToolbarImageAlign.STANDARD)
         }
-        class={this.imageAlign === ToolbarImageAlign.STANDARD ? 'active' : undefined}
-      >
+        class={this.imageAlign === ToolbarImageAlign.STANDARD ? 'active' : undefined}>
         <IconAlignImageBlock></IconAlignImageBlock>
       </stylo-toolbar-button>,
       <stylo-toolbar-button
+        label={i18n.state.toolbar.img_align_start}
         onAction={($event: CustomEvent<UIEvent>) =>
           this.styleImage($event.detail, this.setImageAlignment, ToolbarImageAlign.START)
         }
-        class={this.imageAlign === ToolbarImageAlign.START ? 'active' : undefined}
-      >
+        class={this.imageAlign === ToolbarImageAlign.START ? 'active' : undefined}>
         <IconAlignImageStart></IconAlignImageStart>
       </stylo-toolbar-button>,
 
       <stylo-toolbar-separator></stylo-toolbar-separator>,
 
       <stylo-toolbar-button
-        onAction={($event: CustomEvent<UIEvent>) => this.deleteImage($event.detail)}
-      >
+        label={i18n.state.toolbar.img_delete}
+        onAction={($event: CustomEvent<UIEvent>) => this.deleteImage($event.detail)}>
         <IconTrash></IconTrash>
       </stylo-toolbar-button>
     ];

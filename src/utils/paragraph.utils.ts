@@ -79,7 +79,9 @@ export const transformParagraph = ({
       return;
     }
 
-    const {firstChild}: Node = toHTMLElement(addedNodes[focus === 'first' ? 0 : addedNodes.length - 1]);
+    const {firstChild}: Node = toHTMLElement(
+      addedNodes[focus === 'first' ? 0 : addedNodes.length - 1]
+    );
 
     moveCursorToEnd(firstChild);
   });

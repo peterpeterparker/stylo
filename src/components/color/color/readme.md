@@ -136,35 +136,6 @@ export const DEFAULT_PALETTE: StyloPalette[] = [
 | ------------- | ----------------------- | -------------------------------- |
 | `colorChange` | Emit the selected color | `CustomEvent<StyloPaletteColor>` |
 
-## CSS Custom Properties
-
-| Name                                          | Description                                                            |
-| --------------------------------------------- | ---------------------------------------------------------------------- |
-| `--stylo-color-button-border-radius`          | Button border-radius @default 2px                                      |
-| `--stylo-color-button-height`                 | Button height @default 28px                                            |
-| `--stylo-color-button-margin`                 | Button margin @default 4px                                             |
-| `--stylo-color-button-outline`                | Button outline @default none                                           |
-| `--stylo-color-button-width`                  | Button width @default 28px                                             |
-| `--stylo-color-flex-wrap`                     | Component flex-wrap @default wrap                                      |
-| `--stylo-color-hash-background`               | Hash (#) background @default rgb(240, 240, 240) none repeat scroll 0 0 |
-| `--stylo-color-hash-border-radius`            | Hash (#) border-radius @default 4px 0 0 4px                            |
-| `--stylo-color-hash-color`                    | Hash (#) color @default rgb(152, 161, 164)                             |
-| `--stylo-color-hash-height`                   | Hash (#) height @default 28px                                          |
-| `--stylo-color-hash-width`                    | Hash (#) width @default 28px                                           |
-| `--stylo-color-input-background`              | Input background @default inherit                                      |
-| `--stylo-color-input-border-radius`           | Input border-radius @default 0 4px 4px 0                               |
-| `--stylo-color-input-box-shadow`              | Input box-shadow @default rgb(240, 240, 240) 0 0 0 1px inset           |
-| `--stylo-color-input-color`                   | Input color @default rgb(102, 102, 102)                                |
-| `--stylo-color-input-container-border`        | The border property of the input and hash container                    |
-| `--stylo-color-input-container-border-radius` | The border-radius property of the input and hash container             |
-| `--stylo-color-input-font-family`             | Input font-family @default inherit                                     |
-| `--stylo-color-input-height`                  | Input height @default 28px                                             |
-| `--stylo-color-input-margin`                  | Input field margin @default 4px                                        |
-| `--stylo-color-input-max-width`               | Input max-width @default 136px                                         |
-| `--stylo-color-input-padding`                 | Input padding @default 0 4px                                           |
-| `--stylo-color-overflow`                      | Component overflow @default visible                                    |
-| `--stylo-color-padding`                       | Component padding @default 8px                                         |
-
 ## Dependencies
 
 ### Used by

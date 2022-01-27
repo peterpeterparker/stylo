@@ -1,4 +1,4 @@
-import { StyloIcon } from './icon';
+import {StyloIcon} from './icon';
 
 export interface StyloPluginCreateParagraphsParams {
   container: HTMLElement;

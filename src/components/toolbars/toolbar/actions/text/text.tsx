@@ -1,5 +1,6 @@
 import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
+import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
 
 @Component({
@@ -89,32 +90,32 @@ export class Text {
     return (
       <Host class={cssClass}>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.bold}
           onAction={($event: CustomEvent<UIEvent>) => this.styleBold($event.detail)}
           disableAction={this.disabledTitle}
           cssClass={this.bold ? 'active' : undefined}
-          class="bold"
-        >
+          class="bold">
           <span>B</span>
         </stylo-toolbar-button>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.italic}
           onAction={($event: CustomEvent<UIEvent>) => this.styleItalic($event.detail)}
           cssClass={this.italic ? 'active' : undefined}
-          class="italic"
-        >
+          class="italic">
           <span>I</span>
         </stylo-toolbar-button>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.underline}
           onAction={($event: CustomEvent<UIEvent>) => this.styleUnderline($event.detail)}
           cssClass={this.underline ? 'active' : undefined}
-          class={this.underline ? 'active underline' : 'underline'}
-        >
+          class={this.underline ? 'active underline' : 'underline'}>
           <span>U</span>
         </stylo-toolbar-button>
         <stylo-toolbar-button
+          label={i18n.state.toolbar.strikethrough}
           onAction={($event: CustomEvent<UIEvent>) => this.styleStrikeThrough($event.detail)}
           cssClass={this.strikethrough ? 'active' : undefined}
-          class="strikethrough"
-        >
+          class="strikethrough">
           <span style={{'text-decoration': 'line-through'}}>S</span>
         </stylo-toolbar-button>
       </Host>

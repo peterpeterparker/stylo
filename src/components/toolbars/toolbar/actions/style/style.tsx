@@ -1,5 +1,6 @@
 import {Fragment, FunctionalComponent, h} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
+import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
 import {ToolbarActions, ToolbarAlign, ToolbarList} from '../../../../../types/toolbar';
 import {IconAlignCenter} from '../../../../icons/align-center';
@@ -55,7 +56,9 @@ export const Style: FunctionalComponent<StyleProps> = ({
     }
 
     return (
-      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.LIST)}>
+      <stylo-toolbar-button
+        onAction={() => switchToolbarActions(ToolbarActions.LIST)}
+        label={i18n.state.toolbar.style_list}>
         {list === ToolbarList.UNORDERED ? <IconUl></IconUl> : <IconOl></IconOl>}
       </stylo-toolbar-button>
     );
@@ -67,7 +70,9 @@ export const Style: FunctionalComponent<StyleProps> = ({
     }
 
     return (
-      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.ALIGNMENT)}>
+      <stylo-toolbar-button
+        onAction={() => switchToolbarActions(ToolbarActions.ALIGNMENT)}
+        label={i18n.state.toolbar.style_align}>
         {align === ToolbarAlign.LEFT ? (
           <IconAlignLeft></IconAlignLeft>
         ) : align === ToolbarAlign.CENTER ? (
@@ -86,7 +91,9 @@ export const Style: FunctionalComponent<StyleProps> = ({
 
     return (
       <Fragment>
-        <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.FONT_SIZE)}>
+        <stylo-toolbar-button
+          onAction={() => switchToolbarActions(ToolbarActions.FONT_SIZE)}
+          label={i18n.state.toolbar.style_font_size}>
           <span>
             A<small>A</small>
           </span>
@@ -99,7 +106,9 @@ export const Style: FunctionalComponent<StyleProps> = ({
 
   const renderColorActions = () => {
     const result = [
-      <stylo-toolbar-button onAction={() => switchToolbarActions(ToolbarActions.COLOR)}>
+      <stylo-toolbar-button
+        onAction={() => switchToolbarActions(ToolbarActions.COLOR)}
+        label={i18n.state.toolbar.style_color}>
         <IconPalette></IconPalette>
       </stylo-toolbar-button>
     ];
@@ -107,7 +116,8 @@ export const Style: FunctionalComponent<StyleProps> = ({
     if (configStore.state.toolbar.style.backgroundColor) {
       result.push(
         <stylo-toolbar-button
-          onAction={() => switchToolbarActions(ToolbarActions.BACKGROUND_COLOR)}>
+          onAction={() => switchToolbarActions(ToolbarActions.BACKGROUND_COLOR)}
+          label={i18n.state.toolbar.style_background}>
           <IconColor></IconColor>
         </stylo-toolbar-button>
       );
@@ -142,7 +152,10 @@ export const Style: FunctionalComponent<StyleProps> = ({
 
       {renderLinkSeparator()}
 
-      <stylo-toolbar-button onAction={toggleLink} cssClass={link ? 'active' : undefined}>
+      <stylo-toolbar-button
+        onAction={toggleLink}
+        cssClass={link ? 'active' : undefined}
+        label={i18n.state.toolbar.link}>
         <IconLink></IconLink>
       </stylo-toolbar-button>
     </Fragment>

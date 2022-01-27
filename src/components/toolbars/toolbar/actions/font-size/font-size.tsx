@@ -1,5 +1,6 @@
 import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
+import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
 import {ToolbarFontSize} from '../../../../../types/toolbar';
 
@@ -52,9 +53,9 @@ export class FontSize {
   private renderAction(size: ToolbarFontSize) {
     return (
       <stylo-toolbar-button
+        label={`${i18n.state.toolbar.align_center} ${size}`}
         onAction={($event: CustomEvent<UIEvent>) => this.modifyFontSize($event.detail, size)}
-        class={this.fontSize === size ? 'active' : undefined}
-      >
+        class={this.fontSize === size ? 'active' : undefined}>
         <span>{size.toString()}</span>
       </stylo-toolbar-button>
     );
