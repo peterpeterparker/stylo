@@ -285,7 +285,11 @@ export class UndoRedoEvents {
 
     const lowerIndex: number = Math.min(
       ...removedParagraphs.map(({previousSibling}: RemovedParagraph) =>
-        previousSibling ? elementIndex(toHTMLElement(previousSibling)) + 1 : 0
+        {
+          console.log(previousSibling)
+
+          return previousSibling ? elementIndex(toHTMLElement(previousSibling)) + 1 : 0
+        }
       )
     );
 

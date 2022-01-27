@@ -4,7 +4,7 @@ import {findParagraph, isParagraph, isTargetParagraph} from './paragraph.utils';
 
 export interface RemovedParagraph {
   paragraph: HTMLElement;
-  previousSibling: Node;
+  previousSibling: HTMLElement;
 }
 
 export const findAddedParagraphs = ({
@@ -68,9 +68,37 @@ export const findRemovedParagraphs = ({
 
       return [
         ...acc,
-        ...paragraphs.map((paragraph: HTMLElement) => ({paragraph, previousSibling}))
+        ...paragraphs.map((paragraph: HTMLElement) => ({
+          paragraph,
+          previousSibling: findPreviousElementSibling({container, previousSibling})
+        }))
       ];
     }, []);
+};
+
+/**
+ * The mutation observer previous sibling can be a #text node. Because we assume every child of the container are HTML elements, we iterate until we find the closest one.
+ */
+const findPreviousElementSibling = ({
+  previousSibling,
+  container
+}: {
+  previousSibling: Node | undefined;
+  container: HTMLElement;
+}): HTMLElement | undefined => {
+  if (!previousSibling) {
+    return undefined;
+  }
+
+  if (container.isEqualNode(previousSibling)) {
+    return undefined;
+  }
+
+  if (!isTextNode(previousSibling)) {
+    return previousSibling as HTMLElement;
+  }
+
+  return findPreviousElementSibling({previousSibling: previousSibling.previousSibling, container});
 };
 
 export const findUpdatedParagraphs = ({
