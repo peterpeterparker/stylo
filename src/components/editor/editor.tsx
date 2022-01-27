@@ -103,7 +103,7 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    const {plugins, toolbar, lang, placeholders} = this.config;
+    const {plugins, toolbar, lang, placeholders, menus} = this.config;
 
     i18n.state.lang = lang || 'en';
 
@@ -117,6 +117,8 @@ export class Editor implements ComponentInterface {
       : DEFAULT_TOOLBAR;
 
     configStore.state.placeholders = placeholders || DEFAULT_PLACEHOLDERS;
+
+    configStore.state.menus = menus;
   }
 
   private destroyEvents() {
@@ -141,6 +143,7 @@ export class Editor implements ComponentInterface {
         <stylo-add></stylo-add>
         <stylo-plugins></stylo-plugins>
         <stylo-toolbar containerRef={this.containerRef}></stylo-toolbar>
+        {configStore.state.menus?.length && <stylo-menus></stylo-menus>}
       </Fragment>
     );
   }

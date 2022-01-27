@@ -19,6 +19,7 @@
 
 ### Used by
 
+- [stylo-menus](../../menu)
 - [stylo-toolbar](../toolbar)
 - [stylo-toolbar-align](../actions/align)
 - [stylo-toolbar-font-size](../actions/font-size)
@@ -30,6 +31,7 @@
 
 ```mermaid
 graph TD;
+  stylo-menus --> stylo-toolbar-button
   stylo-toolbar --> stylo-toolbar-button
   stylo-toolbar-align --> stylo-toolbar-button
   stylo-toolbar-font-size --> stylo-toolbar-button

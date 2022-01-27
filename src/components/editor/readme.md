@@ -16,6 +16,7 @@
 - [stylo-add](../plugins/add)
 - [stylo-plugins](../plugins/plugins)
 - [stylo-toolbar](../toolbar/toolbar)
+- [stylo-menus](../menu)
 
 ### Graph
 
@@ -24,6 +25,7 @@ graph TD;
   stylo-editor --> stylo-add
   stylo-editor --> stylo-plugins
   stylo-editor --> stylo-toolbar
+  stylo-editor --> stylo-menus
   stylo-plugins --> stylo-list
   stylo-toolbar --> stylo-toolbar-triangle
   stylo-toolbar --> stylo-toolbar-link
@@ -43,6 +45,8 @@ graph TD;
   stylo-toolbar-list --> stylo-toolbar-button
   stylo-toolbar-font-size --> stylo-toolbar-button
   stylo-toolbar-text --> stylo-toolbar-button
+  stylo-menus --> stylo-toolbar-triangle
+  stylo-menus --> stylo-toolbar-button
   style stylo-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

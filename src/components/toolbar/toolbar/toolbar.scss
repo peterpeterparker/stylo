@@ -5,6 +5,10 @@
 }
 
 div.tools {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   visibility: hidden;
   opacity: 0;
 
@@ -20,44 +24,13 @@ div.tools {
   transform: translate(var(--actions-translate-x), var(--actions-translate-y));
 
   /**
-   * @prop --stylo-toolbar-background-top: The top background of the toolbar (linear gradient)
-   * @default white
-   */
-  /**
-   * @prop --stylo-toolbar-background-bottom: The bottom background of the toolbar (linear gradient)
-   * @default white
-   */
-  background-image: linear-gradient(
-    to bottom,
-    var(--stylo-toolbar-background-top, white),
-    var(--stylo-toolbar-background-bottom, white)
-  );
-  background-repeat: repeat-x;
-
-  /**
-   * @prop --stylo-toolbar-border: The border radius of the toolbar
-   */
-  border: var(--stylo-toolbar-border);
-  /**
-   * @prop --stylo-toolbar-border-radius: The border radius of the toolbar
-   * @default 8px
-   */
-  border-radius: var(--stylo-toolbar-border-radius, 8px);
-  /**
-   * @prop --stylo-toolbar-padding: The padding of the toolbar
-   * @default 0 8px
-   */
-  padding: var(--stylo-toolbar-padding, 0 8px);
-
-  /**
    * @prop --stylo-toolbar-zindex: The z-Index of the toolbar
-   * @default 1
+   * @default 2
    */
-  z-index: var(--stylo-toolbar-zindex, 1);
+  z-index: var(--stylo-toolbar-zindex, 2);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include overlay.overlay;
+  @include overlay.toolbar;
 
   /**
    * @prop --stylo-toolbar-min-width: The width of the toolbar
@@ -70,8 +43,6 @@ div.tools {
    * @default 44px
    */
   min-height: var(--stylo-toolbar-min-height, 44px);
-
-  @include overlay.overlay;
 
   &.tools-sticky,
   &.tools-mobile.tools-sticky {
@@ -117,20 +88,6 @@ div.tools {
   }
 
   &.tools-mobile {
-    /**
-     * @prop --stylo-toolbar-mobile-background-top: A top background for the toolbar (linear gradient)
-     * @default #fff
-     */
-    /**
-     * @prop --stylo-toolbar-mobile-background-bottom: A bottom background for the toolbar (linear gradient)
-     * @default #fff
-     */
-    background-image: linear-gradient(
-      to bottom,
-      var(--stylo-toolbar-mobile-background-top, #fff),
-      var(--stylo-toolbar-mobile-background-bottom, #fff)
-    );
-
     /**
      * @prop --stylo-toolbar-mobile-border: Border of the toolbar
      * @default 0

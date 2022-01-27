@@ -6,3 +6,9 @@
   box-shadow: var(--stylo-box-shadow, var(--box-shadow));
   border: var(--stylo-border);
 }
+
+@mixin toolbar {
+  background: var(--stylo-toolbar-background, white);
+  border-radius: var(--stylo-toolbar-border-radius, 8px);
+  padding: var(--stylo-toolbar-padding, 0 8px);
+}

@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { StyloPalette, StyloPaletteColor } from "./types/palette";
 import { StyloConfig } from "./types/config";
 import { StyloPlugin } from "./types/plugin";
+import { StyloMenuActionEvent } from "./types/menu";
 import { StyloToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
 import { ExecCommandAction } from "./types/execcommand";
 import { EventEmitter } from "@stencil/core";
@@ -50,6 +51,8 @@ export namespace Components {
     }
     interface StyloList {
         "focusFirstButton": () => Promise<void>;
+    }
+    interface StyloMenus {
     }
     interface StyloPlugins {
     }
@@ -137,6 +140,12 @@ declare global {
         prototype: HTMLStyloListElement;
         new (): HTMLStyloListElement;
     };
+    interface HTMLStyloMenusElement extends Components.StyloMenus, HTMLStencilElement {
+    }
+    var HTMLStyloMenusElement: {
+        prototype: HTMLStyloMenusElement;
+        new (): HTMLStyloMenusElement;
+    };
     interface HTMLStyloPluginsElement extends Components.StyloPlugins, HTMLStencilElement {
     }
     var HTMLStyloPluginsElement: {
@@ -215,6 +224,7 @@ declare global {
         "stylo-color-input": HTMLStyloColorInputElement;
         "stylo-editor": HTMLStyloEditorElement;
         "stylo-list": HTMLStyloListElement;
+        "stylo-menus": HTMLStyloMenusElement;
         "stylo-plugins": HTMLStyloPluginsElement;
         "stylo-toolbar": HTMLStyloToolbarElement;
         "stylo-toolbar-align": HTMLStyloToolbarAlignElement;
@@ -288,6 +298,12 @@ declare namespace LocalJSX {
           * Emit when user actually do not want to apply a plugin.
          */
         "onCancelPlugins"?: (event: CustomEvent<void>) => void;
+    }
+    interface StyloMenus {
+        /**
+          * An event triggered when user select one of the custom actions of the menus provided in your configuration
+         */
+        "onMenuAction"?: (event: CustomEvent<StyloMenuActionEvent>) => void;
     }
     interface StyloPlugins {
     }
@@ -370,6 +386,7 @@ declare namespace LocalJSX {
         "stylo-color-input": StyloColorInput;
         "stylo-editor": StyloEditor;
         "stylo-list": StyloList;
+        "stylo-menus": StyloMenus;
         "stylo-plugins": StyloPlugins;
         "stylo-toolbar": StyloToolbar;
         "stylo-toolbar-align": StyloToolbarAlign;
@@ -393,6 +410,7 @@ declare module "@stencil/core" {
             "stylo-color-input": LocalJSX.StyloColorInput & JSXBase.HTMLAttributes<HTMLStyloColorInputElement>;
             "stylo-editor": LocalJSX.StyloEditor & JSXBase.HTMLAttributes<HTMLStyloEditorElement>;
             "stylo-list": LocalJSX.StyloList & JSXBase.HTMLAttributes<HTMLStyloListElement>;
+            "stylo-menus": LocalJSX.StyloMenus & JSXBase.HTMLAttributes<HTMLStyloMenusElement>;
             "stylo-plugins": LocalJSX.StyloPlugins & JSXBase.HTMLAttributes<HTMLStyloPluginsElement>;
             "stylo-toolbar": LocalJSX.StyloToolbar & JSXBase.HTMLAttributes<HTMLStyloToolbarElement>;
             "stylo-toolbar-align": LocalJSX.StyloToolbarAlign & JSXBase.HTMLAttributes<HTMLStyloToolbarAlignElement>;

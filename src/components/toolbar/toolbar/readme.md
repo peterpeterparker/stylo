@@ -22,10 +22,6 @@
 
 | Name                                            | Description                                                                        |
 | ----------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `--stylo-toolbar-background-bottom`             | The bottom background of the toolbar (linear gradient) @default white              |
-| `--stylo-toolbar-background-top`                | The top background of the toolbar (linear gradient) @default white                 |
-| `--stylo-toolbar-border`                        | The border radius of the toolbar                                                   |
-| `--stylo-toolbar-border-radius`                 | The border radius of the toolbar @default 8px                                      |
 | `--stylo-toolbar-button-color`                  | The buttons color @default black                                                   |
 | `--stylo-toolbar-button-color-active`           | The color of the buttons when active @default --highlight (see \_variables.scss)   |
 | `--stylo-toolbar-button-color-disabled`         | The color of the buttons when disabled @default --light (see \_variables.scss)     |
@@ -42,10 +38,7 @@
 | `--stylo-toolbar-link-zindex`                   | The z-index property of the link input @default 2                                  |
 | `--stylo-toolbar-min-height`                    | The height of the toolbar @default 44px                                            |
 | `--stylo-toolbar-min-width`                     | The width of the toolbar @default 280px                                            |
-| `--stylo-toolbar-mobile-background-bottom`      | A bottom background for the toolbar (linear gradient) @default #fff                |
-| `--stylo-toolbar-mobile-background-top`         | A top background for the toolbar (linear gradient) @default #fff                   |
 | `--stylo-toolbar-mobile-border`                 | Border of the toolbar @default 0                                                   |
-| `--stylo-toolbar-padding`                       | The padding of the toolbar @default 0 8px                                          |
 | `--stylo-toolbar-separator-background`          | The background of the separator @default #f4f5f8                                   |
 | `--stylo-toolbar-separator-mobile-background`   | The background of the separator on mobile @default #f4f5f8                         |
 | `--stylo-toolbar-sticky-bottom`                 | The bottom attribute of the sticky toolbar @default 0                              |
@@ -54,7 +47,7 @@
 | `--stylo-toolbar-sticky-zindex`                 | The z-Index of the sticky toolbar                                                  |
 | `--stylo-toolbar-triangle-box-shadow`           | The box-shadow of the triangle @default 0 0 8px 0 rgba(0, 0, 0, 0.1)               |
 | `--stylo-toolbar-triangle-start`                | The left position of the triangle @default 8px                                     |
-| `--stylo-toolbar-zindex`                        | The z-Index of the toolbar @default 1                                              |
+| `--stylo-toolbar-zindex`                        | The z-Index of the toolbar @default 2                                              |
 
 ## Dependencies
 

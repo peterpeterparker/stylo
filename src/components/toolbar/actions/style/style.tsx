@@ -11,7 +11,7 @@ import {IconOl} from '../../../icons/ol';
 import {IconPalette} from '../../../icons/palette';
 import {IconUl} from '../../../icons/ul';
 
-interface SelectionProps {
+interface StyleProps {
   align: ToolbarAlign;
   list: ToolbarList | undefined;
   disabledTitle: boolean;
@@ -26,7 +26,7 @@ interface SelectionProps {
   toggleLink: () => void;
 }
 
-export const Style: FunctionalComponent<SelectionProps> = ({
+export const Style: FunctionalComponent<StyleProps> = ({
   align,
   list,
   switchToolbarActions,
@@ -38,7 +38,7 @@ export const Style: FunctionalComponent<SelectionProps> = ({
   link,
   onExecCommand,
   toggleLink
-}: SelectionProps) => {
+}: StyleProps) => {
   const renderSeparator = () => <stylo-toolbar-separator></stylo-toolbar-separator>;
 
   const renderLinkSeparator = () => {

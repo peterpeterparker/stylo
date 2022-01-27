@@ -6,6 +6,7 @@ import {h3} from '../plugins/h3.plugin';
 import {hr} from '../plugins/hr.plugin';
 import {img} from '../plugins/img.plugin';
 import {ul} from '../plugins/ul.plugin';
+import {StyloMenu} from '../types/menu';
 import {DEFAULT_PALETTE} from '../types/palette';
 import {StyloPlugin} from '../types/plugin';
 import {StyloToolbar} from '../types/toolbar';
@@ -13,6 +14,7 @@ import {StyloToolbar} from '../types/toolbar';
 interface ConfigStore {
   plugins: StyloPlugin[];
   toolbar: StyloToolbar;
+  menus: StyloMenu[] | undefined;
   placeholders: string[];
 }
 
@@ -34,7 +36,8 @@ export const DEFAULT_PLACEHOLDERS = ['div', 'p', 'span'];
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,
   toolbar: DEFAULT_TOOLBAR,
-  placeholders: DEFAULT_PLACEHOLDERS
+  placeholders: DEFAULT_PLACEHOLDERS,
+  menus: undefined
 });
 
 export default {state, onChange};

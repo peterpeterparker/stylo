@@ -4,9 +4,10 @@ export interface StyloToolbar {
   /**
    * The list of selectable colors
    */
-  palette: StyloPalette[];
+  palette?: StyloPalette[];
   /**
    * Use `document.execCommand` (= "native") to modify the document or, alternatively use the `custom` implementation
+   * Ultimately 'native' should / will be replaced by custom which still need improvements
    */
   command: 'native' | 'custom';
   /**
