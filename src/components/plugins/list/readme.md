@@ -17,6 +17,13 @@
 
 Type: `Promise<void>`
 
+## CSS Custom Properties
+
+| Name                             | Description                                                                           |
+| -------------------------------- | ------------------------------------------------------------------------------------- |
+| `--stylo-list-background-active` | Background on focus and hover in the list @default --light (see \_variables.scss)     |
+| `--stylo-list-color-active`      | Color on focus and hover in the list @default --light-contrast (see \_variables.scss) |
+
 ## Dependencies
 
 ### Used by

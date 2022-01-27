@@ -2,12 +2,6 @@
 
 <!-- Auto Generated Below -->
 
-## Events
-
-| Event        | Description                                                                                               | Type                                |
-| ------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `menuAction` | An event triggered when user select one of the custom actions of the menus provided in your configuration | `CustomEvent<StyloMenuActionEvent>` |
-
 ## Dependencies
 
 ### Used by

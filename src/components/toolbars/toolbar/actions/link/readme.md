@@ -4,12 +4,12 @@
 
 ## Properties
 
-| Property         | Attribute         | Description | Type                                                                                                                                                                                                                | Default     |
-| ---------------- | ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `anchorLink`     | --                |             | `ToolbarAnchorLink`                                                                                                                                                                                                 | `undefined` |
-| `containerRef`   | --                |             | `HTMLElement`                                                                                                                                                                                                       | `undefined` |
-| `linkCreated`    | --                |             | `EventEmitter<HTMLElement>`                                                                                                                                                                                         | `undefined` |
-| `toolbarActions` | `toolbar-actions` |             | `ToolbarActions.ALIGNMENT \| ToolbarActions.BACKGROUND_COLOR \| ToolbarActions.COLOR \| ToolbarActions.FONT_SIZE \| ToolbarActions.IMAGE \| ToolbarActions.LINK \| ToolbarActions.LIST \| ToolbarActions.SELECTION` | `undefined` |
+| Property         | Attribute         | Description | Type                                                                                                                                                                                    | Default     |
+| ---------------- | ----------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `anchorLink`     | --                |             | `ToolbarAnchorLink`                                                                                                                                                                     | `undefined` |
+| `containerRef`   | --                |             | `HTMLElement`                                                                                                                                                                           | `undefined` |
+| `linkCreated`    | --                |             | `EventEmitter<HTMLElement>`                                                                                                                                                             | `undefined` |
+| `toolbarActions` | `toolbar-actions` |             | `ToolbarActions.ALIGNMENT \| ToolbarActions.BACKGROUND_COLOR \| ToolbarActions.COLOR \| ToolbarActions.FONT_SIZE \| ToolbarActions.LINK \| ToolbarActions.LIST \| ToolbarActions.STYLE` | `undefined` |
 
 ## Events
 

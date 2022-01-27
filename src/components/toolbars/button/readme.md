@@ -24,7 +24,6 @@
 - [stylo-toolbar](../toolbar/toolbar)
 - [stylo-toolbar-align](../toolbar/actions/align)
 - [stylo-toolbar-font-size](../toolbar/actions/font-size)
-- [stylo-toolbar-image](../toolbar/actions/image)
 - [stylo-toolbar-list](../toolbar/actions/list)
 - [stylo-toolbar-text](../toolbar/actions/text)
 
@@ -36,7 +35,6 @@ graph TD;
   stylo-toolbar --> stylo-toolbar-button
   stylo-toolbar-align --> stylo-toolbar-button
   stylo-toolbar-font-size --> stylo-toolbar-button
-  stylo-toolbar-image --> stylo-toolbar-button
   stylo-toolbar-list --> stylo-toolbar-button
   stylo-toolbar-text --> stylo-toolbar-button
   style stylo-toolbar-button fill:#f9f,stroke:#333,stroke-width:4px
