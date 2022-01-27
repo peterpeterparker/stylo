@@ -15,6 +15,7 @@ export const img: StyloPlugin = {
 
     const img: HTMLImageElement = document.createElement('img');
     img.src = imgUrl;
+    img.setAttribute('loading', 'lazy');
 
     const element: HTMLDivElement = createUneditableDiv();
     element.append(img);
