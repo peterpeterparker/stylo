@@ -33,7 +33,6 @@ interface UndoUpdateParagraphs extends UndoRedoUpdateParagraph {
 
 export class UndoRedoEvents {
   private observer: MutationObserver | undefined;
-  private attributesObserver: MutationObserver | undefined;
 
   private undoInput: UndoRedoInput | undefined = undefined;
   private undoUpdateParagraphs: UndoUpdateParagraphs[] = [];
@@ -47,7 +46,6 @@ export class UndoRedoEvents {
     this.undoUpdateParagraphs = [];
 
     this.observer = new MutationObserver(this.onMutation);
-    this.attributesObserver = new MutationObserver(this.onAttributesMutation);
 
     this.observe();
 
@@ -151,14 +149,13 @@ export class UndoRedoEvents {
       childList: true,
       characterData: true,
       characterDataOldValue: true,
+      attributes: true,
       subtree: true
     });
-    this.attributesObserver.observe(containerStore.state.ref, {attributes: true, subtree: true});
   }
 
   private disconnect() {
     this.observer?.disconnect();
-    this.attributesObserver?.disconnect();
   }
 
   private onToolbarActivated = () => {
@@ -249,9 +246,13 @@ export class UndoRedoEvents {
     this.onParagraphsMutations(mutations);
 
     const didUpdate: boolean = this.onNodesParagraphsMutation(mutations);
+
+    // We assume that all paragraphs updates do contain attributes and input changes
     if (didUpdate) {
       return;
     }
+
+    this.onAttributesMutation(mutations);
 
     this.onCharacterDataMutation(mutations);
   };
@@ -369,7 +370,7 @@ export class UndoRedoEvents {
     return clone.outerHTML;
   }
 
-  private onAttributesMutation = async (mutations: MutationRecord[]) => {
+  private onAttributesMutation(mutations: MutationRecord[]) {
     // Only "style" changes are interesting at the moment. If we need more attributes, we should add a config because "placeholder" and "paragraph_id" need to be skipped.
     const updateParagraphs: HTMLElement[] = findUpdatedParagraphs({
       mutations: mutations.filter(({attributeName}: MutationRecord) =>
