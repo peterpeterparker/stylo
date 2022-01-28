@@ -123,6 +123,8 @@ export class UndoRedoEvents {
   }
 
   private stackUndoInput() {
+    this.copySelectedParagraphs({filterEmptySelection: false});
+
     if (!this.undoInput) {
       return;
     }
@@ -131,8 +133,6 @@ export class UndoRedoEvents {
       data: this.undoInput,
       container: containerStore.state.ref
     });
-
-    this.copySelectedParagraphs({filterEmptySelection: false});
 
     this.undoInput = undefined;
   }
