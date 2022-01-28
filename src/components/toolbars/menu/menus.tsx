@@ -39,6 +39,11 @@ export class Menus implements ComponentInterface {
     this.hide();
   }
 
+  @Listen('resize', {target: 'window'})
+  onResize() {
+    this.hide();
+  }
+
   @Listen('click', {target: 'document', passive: true})
   onClick({target}: MouseEvent | TouchEvent) {
     const paragraph: Node | undefined = findParagraph({
