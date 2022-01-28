@@ -2,8 +2,13 @@ import {StyloMenu} from './menu';
 import {StyloPlugin} from './plugin';
 import {StyloToolbar} from './toolbar';
 
+export interface StyloConfigI18n {
+  lang: Languages;
+  custom?: Record<string, string>;
+}
+
 export interface StyloConfig {
-  lang?: Languages;
+  i18n?: StyloConfigI18n;
   plugins?: StyloPlugin[];
   toolbar?: Partial<StyloToolbar>;
   menus?: StyloMenu[];

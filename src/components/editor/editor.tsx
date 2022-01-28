@@ -25,10 +25,11 @@ export class Editor implements ComponentInterface {
   private el: HTMLElement;
 
   /**
-   * Optional editor configuration.
-   * - Language
-   * - Plugin, if provided, replaces the default plugin config
+   * Optional editor configurations
+   * - i18n provides language and optional list of custom translations
+   * - plugins, if provided, replaces the default plugin config
    * - Toolbar, if provided, is merged with the default toolbar config
+   * - Menus, if provided, is merged with the default menus config
    */
   @Prop()
   config: StyloConfig | undefined;
@@ -103,9 +104,11 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    const {plugins, toolbar, lang, placeholders, menus} = this.config;
+    const {plugins, toolbar, i18n: customI18n, placeholders, menus} = this.config;
 
-    i18n.state.lang = lang || 'en';
+    i18n.state.custom = customI18n?.custom;
+
+    i18n.state.lang = customI18n?.lang || 'en';
 
     configStore.state.plugins = plugins || DEFAULT_PLUGINS;
 

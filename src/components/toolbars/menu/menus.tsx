@@ -107,7 +107,7 @@ export class Menus implements ComponentInterface {
     return (
       <stylo-toolbar-button
         onAction={async () => await this.selectMenuAction(action)}
-        label={i18n.state.menus[text] || text}>
+        label={i18n.state.menus[text] ?? i18n.state.custom[text]?? text}>
         {icon ? icon : <div class="icon" innerHTML={iconSrc}></div>}
       </stylo-toolbar-button>
     );

@@ -105,7 +105,7 @@ export class List {
         onClick={($event: UIEvent) => this.emitPlugin($event, plugin)}
         {...(icon === undefined && {innerHTML: iconSrc})}>
         {icon}
-        {i18n.state.plugins[text] || text}
+        {i18n.state.plugins[text] ?? i18n.state.custom[text] ?? text}
       </button>
     );
   }

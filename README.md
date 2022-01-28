@@ -279,9 +279,19 @@ This project is developed with [Stencil](https://stenciljs.com/).
 
 English, German, Spanish and Dutch are currently supported. More translations are also welcomed!
 
+### Contributions
+
 - add a new translation file in [src/assets/i18n](src/assets/i18n)
 - extends the list of supported `Languages` in [src/types/i18.d.ts](src/types/i18.d.ts)
 - update README with the new language
+
+### Customization
+
+The `text` options of plugins and menus can either be static `string` or a translation keys.
+
+To provide a list of custom translations that matches these keys, Stylo accepts a `custom` record of string ([src/types/config.ts](src/types/config.ts)).
+
+Through the same configuration it is also possible to switch languages on the fly.
 
 ## License
 

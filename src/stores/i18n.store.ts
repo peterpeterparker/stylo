@@ -1,7 +1,11 @@
 import {createStore} from '@stencil/store';
 import {en} from '../assets/i18n/en';
 
-const {state, onChange} = createStore<I18n>(en);
+interface I18nStore extends I18n {
+  custom?: Record<string, string>;
+}
+
+const {state, onChange} = createStore<I18nStore>(en);
 
 const esI18n = async (): Promise<I18n> => {
   const {es} = await import(`../assets/i18n/es`);
@@ -37,7 +41,10 @@ onChange('lang', async (lang: Languages) => {
       bundle = enI18n();
   }
 
-  Object.assign(state, bundle);
+  Object.assign(state, {
+    custom: state.custom,
+    ...bundle
+  });
 });
 
 export default {state};
