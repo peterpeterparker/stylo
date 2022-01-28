@@ -68,6 +68,7 @@
         --stylo-border: 1px solid var(--highlight);
         --stylo-toolbar-button-color-active: var(--highlight);
         --stylo-list-background-active: rgba(var(--highlight-rgb), 0.2);
+        --stylo-toolbar-border-radius: 0;
       }
 
       * {
@@ -356,6 +357,8 @@
 
       section.editor article img {
         max-width: 100%;
+        margin: 0 auto;
+        display: block;
       }
 
       section.editor article mark {
@@ -503,9 +506,13 @@
         <div>The project is under development and published in <span style="font-weight: bold">&ZeroWidthSpace;alpha</span>&ZeroWidthSpace; version, it can already be used by anyone but still needs improvements. Your contribution on <a href="https://github.com/deckgo/stylo" rel="noopener noreferrer">GitHub</a> is most welcome!</div>
         <div contenteditable="false"><hr></div>
         <h2>Features</h2>
-        <ul><li>Interactive design 🎯</li><li>Customizable 💪</li><li>By Developer, For Developer 😎</li><li>Future Proof 🚀</li><li>Open Source (MIT license) ⭐️</li></ul>
+        <ul><li>Interactive design 🎯</li><li>Customizable 💪</li><li>Framework agnostic 😎</li><li>Future Proof 🚀</li><li>Open Source (MIT license) ⭐️</li></ul>
         <div contenteditable="false"><hr></div>
         <div>Pro tips: when you are writing, you can toggle to bold (**), italic (space _) or <mark>mark</mark> (space `) on the fly.</div>
+        <div>&ZeroWidthSpace;</div>
+        <div>Cheers<br/>David</div>
+        <div>&ZeroWidthSpace;</div>
+        <div contenteditable="false"><img src="/assets/mogwai.jpg" loading="lazy" style="width: 50%;" /></div>
       </article>
 
       <stylo-editor> </stylo-editor>
@@ -535,12 +542,15 @@
         </article>
 
         <article>
-          <h3>By Developer, For Developer 😎</h3>
+          <h3>Framework agnostic 😎</h3>
 
           <p>
-            <strong>Lightweight</strong> (32kb gzipped) and <strong>code agnostic</strong>, the
-            editor is a library of reusable components. It can be integrated with or without any
-            framework and work across all modern browsers.
+            The editor is a <strong>lightweight</strong> (in comparison to other editors - 32kb
+            gzipped) and <strong>framework agnostic</strong> library of reusable components.
+          </p>
+
+          <p>
+            It uses no 3rd party runtime dependencies and works across all modern browsers.
           </p>
 
           <p>The code is published under MIT license and contribution are most welcome!</p>
@@ -550,7 +560,7 @@
           <h3>Future Proof 🚀</h3>
 
           <p>
-            Even though at the moment (alpha version) few actions still relies on
+            Even if at the moment (alpha version) few actions still relies on
             <a
               href="https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand"
               rel="noopener noreferrer"
@@ -612,7 +622,9 @@
       </a>
     </footer>
 
-    <script>
+    <script type="module">
+      import {imgMenu} from './build/index.esm.js';
+
       const isMobile = () => {
         const isTouchScreen = window.matchMedia('(any-pointer:coarse)').matches;
         const isMouseScreen = window.matchMedia('(any-pointer:fine)').matches;
@@ -628,6 +640,10 @@
 
           const article = document.querySelector('article');
           stylo.containerRef = article;
+
+          stylo.config = {
+            menus: [imgMenu]
+          };
 
           // stylo.addEventListener('addParagraphs', ($event) =>
           //   console.log('addParagraphs', $event)

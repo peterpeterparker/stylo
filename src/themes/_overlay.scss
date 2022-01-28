@@ -6,3 +6,14 @@
   box-shadow: var(--stylo-box-shadow, var(--box-shadow));
   border: var(--stylo-border);
 }
+
+@mixin dialog {
+  background: var(--stylo-background, var(--white));
+  color: var(--stylo-color, var(--white-contrast));
+
+  border-radius: var(--stylo-border, 4px);
+}
+
+@mixin toolbar {
+  padding: var(--stylo-toolbar-padding, 0 8px);
+}

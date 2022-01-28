@@ -13,12 +13,7 @@
   visibility: hidden;
   opacity: 0;
 
-  color: var(--white-contrast);
-  background: var(--white);
-
   margin: 2px 0;
-
-  border-radius: 4px;
 
   width: 220px;
   max-height: 220px;
@@ -26,6 +21,7 @@
   overflow: scroll;
 
   @include variables.colors;
+  @include overlay.dialog;
   @include overlay.overlay;
 
   pointer-events: none;

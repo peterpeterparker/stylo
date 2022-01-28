@@ -99,6 +99,7 @@ describe('plugins', () => {
 
     expect(firstChild.firstChild.nodeName.toLowerCase()).toEqual('img');
     expect(firstChild.firstChild.hasAttribute('src')).toBeTruthy();
+    expect(firstChild.firstChild.getAttribute('loading')).toEqual('lazy');
 
     expectEmpty(lastChild);
   });

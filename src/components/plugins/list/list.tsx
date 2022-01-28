@@ -11,12 +11,9 @@ import {
 } from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import i18n from '../../../stores/i18n.store';
-import {StyloPlugin, StyloPluginIcon} from '../../../types/plugin';
+import {StyloPlugin} from '../../../types/plugin';
+import {renderIcon} from '../../../utils/icon.utils';
 import {toHTMLElement} from '../../../utils/node.utils';
-import {IconCode} from '../../icons/code';
-import {IconEllipsisHorizontal} from '../../icons/ellipsis-horizontal';
-import {IconImages} from '../../icons/images';
-import {IconList} from '../../icons/list';
 
 @Component({
   tag: 'stylo-list',
@@ -101,31 +98,15 @@ export class List {
   private renderPlugin(plugin: StyloPlugin) {
     const {text, icon: iconSrc} = plugin;
 
-    const icon: JSX.IntrinsicElements | undefined = this.renderIcon(iconSrc);
+    const icon: JSX.IntrinsicElements | undefined = renderIcon(iconSrc);
 
     return (
       <button
         onClick={($event: UIEvent) => this.emitPlugin($event, plugin)}
-        {...(icon === undefined && {innerHTML: iconSrc})}
-      >
+        {...(icon === undefined && {innerHTML: iconSrc})}>
         {icon}
         {i18n.state.plugins[text] || text}
       </button>
     );
-  }
-
-  private renderIcon(icon: StyloPluginIcon): JSX.IntrinsicElements | undefined {
-    switch (icon) {
-      case 'code':
-        return <IconCode></IconCode>;
-      case 'ul':
-        return <IconList></IconList>;
-      case 'hr':
-        return <IconEllipsisHorizontal></IconEllipsisHorizontal>;
-      case 'img':
-        return <IconImages></IconImages>;
-      default:
-        return undefined;
-    }
   }
 }

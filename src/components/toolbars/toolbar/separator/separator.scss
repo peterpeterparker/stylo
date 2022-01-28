@@ -1,0 +1,21 @@
+@use "../../../../themes/variables";
+
+:host {
+  @include variables.colors;
+}
+
+div.separator {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1px;
+  min-width: 1px;
+  margin: 0 6px;
+  height: 24px;
+  background: var(--stylo-toolbar-separator-background, var(--light));
+}
+
+:host(.tools-mobile) {
+  div.separator {
+    background: var(--stylo-toolbar-separator-mobile-background, var(--light));
+  }
+}

@@ -15,7 +15,8 @@
 
 - [stylo-add](../plugins/add)
 - [stylo-plugins](../plugins/plugins)
-- [stylo-toolbar](../toolbar/toolbar)
+- [stylo-toolbar](../toolbars/toolbar/toolbar)
+- [stylo-menus](../toolbars/menu)
 
 ### Graph
 
@@ -24,11 +25,11 @@ graph TD;
   stylo-editor --> stylo-add
   stylo-editor --> stylo-plugins
   stylo-editor --> stylo-toolbar
+  stylo-editor --> stylo-menus
   stylo-plugins --> stylo-list
   stylo-toolbar --> stylo-toolbar-triangle
   stylo-toolbar --> stylo-toolbar-link
   stylo-toolbar --> stylo-toolbar-color
-  stylo-toolbar --> stylo-toolbar-image
   stylo-toolbar --> stylo-toolbar-align
   stylo-toolbar --> stylo-toolbar-list
   stylo-toolbar --> stylo-toolbar-font-size
@@ -37,12 +38,12 @@ graph TD;
   stylo-toolbar --> stylo-toolbar-text
   stylo-toolbar-color --> stylo-color
   stylo-color --> stylo-color-input
-  stylo-toolbar-image --> stylo-toolbar-button
-  stylo-toolbar-image --> stylo-toolbar-separator
   stylo-toolbar-align --> stylo-toolbar-button
   stylo-toolbar-list --> stylo-toolbar-button
   stylo-toolbar-font-size --> stylo-toolbar-button
   stylo-toolbar-text --> stylo-toolbar-button
+  stylo-menus --> stylo-toolbar-triangle
+  stylo-menus --> stylo-toolbar-button
   style stylo-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

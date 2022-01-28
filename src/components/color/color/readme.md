@@ -169,7 +169,7 @@ export const DEFAULT_PALETTE: StyloPalette[] = [
 
 ### Used by
 
-- [stylo-toolbar-color](../../toolbar/actions/color)
+- [stylo-toolbar-color](../../toolbars/toolbar/actions/color)
 
 ### Depends on
 

@@ -213,23 +213,6 @@ export const getItalic = (element: HTMLElement): 'italic' | 'initial' | undefine
   return undefined;
 };
 
-export const isAnchorImage = (
-  anchorEvent: MouseEvent | TouchEvent,
-  imgAnchor: string | undefined
-): boolean => {
-  if (!anchorEvent || !imgAnchor) {
-    return false;
-  }
-
-  if (!anchorEvent.target || !(anchorEvent.target instanceof HTMLElement)) {
-    return false;
-  }
-
-  const target: HTMLElement = anchorEvent.target;
-
-  return target.nodeName && target.nodeName.toLowerCase() === imgAnchor;
-};
-
 const isTag = (element: HTMLElement, tagName: string): boolean => {
   if (!element) {
     return false;

@@ -4,7 +4,7 @@ import {findParagraph, isParagraph, isTargetParagraph} from './paragraph.utils';
 
 export interface RemovedParagraph {
   paragraph: HTMLElement;
-  previousSibling: Node;
+  previousSibling: HTMLElement;
 }
 
 export const findAddedParagraphs = ({
@@ -64,13 +64,41 @@ export const findRemovedParagraphs = ({
     .filter(({target}: MutationRecord) => isTargetParagraph({target, container}))
     .filter(({removedNodes}: MutationRecord) => removedNodes?.length > 0)
     .reduce((acc: RemovedParagraph[], {removedNodes, previousSibling}: MutationRecord) => {
-      const paragraphs: Node[] = filterRemovedParagraphs({nodes: Array.from(removedNodes)});
+      const paragraphs: Node[] = filterRemovedParagraphs({nodes: Array.from(removedNodes), container});
 
       return [
         ...acc,
-        ...paragraphs.map((paragraph: HTMLElement) => ({paragraph, previousSibling}))
+        ...paragraphs.map((paragraph: HTMLElement) => ({
+          paragraph,
+          previousSibling: findPreviousElementSibling({container, previousSibling})
+        }))
       ];
     }, []);
+};
+
+/**
+ * The mutation observer previous sibling can be a #text node. Because we assume every child of the container are HTML elements, we iterate until we find the closest one.
+ */
+const findPreviousElementSibling = ({
+  previousSibling,
+  container
+}: {
+  previousSibling: Node | undefined;
+  container: HTMLElement;
+}): HTMLElement | undefined => {
+  if (!previousSibling) {
+    return undefined;
+  }
+
+  if (container.isEqualNode(previousSibling)) {
+    return undefined;
+  }
+
+  if (!isTextNode(previousSibling)) {
+    return previousSibling as HTMLElement;
+  }
+
+  return findPreviousElementSibling({previousSibling: previousSibling.previousSibling, container});
 };
 
 export const findUpdatedParagraphs = ({
@@ -119,9 +147,10 @@ const filterAddedParagraphs = ({
 };
 
 // We remove text node, should not happen we only want elements as children of the container
-const filterRemovedParagraphs = ({nodes}: {nodes: Node[]}): HTMLElement[] => {
+const filterRemovedParagraphs = ({nodes, container}: {nodes: Node[];  container: Node}): HTMLElement[] => {
   return nodes
-    .filter((paragraph: Node | undefined) => !isTextNode(paragraph))
+    .filter((paragraph: Node) => isTargetParagraph({container, target: paragraph}))
+    .filter((paragraph: Node) => !isTextNode(paragraph))
     .map((node: Node) => toHTMLElement(node));
 };
 

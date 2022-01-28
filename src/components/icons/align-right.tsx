@@ -10,8 +10,7 @@ export const IconAlignRight: FunctionalComponent = () => (
       clipRule: 'evenodd',
       strokeLinecap: 'round',
       strokeLinejoin: 'round'
-    }}
-  >
+    }}>
     <path
       d="M256,331l160,0"
       style={{fill: 'none', fillRule: 'nonzero', stroke: 'currentColor', strokeWidth: '25.3px'}}

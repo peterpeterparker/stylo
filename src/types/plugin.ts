@@ -1,4 +1,4 @@
-export type StyloPluginIcon = 'code' | 'ul' | 'hr' | 'img' | string;
+import {StyloIcon} from './icon';
 
 export interface StyloPluginCreateParagraphsParams {
   container: HTMLElement;
@@ -13,7 +13,7 @@ export interface StyloPluginFiles {
 
 export interface StyloPlugin {
   text: string;
-  icon: StyloPluginIcon;
+  icon: StyloIcon;
   files?: StyloPluginFiles;
   createParagraphs: (params: StyloPluginCreateParagraphsParams) => Promise<void>;
 }

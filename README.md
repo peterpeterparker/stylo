@@ -20,6 +20,8 @@ A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations
 - [Usage](#usage)
 - [Config](#config)
 - [Plugins](#plugins)
+- [Toolbar](#toolbar)
+- [Menus](#menus)
 - [Events](#events)
 - [Listener](#listener)
 - [Contributing](#contributing)
@@ -192,6 +194,43 @@ Things to pay attention to:
 - Stylo expect all the direct children - the paragraphs - of the editable container to be HTML elements i.e. no text or comment nodes
 
 Find some custom plugins in DeckDeckGo [repo](https://github.com/deckgo/deckdeckgo/tree/main/studio/src/app/plugins).
+
+## Toolbar
+
+The inline editor that is uses to style texts (bold, italic, colors, etc.) is a web component named `<stylo-toolbar/>`.
+
+It is provided per default with Stylo but can also be used as a standalone component.
+
+## Menus
+
+Optionally, menus can be defined for particular elements - i.e. paragraphs. They will be displayed with an absolute positioning after click events.
+
+Custom menus can be configured following the ([src/types/menu.ts](src/types/menu.ts)) interface.
+
+If for example you would like to display a custom menu for all `code` paragraphs, this can be done as following:
+
+```
+export const editorConfig: Partial<StyloConfig> = {
+  menus: [
+    {
+      match: ({paragraph}: {paragraph: HTMLElement}) =>
+        paragraph.nodeName.toLowerCase() === 'code',
+      actions: [
+        {
+          text: 'Edit code',
+          icon: `<svg ...
+          </svg>`,
+          action: async ({paragraph}: {paragraph: HTMLElement}) => {
+            // Apply some modifications or any other actions of your choice
+          }
+        }
+      ]
+    }
+  ]
+};
+```
+
+Stylo provides a sample menu for images ([src/menus/img.menu.ts](src/menus/img.menu.ts)).
 
 ## Events
 

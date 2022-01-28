@@ -1,4 +1,5 @@
 export type {Components, JSX} from './components';
+export * from './menus/img.menu';
 export * from './plugins/code.plugin';
 export * from './plugins/h1.plugin';
 export * from './plugins/h2.plugin';
@@ -7,6 +8,9 @@ export * from './plugins/hr.plugin';
 export * from './plugins/img.plugin';
 export * from './plugins/ul.plugin';
 export * from './types/config';
+export * from './types/icon';
+export {StyloIcon} from './types/icon';
+export * from './types/menu';
 export * from './types/palette';
 export * from './types/plugin';
 export * from './types/toolbar';

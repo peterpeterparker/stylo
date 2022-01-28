@@ -184,8 +184,7 @@ export class Color {
                 : undefined
             }
             style={style}
-            onClick={() => this.pickColor(element)}
-          ></button>
+            onClick={() => this.pickColor(element)}></button>
         );
       });
     } else {
@@ -200,8 +199,7 @@ export class Color {
         colorRgb={this.selectedColorRgb}
         customColorRgb={this.selectedCustomColorRgb}
         inputAlt={this.inputAlt}
-        onSelectHexColor={this.selectColor}
-      ></stylo-color-input>
+        onSelectHexColor={this.selectColor}></stylo-color-input>
     );
   }
 }

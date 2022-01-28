@@ -33,7 +33,6 @@ interface UndoUpdateParagraphs extends UndoRedoUpdateParagraph {
 
 export class UndoRedoEvents {
   private observer: MutationObserver | undefined;
-  private attributesObserver: MutationObserver | undefined;
 
   private undoInput: UndoRedoInput | undefined = undefined;
   private undoUpdateParagraphs: UndoUpdateParagraphs[] = [];
@@ -47,7 +46,6 @@ export class UndoRedoEvents {
     this.undoUpdateParagraphs = [];
 
     this.observer = new MutationObserver(this.onMutation);
-    this.attributesObserver = new MutationObserver(this.onAttributesMutation);
 
     this.observe();
 
@@ -55,6 +53,7 @@ export class UndoRedoEvents {
     containerStore.state.ref?.addEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
     document.addEventListener('toolbarActivated', this.onToolbarActivated);
+    document.addEventListener('menuActivated', this.onMenuActivated);
 
     this.unsubscribe = undoRedoStore.onChange('observe', (observe: boolean) => {
       if (observe) {
@@ -77,6 +76,7 @@ export class UndoRedoEvents {
     containerStore.state.ref?.removeEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
     document.removeEventListener('toolbarActivated', this.onToolbarActivated);
+    document.removeEventListener('menuActivated', this.onMenuActivated);
 
     this.unsubscribe?.();
   }
@@ -121,6 +121,8 @@ export class UndoRedoEvents {
   }
 
   private stackUndoInput() {
+    this.copySelectedParagraphs({filterEmptySelection: false});
+
     if (!this.undoInput) {
       return;
     }
@@ -129,8 +131,6 @@ export class UndoRedoEvents {
       data: this.undoInput,
       container: containerStore.state.ref
     });
-
-    this.copySelectedParagraphs({filterEmptySelection: false});
 
     this.undoInput = undefined;
   }
@@ -149,18 +149,22 @@ export class UndoRedoEvents {
       childList: true,
       characterData: true,
       characterDataOldValue: true,
+      attributes: true,
       subtree: true
     });
-    this.attributesObserver.observe(containerStore.state.ref, {attributes: true, subtree: true});
   }
 
   private disconnect() {
     this.observer?.disconnect();
-    this.attributesObserver?.disconnect();
   }
 
   private onToolbarActivated = () => {
     this.copySelectedParagraphs({filterEmptySelection: true});
+  };
+
+  private onMenuActivated = ({detail}: CustomEvent<{paragraph: HTMLElement}>) => {
+    const {paragraph} = detail;
+    this.undoUpdateParagraphs = this.toUpdateParagraphs([paragraph]);
   };
 
   private onSnapshotParagraph = ({target}: CustomEvent<void>) => {
@@ -242,9 +246,13 @@ export class UndoRedoEvents {
     this.onParagraphsMutations(mutations);
 
     const didUpdate: boolean = this.onNodesParagraphsMutation(mutations);
+
+    // We assume that all paragraphs updates do contain attributes and input changes
     if (didUpdate) {
       return;
     }
+
+    this.onAttributesMutation(mutations);
 
     this.onCharacterDataMutation(mutations);
   };
@@ -286,7 +294,7 @@ export class UndoRedoEvents {
       changes.push({
         outerHTML: this.cleanOuterHTML(paragraph),
         mutation: 'remove',
-        index: index + lowerIndex
+        index: index + (Number.isFinite(lowerIndex) ? lowerIndex : 0)
       })
     );
 
@@ -362,7 +370,7 @@ export class UndoRedoEvents {
     return clone.outerHTML;
   }
 
-  private onAttributesMutation = async (mutations: MutationRecord[]) => {
+  private onAttributesMutation(mutations: MutationRecord[]) {
     // Only "style" changes are interesting at the moment. If we need more attributes, we should add a config because "placeholder" and "paragraph_id" need to be skipped.
     const updateParagraphs: HTMLElement[] = findUpdatedParagraphs({
       mutations: mutations.filter(({attributeName}: MutationRecord) =>

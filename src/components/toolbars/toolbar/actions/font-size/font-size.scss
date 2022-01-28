@@ -1,0 +1,41 @@
+@use "../../../../../themes/variables";
+
+:host {
+  @include variables.colors;
+
+  display: flex;
+}
+
+:host(.tools-sticky) {
+  stylo-toolbar-button {
+    margin: 0 2px;
+  }
+}
+
+stylo-toolbar-button.active {
+  --stylo-toolbar-button-color: var(--stylo-toolbar-button-color-active, var(--highlight));
+}
+
+stylo-toolbar-button:first-of-type {
+  --stylo-toolbar-button-font-size: 0.8rem;
+}
+
+stylo-toolbar-button:nth-of-type(2) {
+  --stylo-toolbar-button-font-size: 1rem;
+}
+
+stylo-toolbar-button:nth-of-type(3) {
+  --stylo-toolbar-button-font-size: 1.2rem;
+}
+
+stylo-toolbar-button:nth-of-type(5) {
+  --stylo-toolbar-button-font-size: 1.6rem;
+}
+
+stylo-toolbar-button:nth-of-type(6) {
+  --stylo-toolbar-button-font-size: 1.8rem;
+}
+
+stylo-toolbar-button:nth-of-type(7) {
+  --stylo-toolbar-button-font-size: 2rem;
+}

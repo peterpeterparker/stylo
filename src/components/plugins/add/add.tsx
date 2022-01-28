@@ -238,8 +238,7 @@ export class Add implements ComponentInterface {
           onClick={($event: UIEvent) => this.selectPlugins($event)}
           onKeyDown={($event) => $event.stopPropagation()}
           onMouseDown={($event) => $event.stopPropagation()}
-          onTouchStart={($event) => $event.stopPropagation()}
-        >
+          onTouchStart={($event) => $event.stopPropagation()}>
           <IconAdd></IconAdd>
         </button>
       </Host>
