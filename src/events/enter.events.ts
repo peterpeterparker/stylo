@@ -61,7 +61,7 @@ export class EnterEvents {
 
     createEmptyParagraph({
       container: containerStore.state.ref,
-      paragraph: anchor
+      paragraph
     });
   }
 }
