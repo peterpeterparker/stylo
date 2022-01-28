@@ -4,10 +4,10 @@
 
 ## Properties
 
-| Property       | Attribute | Description                                                                                                                                                           | Type          | Default     |
-| -------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- |
-| `config`       | --        | Optional editor configuration. - Language - Plugin, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config | `StyloConfig` | `undefined` |
-| `containerRef` | --        | The container (e.g. an article, a div, etc.) that contains the content, the paragraphs. Must have the attribute `contenteditable` set to `true`.                      | `HTMLElement` | `undefined` |
+| Property       | Attribute | Description                                                                                                                                                                                                                                                                                 | Type          | Default     |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- |
+| `config`       | --        | Optional editor configurations - i18n provides language and optional list of custom translations - plugins, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config - Menus, if provided, is merged with the default menus config | `StyloConfig` | `undefined` |
+| `containerRef` | --        | The container (e.g. an article, a div, etc.) that contains the content, the paragraphs. Must have the attribute `contenteditable` set to `true`.                                                                                                                                            | `HTMLElement` | `undefined` |
 
 ## Dependencies
 

@@ -40,7 +40,7 @@ export namespace Components {
     }
     interface StyloEditor {
         /**
-          * Optional editor configuration. - Language - Plugin, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config
+          * Optional editor configurations - i18n provides language and optional list of custom translations - plugins, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config - Menus, if provided, is merged with the default menus config
          */
         "config": StyloConfig | undefined;
         /**
@@ -269,7 +269,7 @@ declare namespace LocalJSX {
     }
     interface StyloEditor {
         /**
-          * Optional editor configuration. - Language - Plugin, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config
+          * Optional editor configurations - i18n provides language and optional list of custom translations - plugins, if provided, replaces the default plugin config - Toolbar, if provided, is merged with the default toolbar config - Menus, if provided, is merged with the default menus config
          */
         "config"?: StyloConfig | undefined;
         /**
