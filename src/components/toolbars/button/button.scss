@@ -55,37 +55,6 @@ button {
   }
 }
 
-:host(.mobile) {
-  button {
-    color: var(--stylo-toolbar-button-mobile-color, black);
-    padding: 0 4px;
-
-    &.active {
-      color: var(--stylo-toolbar-button-mobile-color-active, #3880ff);
-    }
-
-    &[disabled] {
-      color: var(--stylo-toolbar-button-mobile-color-disabled, var(--light));
-    }
-
-    > div {
-      background-color: var(--stylo-toolbar-button-mobile-color, black);
-    }
-
-    &.active {
-      > div {
-        background-color: var(--stylo-toolbar-button-mobile-color-active, #3880ff);
-      }
-    }
-
-    &[disabled] {
-      > div {
-        background-color: var(--stylo-toolbar-button-mobile-color-disabled, var(--light));
-      }
-    }
-  }
-}
-
 ::slotted(*) {
   pointer-events: none;
 }

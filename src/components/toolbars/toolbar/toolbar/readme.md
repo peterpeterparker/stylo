@@ -38,12 +38,9 @@
 | `--stylo-toolbar-min-height`                    | The height of the toolbar @default 44px                                            |
 | `--stylo-toolbar-min-width`                     | The width of the toolbar @default 280px                                            |
 | `--stylo-toolbar-mobile-border`                 | Border of the toolbar @default 0                                                   |
+| `--stylo-toolbar-mobile-height`                 | The height of the mobile toolbar @default 56px                                     |
 | `--stylo-toolbar-separator-background`          | The background of the separator @default #f4f5f8                                   |
 | `--stylo-toolbar-separator-mobile-background`   | The background of the separator on mobile @default #f4f5f8                         |
-| `--stylo-toolbar-sticky-bottom`                 | The bottom attribute of the sticky toolbar @default 0                              |
-| `--stylo-toolbar-sticky-height`                 | The height of the sticky toolbar @default 56px                                     |
-| `--stylo-toolbar-sticky-scroll`                 | Top position if sticky @default 0                                                  |
-| `--stylo-toolbar-sticky-zindex`                 | The z-Index of the sticky toolbar                                                  |
 | `--stylo-toolbar-triangle-box-shadow`           | The box-shadow of the triangle @default 0 0 8px 0 rgba(0, 0, 0, 0.1)               |
 | `--stylo-toolbar-triangle-start`                | The left position of the triangle @default 8px                                     |
 | `--stylo-toolbar-zindex`                        | The z-Index of the toolbar @default 2                                              |

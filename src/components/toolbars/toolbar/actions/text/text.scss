@@ -27,19 +27,3 @@ stylo-toolbar-button {
     }
   }
 }
-
-:host(.tools-mobile) {
-  stylo-toolbar-button {
-    &.underline {
-      &.active {
-        span {
-          border-bottom: 1px solid var(--stylo-toolbar-button-mobile-color-active, #3880ff);
-        }
-      }
-
-      span {
-        border-bottom: 1px solid var(--stylo-toolbar-button-mobile-color, black);
-      }
-    }
-  }
-}
