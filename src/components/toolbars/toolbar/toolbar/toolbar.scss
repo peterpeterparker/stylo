@@ -48,32 +48,22 @@ div.tools {
    */
   min-height: var(--stylo-toolbar-min-height, 44px);
 
-  &.tools-sticky,
-  &.tools-mobile.tools-sticky {
+  &.tools-mobile {
     position: fixed;
 
     transform: initial;
 
-    /**
-     * @prop --stylo-toolbar-sticky-bottom: The bottom attribute of the sticky toolbar
-     * @default 0
-     */
-    bottom: var(--stylo-toolbar-sticky-bottom, 0);
+    top: env(safe-area-inset-top);
     left: 0;
 
     width: 100%;
     border-radius: 0;
 
     /**
-     * @prop --stylo-toolbar-sticky-zindex: The z-Index of the sticky toolbar
-     */
-    z-index: var(--stylo-toolbar-sticky-zindex);
-
-    /**
-     * @prop --stylo-toolbar-sticky-height: The height of the sticky toolbar
+     * @prop --stylo-toolbar-mobile-height: The height of the mobile toolbar
      * @default 56px
      */
-    height: var(--stylo-toolbar-sticky-height, 56px);
+    height: var(--stylo-toolbar-mobile-height, 56px);
 
     padding-left: 0;
 
@@ -97,19 +87,6 @@ div.tools {
      * @default 0
      */
     border: var(--stylo-toolbar-mobile-border, 0);
-  }
-}
-
-:host(.tools-ios) {
-  div.tools {
-    &.tools-mobile.tools-sticky {
-      /**
-       * @prop --stylo-toolbar-sticky-scroll: Top position if sticky
-       * @default 0
-       */
-      top: calc(var(--stylo-toolbar-sticky-scroll, 0));
-      bottom: inherit;
-    }
   }
 }
 

@@ -350,6 +350,12 @@
         position: relative;
       }
 
+      @media (max-width: 768px) {
+        section.editor article {
+          padding: 2.75rem 1.25rem;
+        }
+      }
+
       section.editor article > div,
       section.editor article p {
         margin: 0 0 0.45rem;
@@ -661,7 +667,7 @@
 
       const onTry = () => {
         const article = document.querySelector('article');
-        article?.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'start'});
+        article?.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'start'});
         article?.classList.add('highlight');
         article?.setAttribute('contenteditable', 'true');
         setTimeout(() => article?.classList.remove('highlight'), 1250);

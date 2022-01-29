@@ -15,7 +15,6 @@ import {
   Event,
   EventEmitter,
   h,
-  Host,
   Listen,
   Prop,
   State,
@@ -126,8 +125,6 @@ export class Toolbar implements ComponentInterface {
    */
   @Event()
   styleDidChange: EventEmitter<HTMLElement>;
-
-  private iOSTimerScroll: number;
 
   private tools!: HTMLDivElement;
 
@@ -275,8 +272,6 @@ export class Toolbar implements ComponentInterface {
 
   private setToolbarAnchorPosition() {
     if (this.mobile) {
-      this.handlePositionIOS();
-
       return;
     }
 
@@ -328,28 +323,6 @@ export class Toolbar implements ComponentInterface {
         ? x - (innerWidth - safeAreaMarginX - this.tools.offsetWidth)
         : this.tools.offsetWidth / 2
     };
-  }
-
-  private handlePositionIOS() {
-    if (!isIOS() || !this.anchorEvent) {
-      return;
-    }
-
-    this.setStickyPositionIOS();
-  }
-
-  private setStickyPositionIOS() {
-    if (!isIOS() || !window) {
-      return;
-    }
-
-    if (this.iOSTimerScroll > 0) {
-      clearTimeout(this.iOSTimerScroll);
-    }
-
-    this.iOSTimerScroll = window.setTimeout(() => {
-      this.el.style.setProperty('--stylo-toolbar-sticky-scroll', `${window.scrollY}px`);
-    }, 50);
   }
 
   private activateToolbar(selection: Selection): boolean {
@@ -604,12 +577,6 @@ export class Toolbar implements ComponentInterface {
       ? 'tools tools-mobile'
       : 'tools';
 
-    if (this.mobile) {
-      classNames += ' tools-sticky';
-    }
-
-    const hostClass = isIOS() ? 'tools-ios' : undefined;
-
     const position: string = this.toolsPosition?.position || 'above';
 
     const style: Record<string, string> | undefined = this.toolsPosition
@@ -623,16 +590,14 @@ export class Toolbar implements ComponentInterface {
       : undefined;
 
     return (
-      <Host class={hostClass}>
-        <div class={classNames} ref={(el) => (this.tools = el as HTMLDivElement)} style={style}>
-          <stylo-toolbar-triangle
-            class={position === 'above' ? 'bottom' : 'top'}
-            style={{
-              '--stylo-toolbar-triangle-start': `${this.toolsPosition?.anchorLeft}px`
-            }}></stylo-toolbar-triangle>
-          {this.renderActions()}
-        </div>
-      </Host>
+      <div class={classNames} ref={(el) => (this.tools = el as HTMLDivElement)} style={style}>
+        <stylo-toolbar-triangle
+          class={position === 'above' ? 'bottom' : 'top'}
+          style={{
+            '--stylo-toolbar-triangle-start': `${this.toolsPosition?.anchorLeft}px`
+          }}></stylo-toolbar-triangle>
+        {this.renderActions()}
+      </div>
     );
   }
 
