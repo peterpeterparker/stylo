@@ -6,7 +6,7 @@
 
   position: absolute;
   top: var(--actions-top);
-  left: var(--stylo-add-left, 0);
+  left: var(--stylo-add-left, 8px);
 
   transition: top 0.1s ease;
 

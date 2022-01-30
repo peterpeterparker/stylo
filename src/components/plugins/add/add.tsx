@@ -1,4 +1,4 @@
-import {getSelection, moveCursorToStart} from '@deckdeckgo/utils';
+import {getSelection, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -122,6 +122,10 @@ export class Add implements ComponentInterface {
   }
 
   private hide() {
+    if (isMobile()) {
+      return;
+    }
+
     this.top = undefined;
   }
 

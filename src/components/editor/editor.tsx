@@ -1,4 +1,4 @@
-import {debounce} from '@deckdeckgo/utils';
+import {debounce, isMobile} from '@deckdeckgo/utils';
 import {Component, ComponentInterface, Element, Fragment, h, Prop, Watch} from '@stencil/core';
 import {DataEvents} from '../../events/data.events';
 import {EnterEvents} from '../../events/enter.events';
@@ -83,6 +83,10 @@ export class Editor implements ComponentInterface {
   }
 
   private applySize() {
+    if (isMobile()) {
+      return;
+    }
+
     containerStore.state.size = this.containerRef?.getBoundingClientRect();
   }
 

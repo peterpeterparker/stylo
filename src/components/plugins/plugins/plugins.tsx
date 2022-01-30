@@ -1,3 +1,4 @@
+import {isMobile} from '@deckdeckgo/utils';
 import {Component, ComponentInterface, Element, h, Host, Listen, State} from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
@@ -25,7 +26,13 @@ export class Plugins implements ComponentInterface {
   private destroyListener: () => void | undefined;
 
   componentWillLoad() {
-    this.destroyListener = containerStore.onChange('size', () => this.hide());
+    this.destroyListener = containerStore.onChange('size', () => {
+      if (isMobile()) {
+        return;
+      }
+
+      this.hide();
+    });
   }
 
   disconnectedCallback() {
