@@ -4,6 +4,7 @@ import containerStore from '../../../stores/container.store';
 import {StyloPlugin} from '../../../types/plugin';
 import {toHTMLElement} from '../../../utils/node.utils';
 import {focusParagraph} from '../../../utils/paragraph.utils';
+import { isMobile } from '@deckdeckgo/utils';
 
 @Component({
   tag: 'stylo-plugins',
@@ -25,7 +26,13 @@ export class Plugins implements ComponentInterface {
   private destroyListener: () => void | undefined;
 
   componentWillLoad() {
-    this.destroyListener = containerStore.onChange('size', () => this.hide());
+    this.destroyListener = containerStore.onChange('size', () => {
+      if (isMobile()) {
+        return;
+      }
+
+      this.hide();
+    });
   }
 
   disconnectedCallback() {

@@ -201,6 +201,11 @@ export class Toolbar implements ComponentInterface {
 
   @Listen('resize', {target: 'window'})
   onResize() {
+    // On Android, keyboard display resize screen
+    if (isMobile()) {
+      return;
+    }
+
     this.reset(true);
   }
 
