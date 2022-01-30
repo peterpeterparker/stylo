@@ -1,10 +1,10 @@
+import {isMobile} from '@deckdeckgo/utils';
 import {Component, ComponentInterface, Element, h, Host, Listen, State} from '@stencil/core';
 import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
 import {StyloPlugin} from '../../../types/plugin';
 import {toHTMLElement} from '../../../utils/node.utils';
 import {focusParagraph} from '../../../utils/paragraph.utils';
-import { isMobile } from '@deckdeckgo/utils';
 
 @Component({
   tag: 'stylo-plugins',

@@ -64,7 +64,10 @@ export const findRemovedParagraphs = ({
     .filter(({target}: MutationRecord) => isTargetParagraph({target, container}))
     .filter(({removedNodes}: MutationRecord) => removedNodes?.length > 0)
     .reduce((acc: RemovedParagraph[], {removedNodes, previousSibling}: MutationRecord) => {
-      const paragraphs: Node[] = filterRemovedParagraphs({nodes: Array.from(removedNodes), container});
+      const paragraphs: Node[] = filterRemovedParagraphs({
+        nodes: Array.from(removedNodes),
+        container
+      });
 
       return [
         ...acc,
@@ -147,7 +150,13 @@ const filterAddedParagraphs = ({
 };
 
 // We remove text node, should not happen we only want elements as children of the container
-const filterRemovedParagraphs = ({nodes, container}: {nodes: Node[];  container: Node}): HTMLElement[] => {
+const filterRemovedParagraphs = ({
+  nodes,
+  container
+}: {
+  nodes: Node[];
+  container: Node;
+}): HTMLElement[] => {
   return nodes
     .filter((paragraph: Node) => isTargetParagraph({container, target: paragraph}))
     .filter((paragraph: Node) => !isTextNode(paragraph))

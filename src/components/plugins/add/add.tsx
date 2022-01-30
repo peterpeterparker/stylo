@@ -1,4 +1,4 @@
-import { getSelection, isMobile, moveCursorToStart } from '@deckdeckgo/utils';
+import {getSelection, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,

@@ -389,5 +389,5 @@ export class UndoRedoEvents {
     });
 
     this.copySelectedParagraphs({filterEmptySelection: false});
-  };
+  }
 }
