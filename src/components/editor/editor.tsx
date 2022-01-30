@@ -1,5 +1,14 @@
 import {debounce, isMobile} from '@deckdeckgo/utils';
-import {Component, ComponentInterface, Element, Fragment, h, Prop, Watch} from '@stencil/core';
+import {
+  Component,
+  ComponentInterface,
+  Element,
+  Fragment,
+  h,
+  Prop,
+  State,
+  Watch
+} from '@stencil/core';
 import {DataEvents} from '../../events/data.events';
 import {EnterEvents} from '../../events/enter.events';
 import {InputEvents} from '../../events/input.events';
@@ -41,6 +50,9 @@ export class Editor implements ComponentInterface {
   @Prop()
   containerRef: HTMLElement | undefined;
 
+  @State()
+  private contentEditable: boolean = true;
+
   private readonly debounceSize: () => void = debounce(() => this.applySize(), 250);
 
   private readonly undoRedoEvents: UndoRedoEvents = new UndoRedoEvents();
@@ -48,6 +60,8 @@ export class Editor implements ComponentInterface {
   private readonly enterEvents: EnterEvents = new EnterEvents();
   private readonly tabEvents: TabEvents = new TabEvents();
   private readonly dataEvents: DataEvents = new DataEvents();
+
+  private attributesObserver: MutationObserver | undefined;
 
   componentWillLoad() {
     this.init();
@@ -64,6 +78,8 @@ export class Editor implements ComponentInterface {
     window?.removeEventListener('resize', this.debounceSize);
 
     this.destroyEvents();
+
+    this.attributesObserver?.disconnect();
   }
 
   @Watch('containerRef')
@@ -99,8 +115,41 @@ export class Editor implements ComponentInterface {
 
     containerStore.state.ref.classList.add('stylo-container');
 
+    this.containerRefEditable();
+
     this.applySize();
     this.initEvents();
+  }
+
+  /**
+   * Observe and init containerref "contenteditable" state. Notably useful in case consumer toggles such state.
+   */
+  private containerRefEditable() {
+    this.attributesObserver?.disconnect();
+
+    this.attributesObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      const contentEditableChanged: MutationRecord | undefined = mutations.find(
+        ({attributeName}: MutationRecord) =>
+          ['contenteditable'].includes(attributeName.toLowerCase())
+      );
+
+      if (!contentEditableChanged) {
+        return;
+      }
+
+      this.contentEditable = this.containerRef.getAttribute('contenteditable') === 'true';
+
+      if (this.contentEditable) {
+        this.initEvents();
+        return;
+      }
+
+      this.destroyEvents();
+    });
+
+    this.attributesObserver.observe(containerStore.state.ref, {attributes: true});
+
+    this.contentEditable = this.containerRef.getAttribute('contenteditable') === 'true';
   }
 
   private applyConfig() {
@@ -137,6 +186,10 @@ export class Editor implements ComponentInterface {
   }
 
   private initEvents() {
+    if (!this.contentEditable) {
+      return;
+    }
+
     this.inputEvents.init();
     this.enterEvents.init();
     this.tabEvents.init();
@@ -145,6 +198,10 @@ export class Editor implements ComponentInterface {
   }
 
   render() {
+    if (!this.contentEditable) {
+      return undefined;
+    }
+
     return (
       <Fragment>
         <stylo-add></stylo-add>
