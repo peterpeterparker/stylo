@@ -120,6 +120,8 @@ export class Link implements ComponentInterface {
     a.title = this.anchorLink.text;
     a.href = this.linkUrl;
 
+    a.rel = 'noopener noreferrer';
+
     return a;
   }
 
