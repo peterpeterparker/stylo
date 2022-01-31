@@ -1,7 +1,14 @@
-import { caretPosition, getSelection, isFirefox, isIOS, moveCursorToEnd } from '@deckdeckgo/utils';
+import {
+  caretPosition,
+  getSelection,
+  isFirefox,
+  isIOS,
+  isSafari,
+  moveCursorToEnd
+} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
-import { isTextNode, toHTMLElement } from '../utils/node.utils';
+import {isTextNode, toHTMLElement} from '../utils/node.utils';
 
 interface Key {
   key: string;
@@ -14,8 +21,6 @@ interface TransformInput {
   active: (parent: HTMLElement) => boolean;
   trim: () => number;
 }
-
-const isSafari = (): boolean => /apple/i.test(navigator.vendor);
 
 export class InputEvents {
   private lastBeforeInput: Key | undefined = undefined;
@@ -378,7 +383,7 @@ export class InputEvents {
     });
   }
 
-  private removeLastChar({target}: {target: Node;}): Promise<Node> {
+  private removeLastChar({target}: {target: Node}): Promise<Node> {
     return new Promise<Node>((resolve) => {
       const changeObserver: MutationObserver = new MutationObserver(
         (mutations: MutationRecord[]) => {
