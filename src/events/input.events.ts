@@ -1,4 +1,4 @@
-import {caretPosition, getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
+import {caretPosition, getSelection, isIOS, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {toHTMLElement} from '../utils/node.utils';
@@ -22,13 +22,22 @@ export class InputEvents {
 
   private beforeInputTransformer: TransformInput[] = [
     {
-      match: ({lastKey, key}: {lastKey: Key | undefined; key: Key}) =>
-        lastKey?.key === (isSafari() ? null : '`') && key.key === '`',
+      match: ({lastKey, key}: {lastKey: Key | undefined; key: Key}) => {
+        if (isIOS()) {
+          return ['‘', '’'].includes(lastKey?.key) && key.key === ' ';
+        }
+
+        if (isSafari()) {
+          return lastKey?.key === null && key.key === '`';
+        }
+
+        return lastKey?.key === '`' && key.key === '`';
+      },
       transform: (): HTMLElement => {
         return document.createElement('mark');
       },
       active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-      trim: (): number => isSafari() ? 0 : '`'.length,
+      trim: (): number => (isSafari() && !isIOS() ? 0 : '`'.length),
       postTransform: () => this.replaceBacktick()
     },
     {
@@ -298,7 +307,7 @@ export class InputEvents {
 
           const target: Node = mutation[0].target;
 
-          console.log('fck')
+          console.log('fck');
 
           undoRedoStore.state.observe = false;
 
