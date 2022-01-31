@@ -4,6 +4,8 @@ Another kind of rich text editor.
 
 - Interactive design 🎯
 - Customizable 💪
+- Framework agnostic 😎
+- Lightweight 🪶
 - Future Proof 🚀
 - Open Source ⭐️
 
@@ -30,7 +32,7 @@ A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations
 
 ## Getting Started
 
-Lightweight (32kb gzipped) and code agnostic, this project is a library of reusable components. It can be integrated with or without any framework and work across all modern browsers.
+Lightweight (30k gzipped) and framework agnostic, this project is a library of reusable components. It can be integrated with or without any framework and work across all modern browsers.
 
 Even though at the moment few actions still relies on [execCommand](https://developer.mozilla.org/fr/docs/Web/API/Document/execCommand) to apply styles (e.g. bold, italic) - the core of Stylo does not. It controls what happens on every mutation and avoids the need to use this deprecated API and is therefore designed for the future.
 
