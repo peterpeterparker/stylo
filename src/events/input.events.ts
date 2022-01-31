@@ -307,8 +307,6 @@ export class InputEvents {
 
           const target: Node = mutation[0].target;
 
-          console.log('fck');
-
           undoRedoStore.state.observe = false;
 
           await this.replaceChar({target, searchValue: '`', replaceValue: ''});
