@@ -7,7 +7,7 @@ describe('editor', () => {
     page = await newE2EPage();
 
     await page.setContent(
-      `<article style="width: 200px; height: 200px; margin: 64px; padding: 8px;">
+      `<article style="width: 200px; height: 200px; margin: 64px; padding: 8px;" contenteditable='true'>
           <div>${'\u200B'}</div>
         </article>
         <stylo-editor></stylo-editor>
