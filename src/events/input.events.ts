@@ -15,18 +15,20 @@ interface TransformInput {
   trim: () => number;
 }
 
+const isSafari = (): boolean => /apple/i.test(navigator.vendor);
+
 export class InputEvents {
   private lastBeforeInput: Key | undefined = undefined;
 
   private beforeInputTransformer: TransformInput[] = [
     {
       match: ({lastKey, key}: {lastKey: Key | undefined; key: Key}) =>
-        lastKey?.key === '`' && key.key === '`',
+        lastKey?.key === (isSafari() ? null : '`') && key.key === '`',
       transform: (): HTMLElement => {
         return document.createElement('mark');
       },
       active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-      trim: (): number => '`'.length,
+      trim: (): number => isSafari() ? 0 : '`'.length,
       postTransform: () => this.replaceBacktick()
     },
     {
@@ -281,15 +283,22 @@ export class InputEvents {
   }
 
   /**
-   * Browser render the backtick afterwards therefore we have to delete it
+   * Chrome renders the backtick afterwards therefore we have to delete it
    */
   private replaceBacktick(): Promise<void> {
     return new Promise<void>((resolve) => {
+      if (isSafari()) {
+        resolve();
+        return;
+      }
+
       const changeObserver: MutationObserver = new MutationObserver(
         async (mutation: MutationRecord[]) => {
           changeObserver.disconnect();
 
           const target: Node = mutation[0].target;
+
+          console.log('fck')
 
           undoRedoStore.state.observe = false;
 
