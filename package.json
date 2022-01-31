@@ -32,7 +32,7 @@
     "copy:site": "node ./scripts/copy.site.js"
   },
   "dependencies": {
-    "@deckdeckgo/utils": "^4.0.0"
+    "@deckdeckgo/utils": "^5.0.0"
   },
   "devDependencies": {
     "@stencil/core": "^2.12.1",
