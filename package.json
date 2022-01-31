@@ -31,9 +31,6 @@
     "postbuild": "npm run format:md",
     "copy:site": "node ./scripts/copy.site.js"
   },
-  "dependencies": {
-    "@deckdeckgo/utils": "^5.0.0"
-  },
   "devDependencies": {
     "@stencil/core": "^2.12.1",
     "@stencil/postcss": "^2.1.0",
@@ -67,5 +64,8 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "dependencies": {
+    "@deckdeckgo/utils": "^5.1.0"
   }
 }

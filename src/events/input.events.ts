@@ -1,7 +1,14 @@
-import {caretPosition, getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
+import {
+  caretPosition,
+  getSelection,
+  isFirefox,
+  isIOS,
+  isSafari,
+  moveCursorToEnd
+} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
-import {toHTMLElement} from '../utils/node.utils';
+import {isTextNode, toHTMLElement} from '../utils/node.utils';
 
 interface Key {
   key: string;
@@ -20,13 +27,22 @@ export class InputEvents {
 
   private beforeInputTransformer: TransformInput[] = [
     {
-      match: ({lastKey, key}: {lastKey: Key | undefined; key: Key}) =>
-        lastKey?.key === '`' && key.key === '`',
+      match: ({lastKey, key}: {lastKey: Key | undefined; key: Key}) => {
+        if (isIOS()) {
+          return ['‘', '’'].includes(lastKey?.key) && key.key === ' ';
+        }
+
+        if (isSafari()) {
+          return lastKey?.key === null && key.key === '`';
+        }
+
+        return lastKey?.key === '`' && key.key === '`';
+      },
       transform: (): HTMLElement => {
         return document.createElement('mark');
       },
       active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-      trim: (): number => '`'.length,
+      trim: (): number => (isSafari() && !isIOS() ? 0 : '`'.length),
       postTransform: () => this.replaceBacktick()
     },
     {
@@ -280,10 +296,46 @@ export class InputEvents {
     });
   }
 
-  /**
-   * Browser render the backtick afterwards therefore we have to delete it
-   */
   private replaceBacktick(): Promise<void> {
+    if (isSafari()) {
+      return Promise.resolve();
+    }
+
+    if (isFirefox()) {
+      return this.replaceBacktickFirefox();
+    }
+
+    return this.replaceBacktickChrome();
+  }
+
+  /**
+   * Firefox renders the new mark and let the backtick in the previous text element
+   */
+  private async replaceBacktickFirefox(): Promise<void> {
+    const markElement: Node | null = getSelection()?.anchorNode;
+    const previousSibling: Node | null = markElement?.previousSibling;
+
+    if (!previousSibling) {
+      return;
+    }
+
+    const text: Node = isTextNode(previousSibling) ? previousSibling : previousSibling.firstChild;
+
+    if (text.nodeValue.charAt(text.nodeValue.length - 1) !== '`') {
+      return;
+    }
+
+    undoRedoStore.state.observe = false;
+
+    await this.removeLastChar({target: text});
+
+    undoRedoStore.state.observe = true;
+  }
+
+  /**
+   * Chrome renders the backtick in the new mark therefore we have to delete it the new element
+   */
+  private replaceBacktickChrome(): Promise<void> {
     return new Promise<void>((resolve) => {
       const changeObserver: MutationObserver = new MutationObserver(
         async (mutation: MutationRecord[]) => {
@@ -328,6 +380,22 @@ export class InputEvents {
       changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
       target.nodeValue = target.nodeValue.replace(searchValue, replaceValue);
+    });
+  }
+
+  private removeLastChar({target}: {target: Node}): Promise<Node> {
+    return new Promise<Node>((resolve) => {
+      const changeObserver: MutationObserver = new MutationObserver(
+        (mutations: MutationRecord[]) => {
+          changeObserver.disconnect();
+
+          resolve(mutations[0].target);
+        }
+      );
+
+      changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
+
+      target.nodeValue = target.nodeValue.slice(0, target.nodeValue.length - 1);
     });
   }
 }
