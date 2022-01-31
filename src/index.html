@@ -507,14 +507,14 @@
       <!-- prettier-ignore -->
       <article contenteditable="true">
         <h2><span style="color: rgb(255, 101, 169);">Stylo</span></h2>
-        <div>Stylo is an open source WYSIWYG project from <a href="https://deckdeckgo.com" rel="noopener noreferrer">DeckDeckGo</a>, an editor for presentations, documents and blog posts. With its particular design and customizable plugin architecture, it fits well an interactive user experience.</div>
+        <div>Stylo is an open source <a href="https://en.wikipedia.org/wiki/WYSIWYG" rel="noopener noreferrer">WYSIWYG</a> interactive editor for JavaScript. Its goal is to bring great user experience and interactivity to the web, for everyone, with no dependencies. Stylo is a <a href="https://deckdeckgo.com" rel="noopener noreferrer">DeckDeckGo</a> project.</div>
         <div contenteditable="false"><hr /></div>
-        <div>The project is under development and published in <span style="font-weight: bold">&ZeroWidthSpace;alpha</span>&ZeroWidthSpace; version, it can already be used by anyone but still needs improvements. Your contribution on <a href="https://github.com/deckgo/stylo" rel="noopener noreferrer">GitHub</a> is most welcome!</div>
+        <div>This is an <span style="font-weight: bold">&ZeroWidthSpace;alpha</span>&ZeroWidthSpace; version! ⚠️ The project is under active development and contributions on <a href="https://github.com/deckgo/stylo" rel="noopener noreferrer">GitHub</a> are most welcome.</div>
         <div contenteditable="false"><hr></div>
         <h2>Features</h2>
-        <ul><li>Interactive design 🎯</li><li>Customizable 💪</li><li>Framework agnostic 😎</li><li>Future Proof 🚀</li><li>Open Source (MIT license) ⭐️</li></ul>
+        <ul><li>Interactive design 🎯</li><li>Customizable 💪</li><li>Framework agnostic 😎</li><li>Lightweight (30kb gzipped, 0 deps) 🪶</li><li>Future Proof 🚀</li><li>Open Source (MIT license) ⭐️</li></ul>
         <div contenteditable="false"><hr></div>
-        <div>Pro tips: when you are writing, you can toggle to bold (**), italic (space _) or <mark>mark</mark> (space `) on the fly.</div>
+        <div>Pro tips: trigger <span style="font-weight: bold;">bold</span> mode with "**", <span style="font-style: italic">italic</span> mode with whitespace and "_", and <mark>mark</mark> mode with whitespace and "`". 👾</div>
         <div>&ZeroWidthSpace;</div>
         <div>Cheers<br/>David</div>
         <div>&ZeroWidthSpace;</div>
@@ -532,9 +532,9 @@
           <h3>Interactive design 🎯</h3>
 
           <p>
-            A <strong>clean design</strong> and an intuitive <strong>user experience</strong> are
-            the leitmotiv of Stylo. Serving users the feature they need when they edit their content
-            in the most straightforward way possible is the goal of the project.
+            Stylo aims first and foremost for a <strong>clean design</strong>
+            and an intuitive <strong>user experience</strong>. We want users to
+            have the feature they need, right at their fingertips.
           </p>
         </article>
 
@@ -551,29 +551,28 @@
           <h3>Framework agnostic 😎</h3>
 
           <p>
-            The editor is a <strong>lightweight</strong> (in comparison to other editors - 30kb
-            gzipped for the default configuration) and <strong>framework agnostic</strong> library
-            of reusable components.
+            The editor is a <strong>lightweight</strong> (30k gzipped) and
+            <strong>framework agnostic</strong> library of reusable components.
           </p>
 
-          <p>It uses no 3rd party runtime dependencies and works across all modern browsers.</p>
+          <p>No 3rd party runtime dependencies. Works on all modern browsers.</p>
 
-          <p>The code is published under MIT license and contribution are most welcome!</p>
+          <p>The code is published under the MIT license and contributions are most welcome!</p>
         </article>
 
         <article>
           <h3>Future Proof 🚀</h3>
 
           <p>
-            Even if at the moment (alpha version) few actions still relies on
+            Stylo controls what happens on every mutation.
+            While a handful of actions in the alpha version still rely on
             <a
               href="https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand"
               rel="noopener noreferrer"
               >execCommand</a
             >
-            to apply styles (e.g. bold, italic) - the core of Stylo does not. It controls what
-            happens on every mutation and avoids the need to use this deprecated API and is
-            therefore designed for the <strong>future</strong>.
+            to apply styles (e.g. bold, italic) - the core of the library does
+            not. Stylo is built for the <strong>future</strong>.
           </p>
         </article>
       </div>
