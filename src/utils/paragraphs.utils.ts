@@ -1,6 +1,6 @@
 import {getSelection} from '@deckdeckgo/utils';
 import {isTextNode, toHTMLElement} from './node.utils';
-import {findParagraph, isParagraph, isTargetParagraph} from './paragraph.utils';
+import {findParagraph, isParagraph, isTargetContainer} from './paragraph.utils';
 
 export interface RemovedParagraph {
   paragraph: HTMLElement;
@@ -46,7 +46,7 @@ export const findRemovedNodesParagraphs = ({
 }): MutationRecord[] => {
   return mutations
     .filter(({removedNodes}: MutationRecord) => removedNodes?.length > 0)
-    .filter(({target}: MutationRecord) => !isTargetParagraph({target, container}));
+    .filter(({target}: MutationRecord) => !isTargetContainer({target, container}));
 };
 
 export const findRemovedParagraphs = ({
@@ -61,12 +61,11 @@ export const findRemovedParagraphs = ({
   }
 
   return mutations
-    .filter(({target}: MutationRecord) => isTargetParagraph({target, container}))
+    .filter(({target}: MutationRecord) => isTargetContainer({target, container}))
     .filter(({removedNodes}: MutationRecord) => removedNodes?.length > 0)
     .reduce((acc: RemovedParagraph[], {removedNodes, previousSibling}: MutationRecord) => {
       const paragraphs: Node[] = filterRemovedParagraphs({
-        nodes: Array.from(removedNodes),
-        container
+        nodes: Array.from(removedNodes)
       });
 
       return [
@@ -151,16 +150,13 @@ const filterAddedParagraphs = ({
 
 // We remove text node, should not happen we only want elements as children of the container
 const filterRemovedParagraphs = ({
-  nodes,
-  container
+  nodes
 }: {
   nodes: Node[];
-  container: Node;
 }): HTMLElement[] => {
   return nodes
-    .filter((paragraph: Node) => isTargetParagraph({container, target: paragraph}))
     .filter((paragraph: Node) => !isTextNode(paragraph))
-    .map((node: Node) => toHTMLElement(node));
+    .map((node: Node) => node as HTMLElement);
 };
 
 export const findSelectionParagraphs = ({
