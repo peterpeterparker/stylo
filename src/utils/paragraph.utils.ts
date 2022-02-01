@@ -45,7 +45,7 @@ export const isParagraph = ({element, container}: {element: Node; container: Nod
   return parentElement?.isEqualNode(container);
 };
 
-export const isTargetParagraph = ({target, container}: {target: Node; container: Node}): boolean =>
+export const isTargetContainer = ({target, container}: {target: Node; container: Node}): boolean =>
   target.isEqualNode(container);
 
 export const focusParagraph = ({paragraph}: {paragraph: Node | undefined}) => {

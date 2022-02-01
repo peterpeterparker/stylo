@@ -250,11 +250,14 @@ const undoRedoParagraph = async ({
     if (mutation === 'add') {
       await removeNode({container, index});
 
-      to.push({
-        outerHTML,
-        index,
-        mutation: 'remove'
-      });
+      to = [
+        {
+          outerHTML,
+          index,
+          mutation: 'remove'
+        },
+        ...to
+      ];
     }
 
     if (mutation === 'remove') {
