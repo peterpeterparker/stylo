@@ -6,12 +6,6 @@
   @include variables.colors;
 }
 
-:host(.tools-sticky) {
-  stylo-toolbar-button {
-    margin: 0 2px;
-  }
-}
-
 stylo-toolbar-button.active {
   --stylo-toolbar-button-color: var(--stylo-toolbar-button-color-active, var(--highlight));
 }

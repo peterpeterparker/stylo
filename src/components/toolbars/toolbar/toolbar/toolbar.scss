@@ -48,45 +48,9 @@ div.tools {
    */
   min-height: var(--stylo-toolbar-min-height, 44px);
 
-  &.tools-mobile {
-    position: fixed;
-
-    transform: initial;
-
-    top: env(safe-area-inset-top);
-    left: 0;
-
-    width: 100%;
-    border-radius: 0;
-
-    /**
-     * @prop --stylo-toolbar-mobile-height: The height of the mobile toolbar
-     * @default 56px
-     */
-    height: var(--stylo-toolbar-mobile-height, 56px);
-
-    padding-left: 0;
-
-    stylo-toolbar-button {
-      margin: 0 2px;
-    }
-
-    stylo-toolbar-triangle {
-      display: none;
-    }
-  }
-
   &.tools-activated {
     visibility: visible;
     opacity: 1;
-  }
-
-  &.tools-mobile {
-    /**
-     * @prop --stylo-toolbar-mobile-border: Border of the toolbar
-     * @default 0
-     */
-    border: var(--stylo-toolbar-mobile-border, 0);
   }
 }
 
@@ -109,20 +73,8 @@ div.tools {
  * @default black
  */
 /**
- * @prop --stylo-toolbar-link-mobile-color: The color property of the link input on mobile
- * @default inherit
- */
-/**
- * @prop --stylo-toolbar-link-mobile-placeholder-color: : The color of the place holder of the link input on mobile
- * @default inherit
- */
-/**
  * @prop --stylo-toolbar-button-color: The buttons color
  * @default black
- */
-/**
- * @prop --stylo-toolbar-button-mobile-color-active: The buttons color on mobile if active
- * @default #3880ff
  */
 /**
  * @prop --stylo-toolbar-button-zindex: The z-index of the action buttons
@@ -145,15 +97,7 @@ div.tools {
  * @default none
  */
 /**
- * @prop --stylo-toolbar-button-mobile-color-disabled: The color of the buttons when disabled on mobile
- * @default #f4f5f8
- */
-/**
  * @prop --stylo-toolbar-separator-background: The background of the separator
- * @default #f4f5f8
- */
-/**
- * @prop --stylo-toolbar-separator-mobile-background: The background of the separator on mobile
  * @default #f4f5f8
  */
 /**

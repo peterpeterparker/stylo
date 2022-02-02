@@ -5,11 +5,3 @@
     pointer-events: all;
   }
 }
-
-:host(.tools-mobile) {
-  max-width: calc(100% - 54px);
-  --stylo-color-flex-wrap: nowrap;
-  --stylo-color-width: fit-content;
-  pointer-events: all;
-  overflow: scroll;
-}

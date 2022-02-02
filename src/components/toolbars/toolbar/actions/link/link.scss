@@ -20,15 +20,3 @@
     }
   }
 }
-
-:host(.tools-mobile) {
-  width: 100%;
-
-  input {
-    color: var(--stylo-toolbar-link-mobile-color, inherit);
-
-    &::placeholder {
-      color: var(--stylo-toolbar-link-mobile-placeholder-color, inherit);
-    }
-  }
-}

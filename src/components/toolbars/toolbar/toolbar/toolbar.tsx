@@ -141,7 +141,6 @@ export class Toolbar implements ComponentInterface {
     | undefined;
 
   private rtl: boolean = isRTL();
-  private mobile: boolean = isMobile();
 
   constructor() {
     this.onSelectionChange = this.onSelectionChange.bind(this);
@@ -276,10 +275,6 @@ export class Toolbar implements ComponentInterface {
   }
 
   private setToolbarAnchorPosition() {
-    if (this.mobile) {
-      return;
-    }
-
     if (!this.tools) {
       return;
     }
@@ -574,13 +569,7 @@ export class Toolbar implements ComponentInterface {
   }
 
   render() {
-    let classNames: string = this.displayToolsActivated
-      ? this.mobile
-        ? 'tools tools-activated tools-mobile'
-        : 'tools tools-activated'
-      : this.mobile
-      ? 'tools tools-mobile'
-      : 'tools';
+    let classNames: string = this.displayToolsActivated ? 'tools tools-activated' : 'tools';
 
     const position: string = this.toolsPosition?.position || 'above';
 

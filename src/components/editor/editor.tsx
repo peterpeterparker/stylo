@@ -63,6 +63,8 @@ export class Editor implements ComponentInterface {
 
   private attributesObserver: MutationObserver | undefined;
 
+  private mobile: boolean = isMobile();
+
   componentWillLoad() {
     this.init();
     this.applyConfig();
@@ -206,7 +208,7 @@ export class Editor implements ComponentInterface {
       <Fragment>
         <stylo-add></stylo-add>
         <stylo-plugins></stylo-plugins>
-        <stylo-toolbar containerRef={this.containerRef}></stylo-toolbar>
+        {!this.mobile && <stylo-toolbar containerRef={this.containerRef}></stylo-toolbar>}
         {configStore.state.menus?.length && <stylo-menus></stylo-menus>}
       </Fragment>
     );

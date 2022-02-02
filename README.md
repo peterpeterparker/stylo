@@ -201,7 +201,9 @@ Find some custom plugins in DeckDeckGo [repo](https://github.com/deckgo/deckdeck
 
 The inline editor that is uses to style texts (bold, italic, colors, etc.) is a web component named `<stylo-toolbar/>`.
 
-It is provided per default with Stylo but can also be used as a standalone component.
+It is used per default with Stylo on desktop but can also be used as a standalone component.
+
+Because mobile devices are already shipped with their own tooltip, the toolbar is not activated by Stylo on such device. 
 
 ## Menus
 

@@ -1,4 +1,3 @@
-import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
 import i18n from '../../../../../stores/i18n.store';
@@ -27,8 +26,6 @@ export class Align {
   @Event()
   private alignModified: EventEmitter;
 
-  private mobile: boolean = isMobile();
-
   private justifyContent($event: UIEvent, align: ToolbarAlign) {
     $event.stopPropagation();
 
@@ -43,7 +40,7 @@ export class Align {
 
   render() {
     return (
-      <Host class={this.mobile ? 'tools-sticky' : undefined}>
+      <Host>
         <stylo-toolbar-button
           label={i18n.state.toolbar.align_left}
           onAction={($event: CustomEvent<UIEvent>) =>
