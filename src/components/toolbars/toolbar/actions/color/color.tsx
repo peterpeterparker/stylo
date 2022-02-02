@@ -1,5 +1,5 @@
-import {getAnchorElement, getSelection, hexToRgb, isMobile} from '@deckdeckgo/utils';
-import {Component, Event, EventEmitter, h, Host, Prop, State} from '@stencil/core';
+import {getAnchorElement, getSelection, hexToRgb} from '@deckdeckgo/utils';
+import {Component, Event, EventEmitter, h, Prop, State} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
 import {toHTMLElement} from '../../../../../utils/node.utils';
@@ -24,8 +24,6 @@ export class Color {
   private execCommand: EventEmitter<ExecCommandAction>;
 
   private range: Range | undefined;
-
-  private mobile: boolean = isMobile();
 
   componentWillLoad() {
     this.initColor();
@@ -105,15 +103,11 @@ export class Color {
   }
 
   render() {
-    const cssClass = this.mobile ? 'tools-mobile' : undefined;
-
     return (
-      <Host class={cssClass}>
-        <stylo-color
-          color-rgb={this.colorRgb}
-          onColorChange={($event: CustomEvent) => this.selectColor($event)}
-          palette={configStore.state.toolbar.palette}></stylo-color>
-      </Host>
+      <stylo-color
+        color-rgb={this.colorRgb}
+        onColorChange={($event: CustomEvent) => this.selectColor($event)}
+        palette={configStore.state.toolbar.palette}></stylo-color>
     );
   }
 }

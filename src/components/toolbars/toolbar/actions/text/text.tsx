@@ -1,4 +1,3 @@
-import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
@@ -26,8 +25,6 @@ export class Text {
 
   @Event()
   private execCommand: EventEmitter<ExecCommandAction>;
-
-  private mobile: boolean = isMobile();
 
   private styleBold($event: UIEvent) {
     $event.stopPropagation();
@@ -85,10 +82,8 @@ export class Text {
   }
 
   render() {
-    const cssClass = this.mobile ? 'tools-mobile' : undefined;
-
     return (
-      <Host class={cssClass}>
+      <Host>
         <stylo-toolbar-button
           label={i18n.state.toolbar.bold}
           onAction={($event: CustomEvent<UIEvent>) => this.styleBold($event.detail)}

@@ -1,4 +1,3 @@
-import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
@@ -15,8 +14,6 @@ export class FontSize {
 
   @Event()
   private execCommand: EventEmitter<ExecCommandAction>;
-
-  private mobile: boolean = isMobile();
 
   private modifyFontSize($event: UIEvent, size: ToolbarFontSize) {
     $event.stopPropagation();
@@ -38,7 +35,7 @@ export class FontSize {
 
   render() {
     return (
-      <Host class={this.mobile ? 'tools-sticky' : undefined}>
+      <Host>
         {this.renderAction(ToolbarFontSize.X_SMALL)}
         {this.renderAction(ToolbarFontSize.SMALL)}
         {this.renderAction(ToolbarFontSize.MEDIUM)}

@@ -1,4 +1,4 @@
-import {getSelection, isMobile} from '@deckdeckgo/utils';
+import {getSelection} from '@deckdeckgo/utils';
 import {Component, ComponentInterface, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import {ToolbarActions, ToolbarAnchorLink} from '../../../../../types/toolbar';
 import {toHTMLElement} from '../../../../../utils/node.utils';
@@ -28,8 +28,6 @@ export class Link implements ComponentInterface {
   linkModified: EventEmitter<boolean>;
 
   private input: HTMLInputElement | undefined;
-
-  private mobile: boolean = isMobile();
 
   componentDidLoad() {
     setTimeout(() => this.input?.focus(), 250);
@@ -145,10 +143,8 @@ export class Link implements ComponentInterface {
   }
 
   render() {
-    const cssClass = this.mobile ? 'tools-mobile' : undefined;
-
     return (
-      <Host class={cssClass}>
+      <Host>
         <input
           ref={(el) => (this.input = el as HTMLInputElement)}
           placeholder="Add a link..."

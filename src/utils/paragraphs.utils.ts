@@ -149,11 +149,7 @@ const filterAddedParagraphs = ({
 };
 
 // We remove text node, should not happen we only want elements as children of the container
-const filterRemovedParagraphs = ({
-  nodes
-}: {
-  nodes: Node[];
-}): HTMLElement[] => {
+const filterRemovedParagraphs = ({nodes}: {nodes: Node[]}): HTMLElement[] => {
   return nodes
     .filter((paragraph: Node) => !isTextNode(paragraph))
     .map((node: Node) => node as HTMLElement);

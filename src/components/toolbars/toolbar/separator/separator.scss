@@ -13,9 +13,3 @@ div.separator {
   height: 24px;
   background: var(--stylo-toolbar-separator-background, var(--light));
 }
-
-:host(.tools-mobile) {
-  div.separator {
-    background: var(--stylo-toolbar-separator-mobile-background, var(--light));
-  }
-}

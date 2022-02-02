@@ -1,4 +1,3 @@
-import {isMobile} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
@@ -18,8 +17,6 @@ export class AlignActions {
   @Event()
   private execCommand: EventEmitter<ExecCommandAction>;
 
-  private mobile: boolean = isMobile();
-
   private toggleList(e: UIEvent, type: 'ol' | 'ul') {
     e.stopPropagation();
 
@@ -33,7 +30,7 @@ export class AlignActions {
 
   render() {
     return (
-      <Host class={this.mobile ? 'tools-sticky' : undefined}>
+      <Host>
         <stylo-toolbar-button
           label={i18n.state.toolbar.list_ol}
           onAction={($event: CustomEvent<UIEvent>) => this.toggleList($event.detail, 'ol')}
