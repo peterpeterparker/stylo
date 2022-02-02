@@ -11,7 +11,7 @@ Another kind of rich text editor.
 
 A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations, documents and blog posts.
 
-[![GitHub release](https://img.shields.io/github/release/deckgo/stylo/all?logo=GitHub&color=lightgrey)](https://github.com/deckgo/stylo/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/deckgo/stylo/all?logo=GitHub&color=lightgrey)](https://github.com/papyrs/stylo/releases/latest)
 [![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fstylojs.com)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fstylojs.com&text=Another%20kind%20of%20rich%20text%20editor%20by%20%40deckdeckgo)
 
 ## Table of contents
@@ -69,17 +69,17 @@ You can use Stylo via CDN or by installing it locally.
 Add the following code to your page to load the editor.
 
 ```
-<script type="module" src="https://unpkg.com/@deckdeckgo/stylo@alpha/dist/stylo/stylo.esm.js"></script>
+<script type="module" src="https://unpkg.com/@papyrs/stylo@alpha/dist/stylo/stylo.esm.js"></script>
 ```
 
 That's it, the component is imported and loaded.
 
 ### Local Installation
 
-Install the editor in your project from [npm](https://www.npmjs.com/package/@deckdeckgo/stylo):
+Install the editor in your project from [npm](https://www.npmjs.com/package/@papyrs/stylo):
 
 ```bash
-npm install @deckdeckgo/stylo@alpha
+npm install @papyrs/stylo@alpha
 ```
 
 Afterwards you will need to load - i.e. import - the component in your application. Use one of the following methods, the one that fits the best your needs or framework.
@@ -89,7 +89,7 @@ Afterwards you will need to load - i.e. import - the component in your applicati
 Lazy load the components with the help of a loader.
 
 ```
-import { defineCustomElements } from '@deckdeckgo/stylo/dist/loader';
+import { defineCustomElements } from '@papyrs/stylo/dist/loader';
 defineCustomElements();
 ```
 
@@ -98,7 +98,7 @@ defineCustomElements();
 Import the library.
 
 ```
-import '@deckdeckgo/stylo';
+import '@papyrs/stylo';
 ```
 
 #### Custom Elements
@@ -106,7 +106,7 @@ import '@deckdeckgo/stylo';
 It is also possible to import only selected element, as for example the `<stylo-color />` component.
 
 ```
-import { StyloColor } from '@deckdeckgo/stylo/dist/components/stylo-color';
+import { StyloColor } from '@papyrs/stylo/dist/components/stylo-color';
 customElements.define('stylo-color', StyloColor);
 ```
 
@@ -163,7 +163,7 @@ Stylo exposes interfaces and utilities to ease the development of new plugins. B
 For example, a plugin that generates a new paragraph that is itself a Web Component name `<hello-world/>` would look as following:
 
 ```
-import {createEmptyElement, StyloPlugin, StyloPluginCreateParagraphsParams, transformParagraph} from '@deckdeckgo/stylo';
+import {createEmptyElement, StyloPlugin, StyloPluginCreateParagraphsParams, transformParagraph} from '@papyrs/stylo';
 
 export const hr: StyloPlugin = {
   text: 'My Hello World',
@@ -260,7 +260,7 @@ For such purpose, the editor is listening for the events `snapshotParagraph` of 
 
 ## Contributing
 
-We welcome contributions in the form of issues, pull requests, documentation improvements or thoughtful discussions in the [GitHub issue tracker](https://github.com/deckgo/stylo/issues).
+We welcome contributions in the form of issues, pull requests, documentation improvements or thoughtful discussions in the [GitHub issue tracker](https://github.com/papyrs/stylo/issues).
 
 To provide code changes, make sure you have a recent version of [Node.js installed](https://nodejs.org/en/) (LTS recommended).
 

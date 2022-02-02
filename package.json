@@ -1,5 +1,5 @@
 {
-  "name": "@deckdeckgo/stylo",
+  "name": "@papyrs/stylo",
   "version": "0.0.1",
   "description": "Another kind of rich text editor",
   "author": "David Dal Busco",
@@ -50,10 +50,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deckgo/stylo.git"
+    "url": "git+https://github.com/papyrs/stylo.git"
   },
   "bugs": {
-    "url": "https://github.com/deckgo/stylo"
+    "url": "https://github.com/papyrs/stylo"
   },
   "keywords": [
     "editor",
