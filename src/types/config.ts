@@ -16,4 +16,8 @@ export interface StyloConfig {
    * In which type of nodes the placeholder "Press "/" for plugins" should be displayed
    */
   placeholders?: string[];
+  /**
+   * Exclude attributes that should not be observed for changes
+   */
+  excludeAttributes?: string[];
 }

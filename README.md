@@ -203,7 +203,7 @@ The inline editor that is uses to style texts (bold, italic, colors, etc.) is a 
 
 It is used per default with Stylo on desktop but can also be used as a standalone component.
 
-Because mobile devices are already shipped with their own tooltip, the toolbar is not activated by Stylo on such device. 
+Because mobile devices are already shipped with their own tooltip, the toolbar is not activated by Stylo on such device.
 
 ## Menus
 
@@ -251,6 +251,18 @@ Each paragraph is a direct child of the editable container.
 Unlike `addParagraphs` and `deleteParagraphs` that are triggered only if elements are such level are added or removed, `updateParagraphs` is triggered if the paragraphs themselves or any of their children (HTML elements and text nodes) are modified.
 
 Changes following keyboard inputs are debounced.
+
+### Attributes
+
+Following attributes are ignored to prevent the observer to trigger and keep track of changes that are not made by the user on purpose:
+
+- placeholder: the attribute used by Stylo to display the placeholder about the '/'
+- data-gramm: [Grammarly](https://www.grammarly.com/) flooding the DOM
+- class: only inline style is considered changes
+- spellcheck
+- contenteditable
+
+The list of excluded attributes can be extended through the configuration ([src/types/config.ts](src/types/config.ts)).
 
 ## Listener
 

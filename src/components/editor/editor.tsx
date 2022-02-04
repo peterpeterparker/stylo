@@ -15,6 +15,7 @@ import {InputEvents} from '../../events/input.events';
 import {TabEvents} from '../../events/tab.events';
 import {UndoRedoEvents} from '../../events/undo-redo.events';
 import configStore, {
+  DEFAULT_EXCLUDE_ATTRIBUTES,
   DEFAULT_PLACEHOLDERS,
   DEFAULT_PLUGINS,
   DEFAULT_TOOLBAR
@@ -159,7 +160,14 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    const {plugins, toolbar, i18n: customI18n, placeholders, menus} = this.config;
+    const {
+      plugins,
+      toolbar,
+      i18n: customI18n,
+      placeholders,
+      menus,
+      excludeAttributes
+    } = this.config;
 
     i18n.state.custom = customI18n?.custom;
 
@@ -177,6 +185,10 @@ export class Editor implements ComponentInterface {
     configStore.state.placeholders = placeholders || DEFAULT_PLACEHOLDERS;
 
     configStore.state.menus = menus;
+    configStore.state.excludeAttributes = [
+      ...DEFAULT_EXCLUDE_ATTRIBUTES,
+      ...(excludeAttributes || [])
+    ];
   }
 
   private destroyEvents() {

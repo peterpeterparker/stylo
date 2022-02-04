@@ -15,7 +15,8 @@ interface ConfigStore {
   plugins: StyloPlugin[];
   toolbar: StyloToolbar;
   menus: StyloMenu[] | undefined;
-  placeholders: string[];
+  placeholders: string[] | undefined;
+  excludeAttributes: string[];
 }
 
 export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, img, code, hr];
@@ -33,11 +34,14 @@ export const DEFAULT_TOOLBAR: StyloToolbar = {
 
 export const DEFAULT_PLACEHOLDERS = ['div', 'p', 'span'];
 
+export const DEFAULT_EXCLUDE_ATTRIBUTES = ['placeholder', 'data-gramm', 'class', 'spellcheck', 'contenteditable'];
+
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,
   toolbar: DEFAULT_TOOLBAR,
   placeholders: DEFAULT_PLACEHOLDERS,
-  menus: undefined
+  menus: undefined,
+  excludeAttributes: DEFAULT_EXCLUDE_ATTRIBUTES
 });
 
 export default {state, onChange};

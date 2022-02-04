@@ -194,3 +194,29 @@ export const findSelectionParagraphs = ({
 
   return [start, ...nodes, end];
 };
+
+export const filterAttributesMutations = ({
+  mutations,
+  excludeAttributes
+}: {
+  mutations: MutationRecord[];
+  excludeAttributes: string[];
+}): MutationRecord[] => {
+  const attributeMutations: MutationRecord[] = mutations.filter(
+    ({attributeName}: MutationRecord) => attributeName !== null
+  );
+
+  // We consider only single change. If the mutations contains one attribute to exclude, we ignore all the mutations
+  // If a web component attribute is updated, e.g theme="ubuntu", the component might update the class of the host
+  // In such case, the mutation observer will be triggered twice
+
+  const excludeMutations: MutationRecord | undefined = attributeMutations.find(
+    ({attributeName}: MutationRecord) => excludeAttributes.includes(attributeName)
+  );
+
+  if (excludeMutations !== undefined) {
+    return [];
+  }
+
+  return attributeMutations;
+};

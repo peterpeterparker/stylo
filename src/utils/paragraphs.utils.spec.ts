@@ -59,7 +59,7 @@ describe('paragraphs utils', () => {
     expect(removedParagraphs.length).toEqual(1);
   });
 
-  it('should find added paragraphs', () => {
+  it('should find updated paragraphs', () => {
     const mutation1 = {
       target: child1
     } as unknown as MutationRecord;
