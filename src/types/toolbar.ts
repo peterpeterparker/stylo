@@ -1,6 +1,6 @@
 import {StyloPalette} from './palette';
 
-export interface StyloToolbar {
+export interface StyloConfigToolbar {
   /**
    * The list of selectable colors
    */

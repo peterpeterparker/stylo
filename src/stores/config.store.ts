@@ -9,11 +9,11 @@ import {ul} from '../plugins/ul.plugin';
 import {StyloMenu} from '../types/menu';
 import {DEFAULT_PALETTE} from '../types/palette';
 import {StyloPlugin} from '../types/plugin';
-import {StyloToolbar} from '../types/toolbar';
+import {StyloConfigToolbar} from '../types/toolbar';
 
 interface ConfigStore {
   plugins: StyloPlugin[];
-  toolbar: StyloToolbar;
+  toolbar: StyloConfigToolbar;
   menus: StyloMenu[] | undefined;
   placeholders: string[] | undefined;
   excludeAttributes: string[];
@@ -21,7 +21,7 @@ interface ConfigStore {
 
 export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, img, code, hr];
 
-export const DEFAULT_TOOLBAR: StyloToolbar = {
+export const DEFAULT_TOOLBAR: StyloConfigToolbar = {
   palette: DEFAULT_PALETTE,
   command: 'native',
   style: {
@@ -34,7 +34,13 @@ export const DEFAULT_TOOLBAR: StyloToolbar = {
 
 export const DEFAULT_PLACEHOLDERS = ['div', 'p', 'span'];
 
-export const DEFAULT_EXCLUDE_ATTRIBUTES = ['placeholder', 'data-gramm', 'class', 'spellcheck', 'contenteditable'];
+export const DEFAULT_EXCLUDE_ATTRIBUTES = [
+  'placeholder',
+  'data-gramm',
+  'class',
+  'spellcheck',
+  'contenteditable'
+];
 
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,

@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { StyloPalette, StyloPaletteColor } from "./types/palette";
 import { StyloConfig } from "./types/config";
 import { StyloPlugin } from "./types/plugin";
-import { StyloToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
+import { StyloConfigToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
 import { ExecCommandAction } from "./types/execcommand";
 import { EventEmitter } from "@stencil/core";
 export namespace Components {
@@ -59,7 +59,7 @@ export namespace Components {
         /**
           * If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration.
          */
-        "config": Partial<StyloToolbar> | undefined;
+        "config": Partial<StyloConfigToolbar> | undefined;
         /**
           * To attach the inline editor event listeners to a specific container instead of the document
          */
@@ -296,7 +296,7 @@ declare namespace LocalJSX {
         /**
           * If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration.
          */
-        "config"?: Partial<StyloToolbar> | undefined;
+        "config"?: Partial<StyloConfigToolbar> | undefined;
         /**
           * To attach the inline editor event listeners to a specific container instead of the document
          */

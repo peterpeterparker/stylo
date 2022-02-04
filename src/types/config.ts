@@ -1,6 +1,6 @@
 import {StyloMenu} from './menu';
 import {StyloPlugin} from './plugin';
-import {StyloToolbar} from './toolbar';
+import {StyloConfigToolbar} from './toolbar';
 
 export interface StyloConfigI18n {
   lang: Languages;
@@ -10,7 +10,7 @@ export interface StyloConfigI18n {
 export interface StyloConfig {
   i18n?: StyloConfigI18n;
   plugins?: StyloPlugin[];
-  toolbar?: Partial<StyloToolbar>;
+  toolbar?: Partial<StyloConfigToolbar>;
   menus?: StyloMenu[];
   /**
    * In which type of nodes the placeholder "Press "/" for plugins" should be displayed

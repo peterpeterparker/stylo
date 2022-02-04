@@ -23,7 +23,7 @@ import {
 import configStore from '../../../../stores/config.store';
 import {ExecCommandAction} from '../../../../types/execcommand';
 import {
-  StyloToolbar,
+  StyloConfigToolbar,
   ToolbarActions,
   ToolbarAlign,
   ToolbarAnchorLink,
@@ -57,7 +57,7 @@ export class Toolbar implements ComponentInterface {
    * If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration.
    */
   @Prop()
-  config: Partial<StyloToolbar> | undefined;
+  config: Partial<StyloConfigToolbar> | undefined;
 
   /**
    * To attach the inline editor event listeners to a specific container instead of the document
