@@ -1,8 +1,10 @@
 import {debounce} from '@deckdeckgo/utils';
+import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {emitAddParagraphs, emitDeleteParagraphs, emitUpdateParagraphs} from '../utils/events.utils';
 import {isTextNode, toHTMLElement} from '../utils/node.utils';
 import {
+  filterAttributesMutations,
   findAddedNodesParagraphs,
   findAddedParagraphs,
   findRemovedNodesParagraphs,
@@ -47,7 +49,10 @@ export class DataEvents {
 
   private onAttributesMutation = (mutations: MutationRecord[]) => {
     this.updateParagraphs(
-      mutations.filter(({attributeName}: MutationRecord) => ['style'].includes(attributeName))
+      filterAttributesMutations({
+        mutations,
+        excludeAttributes: configStore.state.excludeAttributes
+      })
     );
   };
 

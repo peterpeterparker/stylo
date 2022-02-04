@@ -1,4 +1,5 @@
 import {caretPosition, debounce} from '@deckdeckgo/utils';
+import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {
@@ -9,6 +10,7 @@ import {
 import {elementIndex, nodeIndex, toHTMLElement} from '../utils/node.utils';
 import {findParagraph} from '../utils/paragraph.utils';
 import {
+  filterAttributesMutations,
   findAddedNodesParagraphs,
   findAddedParagraphs,
   findRemovedNodesParagraphs,
@@ -371,15 +373,19 @@ export class UndoRedoEvents {
   }
 
   private onAttributesMutation(mutations: MutationRecord[]) {
-    // Only "style" changes are interesting at the moment. If we need more attributes, we should add a config because "placeholder" and "paragraph_id" need to be skipped.
     const updateParagraphs: HTMLElement[] = findUpdatedParagraphs({
-      mutations: mutations.filter(({attributeName}: MutationRecord) =>
-        ['style'].includes(attributeName)
-      ),
+      mutations: filterAttributesMutations({
+        mutations,
+        excludeAttributes: configStore.state.excludeAttributes
+      }),
       container: containerStore.state.ref
     });
 
     if (updateParagraphs.length <= 0) {
+      return;
+    }
+
+    if (this.undoUpdateParagraphs.length <= 0) {
       return;
     }
 
@@ -388,6 +394,6 @@ export class UndoRedoEvents {
       container: containerStore.state.ref
     });
 
-    this.copySelectedParagraphs({filterEmptySelection: false});
+    this.undoUpdateParagraphs = this.toUpdateParagraphs(updateParagraphs);
   }
 }
