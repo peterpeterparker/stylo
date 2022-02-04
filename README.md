@@ -32,17 +32,13 @@ A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations
 
 ## Getting Started
 
-Lightweight (30k gzipped) and framework agnostic, this project is a library of reusable components. It can be integrated with or without any framework and work across all modern browsers.
-
-Even though at the moment few actions still relies on [execCommand](https://developer.mozilla.org/fr/docs/Web/API/Document/execCommand) to apply styles (e.g. bold, italic) - the core of Stylo does not. It controls what happens on every mutation and avoids the need to use this deprecated API and is therefore designed for the future.
-
-Based on a set of plugins that can be fully customized, enabling additional functionality or disabling default features is made easy.
+Stylo is an open source WYSIWYG interactive editor for JavaScript. Its goal is to bring great user experience and interactivity to the web, for everyone, with no dependencies.
 
 ## Concept
 
-Stylo is a web component that takes as bare minimum property a reference to an editable element (`contenteditable="true"`) of your application.
+The library - a web component - needs as bare minimum property a reference to an editable HTML element (`contenteditable="true"`).
 
-It needs only one single top container set as editable and will maintain a list of children, paragraphs, that are HTML elements.
+It needs only one single top container set as editable and will maintain a list of children, paragraphs, that are themselves HTML elements.
 
 ```
 <article contenteditable="true">
@@ -56,7 +52,7 @@ It needs only one single top container set as editable and will maintain a list 
 </article>
 ```
 
-In order to keep track of the changes for a custom "undo redo" feature or forward the information to your application, the component mainly uses the [MutationObserver API](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
+To keep track of the changes for a custom "undo redo" stack and to forward the information to your application, the component mainly uses the [MutationObserver API](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 
 It also uses some keyboard, mouse or touch events to present UI elements or apply styling changes.
 
