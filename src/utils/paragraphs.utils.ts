@@ -1,6 +1,6 @@
 import {getSelection} from '@deckdeckgo/utils';
 import {isTextNode, toHTMLElement} from './node.utils';
-import {findParagraph, isParagraph, isTargetContainer} from './paragraph.utils';
+import {findParagraph, isParagraph, isParagraphEmpty, isTargetContainer} from './paragraph.utils';
 
 export interface RemovedParagraph {
   paragraph: HTMLElement;
@@ -34,7 +34,13 @@ export const findAddedNodesParagraphs = ({
 }): MutationRecord[] => {
   return mutations
     .filter(({addedNodes}: MutationRecord) => addedNodes?.length > 0)
-    .filter(({addedNodes}: MutationRecord) => !isParagraph({element: addedNodes[0], container}));
+    .filter(({addedNodes}: MutationRecord) => !isParagraph({element: addedNodes[0], container}))
+    .filter(
+      ({addedNodes}: MutationRecord) =>
+        !isParagraphEmpty({
+          paragraph: findParagraph({element: addedNodes[0], container}) as HTMLElement | undefined
+        })
+    );
 };
 
 export const findRemovedNodesParagraphs = ({
