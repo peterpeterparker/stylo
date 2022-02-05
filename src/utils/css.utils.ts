@@ -12,9 +12,10 @@ export const injectHeadCSS = () => {
       white-space: pre-wrap;
     }
 
-    .stylo-container > *:after {
+    .stylo-container > *:before {
       content: attr(placeholder);
       color: #6e6d6f;
+      position: absolute;
     }
   `;
 

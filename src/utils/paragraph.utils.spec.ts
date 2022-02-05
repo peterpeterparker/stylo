@@ -1,11 +1,8 @@
 import {
-  createEmptyParagraph,
   createNewEmptyLine,
   findParagraph,
   isParagraph,
-  isParagraphCode,
   isParagraphEmpty,
-  isParagraphList,
   isParagraphNotEditable
 } from './paragraph.utils';
 
@@ -120,25 +117,6 @@ describe('paragraph utils', () => {
     expect(isParagraphEmpty({paragraph: paragraph3})).toBeFalsy();
   });
 
-  test('should create a paragraph', () => {
-    const app = createDiv({depth: 0});
-    const container = createDiv({depth: 1});
-    const paragraph = createDiv({depth: 2});
-
-    container.append(paragraph);
-    app.append(container);
-
-    Object.defineProperty(paragraph, 'after', {
-      value: jest.fn((node) => {
-        container.append(node);
-      })
-    });
-
-    createEmptyParagraph({paragraph, container});
-
-    expect(paragraph.nextElementSibling).not.toBeUndefined();
-  });
-
   test('should create a new line in paragraph', () => {
     const paragraph = document.createElement('div');
     const text = document.createTextNode('test');
@@ -148,34 +126,6 @@ describe('paragraph utils', () => {
 
     expect(paragraph.querySelector('br')).not.toBeNull();
     expect(Array.from(paragraph.childNodes).length).toEqual(3);
-  });
-
-  test('should be an code paragraph', () => {
-    const paragraph = document.createElement('div');
-    expect(isParagraphCode({paragraph})).toBeFalsy();
-
-    const code = document.createElement('code');
-    expect(isParagraphCode({paragraph: code})).toBeTruthy();
-
-    const pre = document.createElement('pre');
-    expect(isParagraphCode({paragraph: pre})).toBeTruthy();
-
-    const ddg = document.createElement('deckgo-highlight-code');
-    expect(isParagraphCode({paragraph: ddg})).toBeTruthy();
-  });
-
-  test('should be a list paragraph', () => {
-    const paragraph = document.createElement('div');
-    expect(isParagraphList({paragraph})).toBeFalsy();
-
-    const ul = document.createElement('ul');
-    expect(isParagraphList({paragraph: ul})).toBeTruthy();
-
-    const ol = document.createElement('ol');
-    expect(isParagraphList({paragraph: ol})).toBeTruthy();
-
-    const dl = document.createElement('dl');
-    expect(isParagraphList({paragraph: dl})).toBeTruthy();
   });
 
   test('should be an editable paragraph', () => {

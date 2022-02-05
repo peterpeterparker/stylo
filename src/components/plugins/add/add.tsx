@@ -167,12 +167,12 @@ export class Add implements ComponentInterface {
       return;
     }
 
-    if (window.getComputedStyle(this.paragraph, ':after').getPropertyValue('content') !== '""') {
-      // An external source use :after to style this paragraph
+    if (window.getComputedStyle(this.paragraph, ':before').getPropertyValue('content') !== '""') {
+      // An external source use :before to style this paragraph
       return;
     }
 
-    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 250);
+    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 150);
   }
 
   private removePlaceholder() {

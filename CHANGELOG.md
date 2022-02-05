@@ -1,3 +1,9 @@
+# 0.0.3 (2022-02-06)
+
+### Features
+
+- do not hijack "enter" i.e. let the browser do the job and create new paragraphs
+
 # 0.0.2 (2022-02-04)
 
 ### Fix
