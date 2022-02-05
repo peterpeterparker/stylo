@@ -10,7 +10,6 @@ import {
   Watch
 } from '@stencil/core';
 import {DataEvents} from '../../events/data.events';
-import {EnterEvents} from '../../events/enter.events';
 import {InputEvents} from '../../events/input.events';
 import {TabEvents} from '../../events/tab.events';
 import {UndoRedoEvents} from '../../events/undo-redo.events';
@@ -58,7 +57,6 @@ export class Editor implements ComponentInterface {
 
   private readonly undoRedoEvents: UndoRedoEvents = new UndoRedoEvents();
   private readonly inputEvents: InputEvents = new InputEvents();
-  private readonly enterEvents: EnterEvents = new EnterEvents();
   private readonly tabEvents: TabEvents = new TabEvents();
   private readonly dataEvents: DataEvents = new DataEvents();
 
@@ -194,7 +192,6 @@ export class Editor implements ComponentInterface {
   private destroyEvents() {
     this.undoRedoEvents.destroy();
     this.inputEvents.destroy();
-    this.enterEvents.destroy();
     this.tabEvents.destroy();
     this.dataEvents.destroy();
   }
@@ -205,7 +202,6 @@ export class Editor implements ComponentInterface {
     }
 
     this.inputEvents.init();
-    this.enterEvents.init();
     this.tabEvents.init();
     this.dataEvents.init({editorRef: this.el});
     this.undoRedoEvents.init();
