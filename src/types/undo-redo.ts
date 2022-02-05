@@ -21,3 +21,7 @@ export interface UndoRedoChange {
   target: Node;
   data: UndoRedoInput | UndoRedoAddRemoveParagraph[] | UndoRedoUpdateParagraph[];
 }
+
+export interface UndoRedoChanges {
+  changes: UndoRedoChange[];
+}

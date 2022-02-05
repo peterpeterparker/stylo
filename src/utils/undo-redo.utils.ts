@@ -3,6 +3,7 @@ import undoRedoStore from '../stores/undo-redo.store';
 import {
   UndoRedoAddRemoveParagraph,
   UndoRedoChange,
+  UndoRedoChanges,
   UndoRedoInput,
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
@@ -20,48 +21,28 @@ export const stackUndoInput = ({
   }
 
   undoRedoStore.state.undo.push({
-    type: 'input',
-    target: container,
-    data
+    changes: [
+      {
+        type: 'input',
+        target: container,
+        data
+      }
+    ]
   });
 
   undoRedoStore.state.redo = [];
 };
 
-export const stackUndoParagraph = ({
+export const stackUndoParagraphs = ({
   container,
-  changes
+  addRemoveParagraphs,
+  updateParagraphs
 }: {
   container: HTMLElement;
-  changes: UndoRedoAddRemoveParagraph[];
+  addRemoveParagraphs: UndoRedoAddRemoveParagraph[];
+  updateParagraphs: UndoRedoUpdateParagraph[];
 }) => {
-  if (!undoRedoStore.state.undo) {
-    undoRedoStore.state.undo = [];
-  }
-
-  undoRedoStore.state.undo.push({
-    type: 'paragraph',
-    target: container,
-    data: changes.map(({outerHTML, index, mutation}: UndoRedoAddRemoveParagraph) => ({
-      outerHTML,
-      mutation,
-      index
-    }))
-  });
-
-  if (!undoRedoStore.state.redo) {
-    undoRedoStore.state.redo = [];
-  }
-};
-
-export const stackUndoUpdate = ({
-  paragraphs,
-  container
-}: {
-  paragraphs: {outerHTML: string; index: number}[];
-  container: HTMLElement;
-}) => {
-  if (paragraphs.length <= 0) {
+  if (addRemoveParagraphs.length <= 0 && updateParagraphs.length <= 0) {
     return;
   }
 
@@ -69,24 +50,41 @@ export const stackUndoUpdate = ({
     undoRedoStore.state.undo = [];
   }
 
-  undoRedoStore.state.undo.push({
-    type: 'update',
-    target: container,
-    data: paragraphs
-  });
+  const changes: UndoRedoChanges = {
+    changes: [
+      {
+        type: 'paragraph',
+        target: container,
+        data: addRemoveParagraphs.map(
+          ({outerHTML, index, mutation}: UndoRedoAddRemoveParagraph) => ({
+            outerHTML,
+            mutation,
+            index
+          })
+        )
+      },
+      {
+        type: 'update',
+        target: container,
+        data: updateParagraphs
+      }
+    ]
+  };
+
+  undoRedoStore.state.undo.push(changes);
 
   if (!undoRedoStore.state.redo) {
     undoRedoStore.state.redo = [];
   }
 };
 
-export const nextUndoChange = (): UndoRedoChange | undefined =>
+export const nextUndoChanges = (): UndoRedoChanges | undefined =>
   nextChange(undoRedoStore.state.undo);
 
-export const nextRedoChange = (): UndoRedoChange | undefined =>
+export const nextRedoChanges = (): UndoRedoChanges | undefined =>
   nextChange(undoRedoStore.state.redo);
 
-const nextChange = (changes: UndoRedoChange[] | undefined): UndoRedoChange | undefined => {
+const nextChange = (changes: UndoRedoChanges[] | undefined): UndoRedoChanges | undefined => {
   if (!changes) {
     return undefined;
   }
@@ -100,8 +98,8 @@ export const undo = async () =>
       (undoRedoStore.state.undo = [
         ...undoRedoStore.state.undo.slice(0, undoRedoStore.state.undo.length - 1)
       ]),
-    pushTo: (value: UndoRedoChange) => undoRedoStore.state.redo.push(value),
-    undoChange: nextUndoChange()
+    pushTo: (value: UndoRedoChanges) => undoRedoStore.state.redo.push(value),
+    undoChanges: nextUndoChanges()
   });
 
 export const redo = async () =>
@@ -110,47 +108,58 @@ export const redo = async () =>
       (undoRedoStore.state.redo = [
         ...undoRedoStore.state.redo.slice(0, undoRedoStore.state.redo.length - 1)
       ]),
-    pushTo: (value: UndoRedoChange) => undoRedoStore.state.undo.push(value),
-    undoChange: nextRedoChange()
+    pushTo: (value: UndoRedoChanges) => undoRedoStore.state.undo.push(value),
+    undoChanges: nextRedoChanges()
   });
 
 const undoRedo = async ({
   popFrom,
   pushTo,
-  undoChange
+  undoChanges
 }: {
   popFrom: () => void;
-  pushTo: (value: UndoRedoChange) => void;
-  undoChange: UndoRedoChange | undefined;
+  pushTo: (value: UndoRedoChanges) => void;
+  undoChanges: UndoRedoChanges | undefined;
 }) => {
-  if (!undoChange) {
+  if (!undoChanges) {
     return;
   }
 
+  const {changes}: UndoRedoChanges = undoChanges;
+
+  const promises: Promise<UndoRedoChange>[] = changes.map((undoChange: UndoRedoChange) =>
+    undoRedoChange({undoChange})
+  );
+  const redoChanges: UndoRedoChange[] = await Promise.all(promises);
+
+  pushTo({changes: redoChanges});
+
+  popFrom();
+};
+
+const undoRedoChange = async ({
+  undoChange
+}: {
+  undoChange: UndoRedoChange;
+}): Promise<UndoRedoChange> => {
   const {type} = undoChange;
 
   if (type === 'input') {
-    await undoRedoInput({popFrom, pushTo, undoChange});
+    return undoRedoInput({undoChange});
   }
 
   if (type === 'paragraph') {
-    await undoRedoParagraph({popFrom, pushTo, undoChange});
+    return undoRedoParagraph({undoChange});
   }
 
-  if (type === 'update') {
-    await undoRedoUpdate({popFrom, pushTo, undoChange});
-  }
+  return undoRedoUpdate({undoChange});
 };
 
 const undoRedoInput = async ({
-  popFrom,
-  pushTo,
   undoChange
 }: {
-  popFrom: () => void;
-  pushTo: (value: UndoRedoChange) => void;
   undoChange: UndoRedoChange;
-}) => {
+}): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
   const container: HTMLElement = toHTMLElement(target);
@@ -213,7 +222,7 @@ const undoRedoInput = async ({
     )
   });
 
-  pushTo({
+  return {
     type: 'input',
     target: container,
     data: {
@@ -222,20 +231,14 @@ const undoRedoInput = async ({
       oldValue: previousValue,
       offset: newCaretPosition + (previousValue.length - oldValue.length)
     }
-  });
-
-  popFrom();
+  };
 };
 
 const undoRedoParagraph = async ({
-  popFrom,
-  pushTo,
   undoChange
 }: {
-  popFrom: () => void;
-  pushTo: (value: UndoRedoChange) => void;
   undoChange: UndoRedoChange;
-}) => {
+}): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
   const container: HTMLElement = toHTMLElement(target);
@@ -274,23 +277,17 @@ const undoRedoParagraph = async ({
     }
   }
 
-  pushTo({
+  return {
     ...undoChange,
     data: to
-  });
-
-  popFrom();
+  };
 };
 
 const undoRedoUpdate = async ({
-  popFrom,
-  pushTo,
   undoChange
 }: {
-  popFrom: () => void;
-  pushTo: (value: UndoRedoChange) => void;
   undoChange: UndoRedoChange;
-}) => {
+}): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
   const paragraphs: UndoRedoUpdateParagraph[] = data as UndoRedoUpdateParagraph[];
@@ -311,12 +308,10 @@ const undoRedoUpdate = async ({
     to.push({index, outerHTML: previousOuterHTML});
   }
 
-  pushTo({
+  return {
     ...undoChange,
     data: to
-  });
-
-  popFrom();
+  };
 };
 
 /**
