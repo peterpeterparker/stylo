@@ -51,6 +51,10 @@ export class UndoRedoEvents {
     this.observe();
 
     containerStore.state.ref?.addEventListener('keydown', this.onKeydown);
+
+    containerStore.state.ref?.addEventListener('keyup', this.onKeyup);
+    containerStore.state.ref?.addEventListener('mousedown', this.onMouseTouchDown);
+    containerStore.state.ref?.addEventListener('touchstart', this.onMouseTouchDown);
     containerStore.state.ref?.addEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
     document.addEventListener('toolbarActivated', this.onToolbarActivated);
@@ -74,6 +78,10 @@ export class UndoRedoEvents {
     this.disconnect();
 
     containerStore.state.ref?.removeEventListener('keydown', this.onKeydown);
+
+    containerStore.state.ref?.removeEventListener('keyup', this.onKeyup);
+    containerStore.state.ref?.removeEventListener('mousedown', this.onMouseTouchDown);
+    containerStore.state.ref?.removeEventListener('touchstart', this.onMouseTouchDown);
     containerStore.state.ref?.removeEventListener('snapshotParagraph', this.onSnapshotParagraph);
 
     document.removeEventListener('toolbarActivated', this.onToolbarActivated);
@@ -99,6 +107,10 @@ export class UndoRedoEvents {
       await this.redo($event);
       return;
     }
+  };
+
+  private onKeyup = () => {
+    this.onEventUpdateParagraphs(getSelection()?.anchorNode);
   };
 
   private async undo($event: KeyboardEvent) {
@@ -169,6 +181,18 @@ export class UndoRedoEvents {
   };
 
   private onSnapshotParagraph = ({target}: CustomEvent<void>) => {
+    this.onEventUpdateParagraphs(target as Node);
+  };
+
+  private onMouseTouchDown = ({target}: MouseEvent | TouchEvent) => {
+    this.onEventUpdateParagraphs(target as Node);
+  }
+
+  private onEventUpdateParagraphs(target: Node | undefined) {
+    if (!target) {
+      return;
+    }
+
     const paragraph: HTMLElement | undefined = toHTMLElement(
       findParagraph({element: target as Node, container: containerStore.state.ref})
     );
@@ -178,7 +202,7 @@ export class UndoRedoEvents {
     }
 
     this.undoUpdateParagraphs = this.toUpdateParagraphs([paragraph]);
-  };
+  }
 
   // Copy current paragraphs value to a local state so we can add it to the undo redo global store in case of modifications
   private copySelectedParagraphs({filterEmptySelection}: {filterEmptySelection: boolean}) {
