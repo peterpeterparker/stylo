@@ -1,9 +1,9 @@
 import {createStore} from '@stencil/store';
-import {UndoRedoChange} from '../types/undo-redo';
+import {UndoRedoChanges} from '../types/undo-redo';
 
 interface UndoRedoStore {
-  undo: UndoRedoChange[] | undefined;
-  redo: UndoRedoChange[] | undefined;
+  undo: UndoRedoChanges[] | undefined;
+  redo: UndoRedoChanges[] | undefined;
 
   observe: boolean;
 }

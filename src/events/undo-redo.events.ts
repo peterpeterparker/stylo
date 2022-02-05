@@ -20,12 +20,11 @@ import {
   RemovedParagraph
 } from '../utils/paragraphs.utils';
 import {
-  nextRedoChange,
-  nextUndoChange,
+  nextRedoChanges,
+  nextUndoChanges,
   redo,
   stackUndoInput,
-  stackUndoParagraph,
-  stackUndoUpdate,
+  stackUndoParagraphs,
   undo
 } from '../utils/undo-redo.utils';
 
@@ -105,7 +104,7 @@ export class UndoRedoEvents {
   private async undo($event: KeyboardEvent) {
     $event.preventDefault();
 
-    if (nextUndoChange() === undefined) {
+    if (nextUndoChanges() === undefined) {
       return;
     }
 
@@ -115,7 +114,7 @@ export class UndoRedoEvents {
   private async redo($event: KeyboardEvent) {
     $event.preventDefault();
 
-    if (nextRedoChange() === undefined) {
+    if (nextRedoChanges() === undefined) {
       return;
     }
 
@@ -245,12 +244,18 @@ export class UndoRedoEvents {
   }
 
   private onMutation = (mutations: MutationRecord[]) => {
-    this.onParagraphsMutations(mutations);
+    const addRemoveParagraphs: UndoRedoAddRemoveParagraph[] = this.onParagraphsMutations(mutations);
 
-    const didUpdate: boolean = this.onNodesParagraphsMutation(mutations);
+    const updateParagraphs: UndoRedoUpdateParagraph[] = this.onNodesParagraphsMutation(mutations);
+
+    stackUndoParagraphs({
+      container: containerStore.state.ref,
+      addRemoveParagraphs,
+      updateParagraphs
+    });
 
     // We assume that all paragraphs updates do contain attributes and input changes
-    if (didUpdate) {
+    if (updateParagraphs.length > 0) {
       return;
     }
 
@@ -262,7 +267,7 @@ export class UndoRedoEvents {
   /**
    * Paragraphs added and removed
    */
-  private onParagraphsMutations(mutations: MutationRecord[]) {
+  private onParagraphsMutations(mutations: MutationRecord[]): UndoRedoAddRemoveParagraph[] {
     const changes: UndoRedoAddRemoveParagraph[] = [];
 
     // New paragraph
@@ -300,14 +305,7 @@ export class UndoRedoEvents {
       })
     );
 
-    if (changes.length <= 0) {
-      return;
-    }
-
-    stackUndoParagraph({
-      container: containerStore.state.ref,
-      changes
-    });
+    return changes;
   }
 
   /**
@@ -317,7 +315,7 @@ export class UndoRedoEvents {
    *
    * @return did update
    */
-  private onNodesParagraphsMutation(mutations: MutationRecord[]): boolean {
+  private onNodesParagraphsMutation(mutations: MutationRecord[]): UndoUpdateParagraphs[] {
     const addedNodesMutations: MutationRecord[] = findAddedNodesParagraphs({
       mutations,
       container: containerStore.state.ref
@@ -330,11 +328,11 @@ export class UndoRedoEvents {
     const needsUpdate: boolean = addedNodesMutations.length > 0 || removedNodesMutations.length > 0;
 
     if (!needsUpdate) {
-      return false;
+      return [];
     }
 
     if (this.undoUpdateParagraphs.length <= 0) {
-      return false;
+      return [];
     }
 
     const addedParagraphs: HTMLElement[] = findAddedParagraphs({
@@ -351,19 +349,14 @@ export class UndoRedoEvents {
 
     if (filterUndoUpdateParagraphs.length <= 0) {
       this.copySelectedParagraphs({filterEmptySelection: true});
-      return false;
+      return [];
     }
-
-    stackUndoUpdate({
-      paragraphs: filterUndoUpdateParagraphs,
-      container: containerStore.state.ref
-    });
 
     this.copySelectedParagraphs({filterEmptySelection: true});
 
     this.undoInput = undefined;
 
-    return true;
+    return filterUndoUpdateParagraphs;
   }
 
   private cleanOuterHTML(paragraph: HTMLElement): string {
@@ -389,9 +382,10 @@ export class UndoRedoEvents {
       return;
     }
 
-    stackUndoUpdate({
-      paragraphs: this.undoUpdateParagraphs,
-      container: containerStore.state.ref
+    stackUndoParagraphs({
+      container: containerStore.state.ref,
+      addRemoveParagraphs: [],
+      updateParagraphs: this.undoUpdateParagraphs
     });
 
     this.undoUpdateParagraphs = this.toUpdateParagraphs(updateParagraphs);
