@@ -186,7 +186,7 @@ export class UndoRedoEvents {
 
   private onMouseTouchDown = ({target}: MouseEvent | TouchEvent) => {
     this.onEventUpdateParagraphs(target as Node);
-  }
+  };
 
   private onEventUpdateParagraphs(target: Node | undefined) {
     if (!target) {
