@@ -1,4 +1,4 @@
-import {getSelection} from '@deckdeckgo/utils';
+import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import {toHTMLElement} from '../utils/node.utils';
 import {
@@ -8,6 +8,7 @@ import {
   isParagraphCode,
   isParagraphList
 } from '../utils/paragraph.utils';
+import undoRedoStore from '../stores/undo-redo.store';
 
 export class EnterEvents {
   init() {
@@ -18,17 +19,17 @@ export class EnterEvents {
     containerStore.state.ref?.removeEventListener('keydown', this.onKeyDown);
   }
 
-  private onKeyDown = ($event: KeyboardEvent) => {
+  private onKeyDown = async ($event: KeyboardEvent) => {
     const {code} = $event;
 
     if (!['Enter'].includes(code)) {
       return;
     }
 
-    this.createParagraph($event);
+    await this.createParagraph($event);
   };
 
-  private createParagraph($event: KeyboardEvent) {
+  private async createParagraph($event: KeyboardEvent) {
     const anchor: HTMLElement | undefined = toHTMLElement(getSelection()?.anchorNode);
 
     // Create only if we have an anchor otherwise let the browser deals with it
@@ -59,9 +60,38 @@ export class EnterEvents {
       return;
     }
 
-    createEmptyParagraph({
+    const newParagraph: Node | undefined = await createEmptyParagraph({
       container: containerStore.state.ref,
       paragraph
     });
+
+    if (!newParagraph) {
+      return;
+    }
+
+    // Extract the rest of the "line" (the paragraph) form the cursor position to end
+    const range: Range = getSelection().getRangeAt(0);
+    range.collapse(true);
+    range.setEndAfter(paragraph);
+
+    const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
+
+    // We created a new paragraph with the cursor at the end
+    if (fragment.textContent === '') {
+      moveCursorToEnd(newParagraph);
+      return;
+    }
+
+    undoRedoStore.state.observe = false;
+
+    const moveFragment: DocumentFragment = getSelection().getRangeAt(0).extractContents();
+    newParagraph.replaceChild(moveFragment, newParagraph.firstChild);
+
+    // We don't move the cursor, we keep the position at the begin of the new paragraph
+
+    // TODO: stack changes to undo redo...how?!?
+    // TODO: observe mutations
+
+    undoRedoStore.state.observe = true;
   }
 }

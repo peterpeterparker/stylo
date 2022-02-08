@@ -108,23 +108,26 @@ export const createEmptyParagraph = ({
 }: {
   container: HTMLElement;
   paragraph: HTMLElement;
-}) => {
-  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-    addObserver.disconnect();
-    moveCursorToEnd(mutations[0]?.addedNodes?.[0]);
-  });
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
 
-  addObserver.observe(container, {childList: true, subtree: true});
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
 
-  const div: HTMLElement = createEmptyElement({nodeName: 'div'});
+    addObserver.observe(container, {childList: true, subtree: true});
 
-  // Should not happen, fallback
-  if (!paragraph) {
-    container.append(div);
-    return;
-  }
+    const div: HTMLElement = createEmptyElement({nodeName: 'div'});
 
-  paragraph.after(div);
+    // Should not happen, fallback
+    if (!paragraph) {
+      container.append(div);
+      return;
+    }
+
+    paragraph.after(div);
+  })
 };
 
 export const createNewEmptyLine = ({paragraph}: {paragraph: HTMLElement}) => {
