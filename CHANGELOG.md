@@ -1,3 +1,9 @@
+# 0.0.4-1 (2022-02-08)
+
+### Fix
+
+- on "shift + enter" if the context is extracted it should not clean the selection and then move the cursor to start
+
 # 0.0.4 (2022-02-08)
 
 ### Features
