@@ -152,20 +152,6 @@ export const replaceParagraphFirstChild = ({
   });
 };
 
-export const createNewEmptyLine = ({paragraph}: {paragraph: HTMLElement}) => {
-  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-    addObserver.disconnect();
-    moveCursorToEnd(mutations[0]?.addedNodes?.[mutations[0]?.addedNodes.length - 1]);
-  });
-
-  addObserver.observe(paragraph, {childList: true, subtree: true});
-
-  const br: HTMLBRElement = document.createElement('br');
-  const text: Text = document.createTextNode('\u200B');
-
-  paragraph.append(...[br, text]);
-};
-
 export const isParagraphEmpty = ({paragraph}: {paragraph: HTMLElement | undefined}): boolean =>
   ['', '\n', '\u200B'].includes(paragraph?.textContent?.trim());
 
@@ -174,15 +160,6 @@ export const isParagraphNotEditable = ({
 }: {
   paragraph: HTMLElement | undefined;
 }): boolean => paragraph?.getAttribute('contenteditable') === 'false';
-
-export const isParagraphCode = ({paragraph}: {paragraph: HTMLElement}): boolean => {
-  // DeckDeckGo web components
-  if (paragraph.nodeName.toLowerCase().startsWith('deckgo-')) {
-    return true;
-  }
-
-  return ['code', 'pre'].includes(paragraph.nodeName.toLowerCase());
-};
 
 export const isParagraphList = ({paragraph}: {paragraph: HTMLElement}): boolean =>
   ['ul', 'ol', 'dl'].includes(paragraph.nodeName.toLowerCase());

@@ -5,9 +5,7 @@ import {UndoRedoUpdateParagraph} from '../types/undo-redo';
 import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
   createEmptyParagraph,
-  createNewEmptyLine,
   findParagraph,
-  isParagraphCode,
   isParagraphList,
   replaceParagraphFirstChild
 } from '../utils/paragraph.utils';
@@ -54,14 +52,22 @@ export class EnterEvents {
       return;
     }
 
-    $event.preventDefault();
-
     const {shiftKey} = $event;
 
-    if (shiftKey || isParagraphCode({paragraph})) {
-      createNewEmptyLine({paragraph: anchor});
+    // Shift-enter let the browser deal with it
+    if (shiftKey) {
       return;
     }
+
+    $event.preventDefault();
+
+    // Extract the rest of the "line" (the paragraph) form the cursor position to end
+    const range: Range = getSelection().getRangeAt(0);
+    range.collapse(true);
+    range.setEndAfter(paragraph);
+
+    const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
+    const isEndOfParagraph: boolean = fragment.textContent === '';
 
     const newParagraph: Node | undefined = await createEmptyParagraph({
       container: containerStore.state.ref,
@@ -72,15 +78,8 @@ export class EnterEvents {
       return;
     }
 
-    // Extract the rest of the "line" (the paragraph) form the cursor position to end
-    const range: Range = getSelection().getRangeAt(0);
-    range.collapse(true);
-    range.setEndAfter(paragraph);
-
-    const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
-
     // We created a new paragraph with the cursor at the end aka we pressed "Enter" with the cursor at the end of the paragraph
-    if (fragment.textContent === '') {
+    if (isEndOfParagraph) {
       moveCursorToEnd(newParagraph);
       return;
     }
