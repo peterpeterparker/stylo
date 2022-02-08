@@ -127,7 +127,29 @@ export const createEmptyParagraph = ({
     }
 
     paragraph.after(div);
-  })
+  });
+};
+
+export const replaceParagraphFirstChild = ({
+  paragraph,
+  container,
+  fragment
+}: {
+  container: HTMLElement;
+  paragraph: HTMLElement;
+  fragment: DocumentFragment;
+}): Promise<void> => {
+  return new Promise<void>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((_mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve();
+    });
+
+    addObserver.observe(container, {childList: true, subtree: true});
+
+    paragraph.replaceChild(fragment, paragraph.firstChild);
+  });
 };
 
 export const createNewEmptyLine = ({paragraph}: {paragraph: HTMLElement}) => {

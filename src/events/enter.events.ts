@@ -1,14 +1,17 @@
 import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
-import {toHTMLElement} from '../utils/node.utils';
+import undoRedoStore from '../stores/undo-redo.store';
+import {UndoRedoUpdateParagraph} from '../types/undo-redo';
+import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
   createEmptyParagraph,
   createNewEmptyLine,
   findParagraph,
   isParagraphCode,
-  isParagraphList
+  isParagraphList,
+  replaceParagraphFirstChild
 } from '../utils/paragraph.utils';
-import undoRedoStore from '../stores/undo-redo.store';
+import {stackUndoParagraphs} from '../utils/undo-redo.utils';
 
 export class EnterEvents {
   init() {
@@ -76,22 +79,47 @@ export class EnterEvents {
 
     const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
 
-    // We created a new paragraph with the cursor at the end
+    // We created a new paragraph with the cursor at the end aka we pressed "Enter" with the cursor at the end of the paragraph
     if (fragment.textContent === '') {
       moveCursorToEnd(newParagraph);
       return;
     }
 
+    await this.createParagraphWithContent({paragraph, newParagraph: newParagraph as HTMLElement});
+  }
+
+  private async createParagraphWithContent({
+    paragraph,
+    newParagraph
+  }: {
+    paragraph: HTMLElement;
+    newParagraph: HTMLElement;
+  }) {
+    // We have to handle undo-redo manually otherwise we will get two entries in the stack, one for the "extractContents" and one when we replace the child in the new paragraph
     undoRedoStore.state.observe = false;
 
+    stackUndoParagraphs({
+      container: containerStore.state.ref,
+      addRemoveParagraphs: [],
+      updateParagraphs: this.toUpdateParagraphs([paragraph, newParagraph])
+    });
+
     const moveFragment: DocumentFragment = getSelection().getRangeAt(0).extractContents();
-    newParagraph.replaceChild(moveFragment, newParagraph.firstChild);
+    await replaceParagraphFirstChild({
+      container: containerStore.state.ref,
+      paragraph: newParagraph,
+      fragment: moveFragment
+    });
 
-    // We don't move the cursor, we keep the position at the begin of the new paragraph
-
-    // TODO: stack changes to undo redo...how?!?
-    // TODO: observe mutations
+    // We don't move the cursor, we keep the position at the beginning of the new paragraph
 
     undoRedoStore.state.observe = true;
+  }
+
+  private toUpdateParagraphs(paragraphs: HTMLElement[]): UndoRedoUpdateParagraph[] {
+    return paragraphs.map((paragraph: HTMLElement) => ({
+      outerHTML: paragraph.outerHTML,
+      index: elementIndex(paragraph)
+    }));
   }
 }
