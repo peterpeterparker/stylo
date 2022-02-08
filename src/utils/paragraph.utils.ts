@@ -1,4 +1,5 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
+import {createEmptyElement} from './create-element.utils';
 import {isTextNode, toHTMLElement} from './node.utils';
 
 export const findParagraph = ({
@@ -101,6 +102,31 @@ export const transformParagraph = ({
   anchor.after(...elements);
 };
 
+export const createEmptyParagraph = ({
+  paragraph,
+  container
+}: {
+  container: HTMLElement;
+  paragraph: HTMLElement;
+}) => {
+  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+    addObserver.disconnect();
+    moveCursorToEnd(mutations[0]?.addedNodes?.[0]);
+  });
+
+  addObserver.observe(container, {childList: true, subtree: true});
+
+  const div: HTMLElement = createEmptyElement({nodeName: 'div'});
+
+  // Should not happen, fallback
+  if (!paragraph) {
+    container.append(div);
+    return;
+  }
+
+  paragraph.after(div);
+};
+
 export const createNewEmptyLine = ({paragraph}: {paragraph: HTMLElement}) => {
   const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
     addObserver.disconnect();
@@ -123,3 +149,15 @@ export const isParagraphNotEditable = ({
 }: {
   paragraph: HTMLElement | undefined;
 }): boolean => paragraph?.getAttribute('contenteditable') === 'false';
+
+export const isParagraphCode = ({paragraph}: {paragraph: HTMLElement}): boolean => {
+  // DeckDeckGo web components
+  if (paragraph.nodeName.toLowerCase().startsWith('deckgo-')) {
+    return true;
+  }
+
+  return ['code', 'pre'].includes(paragraph.nodeName.toLowerCase());
+};
+
+export const isParagraphList = ({paragraph}: {paragraph: HTMLElement}): boolean =>
+  ['ul', 'ol', 'dl'].includes(paragraph.nodeName.toLowerCase());
