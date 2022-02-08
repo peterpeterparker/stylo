@@ -152,6 +152,48 @@ export const replaceParagraphFirstChild = ({
   });
 };
 
+export const createNewEmptyLine = ({
+  paragraph,
+  range
+}: {
+  paragraph: HTMLElement;
+  range: Range;
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
+
+    addObserver.observe(paragraph, {childList: true, subtree: true});
+
+    const br: HTMLBRElement = document.createElement('br');
+    range.insertNode(br);
+  });
+};
+
+export const appendEmptyText = ({
+  paragraph,
+  element
+}: {
+  paragraph: HTMLElement;
+  element: HTMLElement;
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
+
+    addObserver.observe(paragraph, {childList: true, subtree: true});
+
+    const text: Text = document.createTextNode('\u200B');
+    element.after(text);
+  });
+};
+
 export const isParagraphEmpty = ({paragraph}: {paragraph: HTMLElement | undefined}): boolean =>
   ['', '\n', '\u200B'].includes(paragraph?.textContent?.trim());
 

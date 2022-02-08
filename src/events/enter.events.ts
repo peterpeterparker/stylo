@@ -1,10 +1,12 @@
-import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
+import {getSelection, moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {UndoRedoUpdateParagraph} from '../types/undo-redo';
 import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
+  appendEmptyText,
   createEmptyParagraph,
+  createNewEmptyLine,
   findParagraph,
   isParagraphList,
   replaceParagraphFirstChild
@@ -52,22 +54,24 @@ export class EnterEvents {
       return;
     }
 
-    const {shiftKey} = $event;
-
-    // Shift-enter let the browser deal with it
-    if (shiftKey) {
-      return;
-    }
-
     $event.preventDefault();
 
-    // Extract the rest of the "line" (the paragraph) form the cursor position to end
     const range: Range = getSelection().getRangeAt(0);
     range.collapse(true);
-    range.setEndAfter(paragraph);
 
     const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
     const isEndOfParagraph: boolean = fragment.textContent === '';
+
+    const {shiftKey} = $event;
+
+    if (shiftKey) {
+      await this.createLineBreak({anchor, paragraph, isEndOfParagraph});
+
+      return;
+    }
+
+    // Extract the rest of the "line" (the paragraph) form the cursor position to end
+    range.setEndAfter(paragraph);
 
     const newParagraph: Node | undefined = await createEmptyParagraph({
       container: containerStore.state.ref,
@@ -120,5 +124,42 @@ export class EnterEvents {
       outerHTML: paragraph.outerHTML,
       index: elementIndex(paragraph)
     }));
+  }
+
+  private async createLineBreak({
+    anchor,
+    paragraph,
+    isEndOfParagraph
+  }: {
+    anchor: HTMLElement;
+    paragraph: HTMLElement;
+    isEndOfParagraph: boolean;
+  }) {
+    undoRedoStore.state.observe = false;
+
+    stackUndoParagraphs({
+      container: containerStore.state.ref,
+      addRemoveParagraphs: [],
+      updateParagraphs: this.toUpdateParagraphs([paragraph])
+    });
+
+    const newBr: Node | undefined = await createNewEmptyLine({
+      paragraph: anchor,
+      range: getSelection().getRangeAt(0)
+    });
+
+    if (!isEndOfParagraph || !newBr) {
+      undoRedoStore.state.observe = true;
+      return;
+    }
+
+    const text: Node | undefined = await appendEmptyText({
+      paragraph,
+      element: newBr as HTMLElement
+    });
+
+    moveCursorToStart(text);
+
+    undoRedoStore.state.observe = true;
   }
 }

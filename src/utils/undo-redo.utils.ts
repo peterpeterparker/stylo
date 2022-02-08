@@ -202,14 +202,22 @@ const undoRedoInput = async ({
 
     let parent: Node | undefined =
       cloneIndexDepths.length <= 0
-        ? text.parentNode
+        ? text
+          ? text.parentNode
+          : undefined
         : findInputNode({parent: paragraph, indexDepths: [...cloneIndexDepths]});
 
-    if (!parent) {
-      parent = await createLast({paragraph: toHTMLElement(paragraph) || container, container});
+    if (!parent && isTextNode(toHTMLElement(paragraph)?.lastChild)) {
+      text = toHTMLElement(paragraph).lastChild;
     }
 
-    text = await prependText({parent: toHTMLElement(parent), container});
+    if (!text) {
+      if (!parent) {
+        parent = await createLast({paragraph: toHTMLElement(paragraph) || container, container});
+      }
+
+      text = await prependText({parent: toHTMLElement(parent), container});
+    }
   }
 
   const {previousValue} = await updateNodeValue({text, oldValue, container});
@@ -444,7 +452,9 @@ const createLast = ({
 }): Promise<HTMLElement> =>
   new Promise<HTMLElement>((resolve) => {
     const anchor: HTMLElement =
-      toHTMLElement(paragraph.lastElementChild) || document.createElement('span');
+      paragraph.lastElementChild?.nodeName.toLowerCase() !== 'br'
+        ? toHTMLElement(paragraph.lastElementChild)
+        : document.createElement('span');
 
     const parent: HTMLElement = toHTMLElement(anchor.cloneNode());
     parent.innerHTML = '';
