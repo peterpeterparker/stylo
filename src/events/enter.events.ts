@@ -56,8 +56,10 @@ export class EnterEvents {
 
     $event.preventDefault();
 
+    // Extract the rest of the "line" (the paragraph) form the cursor position to end
     const range: Range = getSelection().getRangeAt(0);
     range.collapse(true);
+    range.setEndAfter(paragraph);
 
     const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
     const isEndOfParagraph: boolean = fragment.textContent === '';
@@ -65,13 +67,10 @@ export class EnterEvents {
     const {shiftKey} = $event;
 
     if (shiftKey) {
-      await this.createLineBreak({anchor, paragraph, isEndOfParagraph});
+      await this.createLineBreak({anchor, paragraph, isEndOfParagraph, range});
 
       return;
     }
-
-    // Extract the rest of the "line" (the paragraph) form the cursor position to end
-    range.setEndAfter(paragraph);
 
     const newParagraph: Node | undefined = await createEmptyParagraph({
       container: containerStore.state.ref,
@@ -129,11 +128,13 @@ export class EnterEvents {
   private async createLineBreak({
     anchor,
     paragraph,
-    isEndOfParagraph
+    isEndOfParagraph,
+    range
   }: {
     anchor: HTMLElement;
     paragraph: HTMLElement;
     isEndOfParagraph: boolean;
+    range: Range;
   }) {
     undoRedoStore.state.observe = false;
 
@@ -143,19 +144,24 @@ export class EnterEvents {
       updateParagraphs: this.toUpdateParagraphs([paragraph])
     });
 
-    const newBr: Node | undefined = await createNewEmptyLine({
+    // Reset range end we do not want to select empty text
+    range.setEndAfter(getSelection().anchorNode);
+
+    const newNode: Node | undefined = await createNewEmptyLine({
       paragraph: anchor,
-      range: getSelection().getRangeAt(0)
+      range
     });
 
-    if (!isEndOfParagraph || !newBr) {
+    if (!isEndOfParagraph || !newNode) {
+      moveCursorToStart(newNode);
+
       undoRedoStore.state.observe = true;
       return;
     }
 
     const text: Node | undefined = await appendEmptyText({
       paragraph,
-      element: newBr as HTMLElement
+      element: newNode as HTMLElement
     });
 
     moveCursorToStart(text);
