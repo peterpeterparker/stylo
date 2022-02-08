@@ -108,37 +108,90 @@ export const createEmptyParagraph = ({
 }: {
   container: HTMLElement;
   paragraph: HTMLElement;
-}) => {
-  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-    addObserver.disconnect();
-    moveCursorToEnd(mutations[0]?.addedNodes?.[0]);
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
+
+    addObserver.observe(container, {childList: true, subtree: true});
+
+    const div: HTMLElement = createEmptyElement({nodeName: 'div'});
+
+    // Should not happen, fallback
+    if (!paragraph) {
+      container.append(div);
+      return;
+    }
+
+    paragraph.after(div);
   });
-
-  addObserver.observe(container, {childList: true, subtree: true});
-
-  const div: HTMLElement = createEmptyElement({nodeName: 'div'});
-
-  // Should not happen, fallback
-  if (!paragraph) {
-    container.append(div);
-    return;
-  }
-
-  paragraph.after(div);
 };
 
-export const createNewEmptyLine = ({paragraph}: {paragraph: HTMLElement}) => {
-  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-    addObserver.disconnect();
-    moveCursorToEnd(mutations[0]?.addedNodes?.[mutations[0]?.addedNodes.length - 1]);
+export const replaceParagraphFirstChild = ({
+  paragraph,
+  container,
+  fragment
+}: {
+  container: HTMLElement;
+  paragraph: HTMLElement;
+  fragment: DocumentFragment;
+}): Promise<void> => {
+  return new Promise<void>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((_mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve();
+    });
+
+    addObserver.observe(container, {childList: true, subtree: true});
+
+    paragraph.replaceChild(fragment, paragraph.firstChild);
   });
+};
 
-  addObserver.observe(paragraph, {childList: true, subtree: true});
+export const createNewEmptyLine = ({
+  paragraph,
+  range
+}: {
+  paragraph: HTMLElement;
+  range: Range;
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
 
-  const br: HTMLBRElement = document.createElement('br');
-  const text: Text = document.createTextNode('\u200B');
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
 
-  paragraph.append(...[br, text]);
+    addObserver.observe(paragraph, {childList: true, subtree: true});
+
+    const br: HTMLBRElement = document.createElement('br');
+    range.insertNode(br);
+  });
+};
+
+export const appendEmptyText = ({
+  paragraph,
+  element
+}: {
+  paragraph: HTMLElement;
+  element: HTMLElement;
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
+
+    addObserver.observe(paragraph, {childList: true, subtree: true});
+
+    const text: Text = document.createTextNode('\u200B');
+    element.after(text);
+  });
 };
 
 export const isParagraphEmpty = ({paragraph}: {paragraph: HTMLElement | undefined}): boolean =>
@@ -149,15 +202,6 @@ export const isParagraphNotEditable = ({
 }: {
   paragraph: HTMLElement | undefined;
 }): boolean => paragraph?.getAttribute('contenteditable') === 'false';
-
-export const isParagraphCode = ({paragraph}: {paragraph: HTMLElement}): boolean => {
-  // DeckDeckGo web components
-  if (paragraph.nodeName.toLowerCase().startsWith('deckgo-')) {
-    return true;
-  }
-
-  return ['code', 'pre'].includes(paragraph.nodeName.toLowerCase());
-};
 
 export const isParagraphList = ({paragraph}: {paragraph: HTMLElement}): boolean =>
   ['ul', 'ol', 'dl'].includes(paragraph.nodeName.toLowerCase());
