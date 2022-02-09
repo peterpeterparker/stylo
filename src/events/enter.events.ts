@@ -7,7 +7,7 @@ import {
   appendEmptyText,
   createEmptyParagraph,
   createNewEmptyLine,
-  findParagraph,
+  findParagraph, isParagraphCode,
   isParagraphList,
   replaceParagraphFirstChild
 } from '../utils/paragraph.utils';
@@ -66,7 +66,7 @@ export class EnterEvents {
 
     const {shiftKey} = $event;
 
-    if (shiftKey) {
+    if (shiftKey || isParagraphCode({paragraph})) {
       await this.createLineBreak({anchor, paragraph, isEndOfParagraph, range});
 
       return;
