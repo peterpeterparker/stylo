@@ -2,6 +2,7 @@ import {
   createEmptyParagraph,
   findParagraph,
   isParagraph,
+  isParagraphCode,
   isParagraphEmpty,
   isParagraphList,
   isParagraphNotEditable
@@ -135,6 +136,20 @@ describe('paragraph utils', () => {
     createEmptyParagraph({paragraph, container});
 
     expect(paragraph.nextElementSibling).not.toBeUndefined();
+  });
+
+  test('should be an code paragraph', () => {
+    const paragraph = document.createElement('div');
+    expect(isParagraphCode({paragraph})).toBeFalsy();
+
+    const code = document.createElement('code');
+    expect(isParagraphCode({paragraph: code})).toBeTruthy();
+
+    const pre = document.createElement('pre');
+    expect(isParagraphCode({paragraph: pre})).toBeTruthy();
+
+    const ddg = document.createElement('deckgo-highlight-code');
+    expect(isParagraphCode({paragraph: ddg})).toBeTruthy();
   });
 
   test('should be a list paragraph', () => {

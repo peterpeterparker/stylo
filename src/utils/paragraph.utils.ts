@@ -203,5 +203,14 @@ export const isParagraphNotEditable = ({
   paragraph: HTMLElement | undefined;
 }): boolean => paragraph?.getAttribute('contenteditable') === 'false';
 
+export const isParagraphCode = ({paragraph}: {paragraph: HTMLElement}): boolean => {
+  // DeckDeckGo web components
+  if (paragraph.nodeName.toLowerCase().startsWith('deckgo-')) {
+    return true;
+  }
+
+  return ['code', 'pre'].includes(paragraph.nodeName.toLowerCase());
+};
+
 export const isParagraphList = ({paragraph}: {paragraph: HTMLElement}): boolean =>
   ['ul', 'ol', 'dl'].includes(paragraph.nodeName.toLowerCase());
