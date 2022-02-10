@@ -3,6 +3,7 @@
 ### Features
 
 - preserve styles when removing links (except Firefox)
+- prevent text nodes - i.e. leaves - as direct children of the content editable when user is typing
 
 ### Fix
 

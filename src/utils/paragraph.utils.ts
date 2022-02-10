@@ -159,6 +159,33 @@ export const createNewEmptyLine = ({
   paragraph: HTMLElement;
   range: Range;
 }): Promise<Node | undefined> => {
+  const br: HTMLBRElement = document.createElement('br');
+  return insertNodeInRange({observerRoot: paragraph, range, element: br});
+};
+
+export const createNewParagraph = ({
+  container,
+  range,
+  text
+}: {
+  container: HTMLElement;
+  range: Range;
+  text: string;
+}): Promise<Node | undefined> => {
+  const div: HTMLDivElement = document.createElement('div');
+  div.innerHTML = text;
+  return insertNodeInRange({observerRoot: container, range, element: div});
+};
+
+const insertNodeInRange = ({
+  observerRoot,
+  range,
+  element
+}: {
+  observerRoot: HTMLElement;
+  range: Range;
+  element: HTMLElement;
+}): Promise<Node | undefined> => {
   return new Promise<Node | undefined>((resolve) => {
     const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       addObserver.disconnect();
@@ -166,10 +193,9 @@ export const createNewEmptyLine = ({
       resolve(mutations[0]?.addedNodes?.[0]);
     });
 
-    addObserver.observe(paragraph, {childList: true, subtree: true});
+    addObserver.observe(observerRoot, {childList: true, subtree: true});
 
-    const br: HTMLBRElement = document.createElement('br');
-    range.insertNode(br);
+    range.insertNode(element);
   });
 };
 
