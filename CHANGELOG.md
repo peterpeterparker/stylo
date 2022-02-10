@@ -1,3 +1,13 @@
+# 0.0.5
+
+### Features
+
+- preserve styles when removing links (except Firefox)
+
+### Fix
+
+- add link on Firefox
+
 # 0.0.4-1 (2022-02-08)
 
 ### Fix

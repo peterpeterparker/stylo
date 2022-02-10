@@ -44,6 +44,7 @@ import {
   getUnderline
 } from '../../../../utils/toolbar.utils';
 import {Style} from '../actions/style/style';
+import {removeLink} from '../../../../utils/link.utils';
 
 @Component({
   tag: 'stylo-toolbar',
@@ -266,8 +267,7 @@ export class Toolbar implements ComponentInterface {
     if (selection.rangeCount > 0) {
       const range: Range = selection.getRangeAt(0);
       this.anchorLink = {
-        range: range,
-        text: selection.toString()
+        range: range.cloneRange()
       };
 
       this.setToolbarAnchorPosition();
@@ -473,35 +473,12 @@ export class Toolbar implements ComponentInterface {
 
   private toggleLink = () => {
     if (this.link) {
-      this.removeLink();
+      removeLink();
       this.reset(true);
     } else {
       this.openLink();
     }
   };
-
-  private removeLink() {
-    if (!this.selection) {
-      return;
-    }
-
-    let content: Node = this.selection.anchorNode;
-
-    if (!content || !content.parentElement) {
-      return;
-    }
-
-    if (content.nodeType === 3) {
-      content = content.parentElement;
-    }
-
-    if (!content.nodeName && content.nodeName.toLowerCase() !== 'a') {
-      return;
-    }
-
-    content.parentElement.insertBefore(document.createTextNode(content.textContent), content);
-    content.parentElement.removeChild(content);
-  }
 
   private openLink() {
     this.toolbarActions = ToolbarActions.LINK;
