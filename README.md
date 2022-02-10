@@ -40,7 +40,7 @@ The library - a web component - needs as bare minimum property a reference to an
 
 It needs only one single top container set as editable and will maintain a list of children, paragraphs, that are themselves HTML elements.
 
-```
+```html
 <article contenteditable="true">
    <div>Lorem ipsum dolor sit amet.</div>
    <hr/>
@@ -64,7 +64,7 @@ You can use Stylo via CDN or by installing it locally.
 
 Add the following code to your page to load the editor.
 
-```
+```html
 <script type="module" src="https://unpkg.com/@papyrs/stylo@alpha/dist/stylo/stylo.esm.js"></script>
 ```
 
@@ -84,7 +84,7 @@ Afterwards you will need to load - i.e. import - the component in your applicati
 
 Lazy load the components with the help of a loader.
 
-```
+```js
 import { defineCustomElements } from '@papyrs/stylo/dist/loader';
 defineCustomElements();
 ```
@@ -93,7 +93,7 @@ defineCustomElements();
 
 Import the library.
 
-```
+```js
 import '@papyrs/stylo';
 ```
 
@@ -101,7 +101,7 @@ import '@papyrs/stylo';
 
 It is also possible to import only selected element, as for example the `<stylo-color />` component.
 
-```
+```js
 import { StyloColor } from '@papyrs/stylo/dist/components/stylo-color';
 customElements.define('stylo-color', StyloColor);
 ```
@@ -120,7 +120,7 @@ The component needs to find place at the same level because its UI elements are 
 
 Once added, provide a reference to your container.
 
-```
+```js
 // Your editable element
 const article = document.querySelector('article[contenteditable="true"]');
 
@@ -158,7 +158,7 @@ Stylo exposes interfaces and utilities to ease the development of new plugins. B
 
 For example, a plugin that generates a new paragraph that is itself a Web Component name `<hello-world/>` would look as following:
 
-```
+```js
 import {createEmptyElement, StyloPlugin, StyloPluginCreateParagraphsParams, transformParagraph} from '@papyrs/stylo';
 
 export const hr: StyloPlugin = {
@@ -209,7 +209,7 @@ Custom menus can be configured following the ([src/types/menu.ts](src/types/menu
 
 If for example you would like to display a custom menu for all `code` paragraphs, this can be done as following:
 
-```
+```js
 export const editorConfig: Partial<StyloConfig> = {
   menus: [
     {
