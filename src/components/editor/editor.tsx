@@ -220,9 +220,17 @@ export class Editor implements ComponentInterface {
       <Fragment>
         <stylo-add></stylo-add>
         <stylo-plugins></stylo-plugins>
-        {!this.mobile ?? <stylo-toolbar containerRef={this.containerRef}></stylo-toolbar>}
+        {this.renderToolbar()}
         {configStore.state.menus?.length && <stylo-menus></stylo-menus>}
       </Fragment>
     );
+  }
+
+  private renderToolbar() {
+    if (this.mobile) {
+      return undefined;
+    }
+
+    return <stylo-toolbar containerRef={this.containerRef}></stylo-toolbar>;
   }
 }
