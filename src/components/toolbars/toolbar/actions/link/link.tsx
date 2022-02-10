@@ -1,5 +1,6 @@
 import {Component, ComponentInterface, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import {ToolbarActions, ToolbarAnchorLink} from '../../../../../types/toolbar';
+import {createLink} from '../../../../../utils/link.utils';
 import {toHTMLElement} from '../../../../../utils/node.utils';
 import {findParagraph} from '../../../../../utils/paragraph.utils';
 
@@ -51,10 +52,7 @@ export class Link implements ComponentInterface {
       return;
     }
 
-    const fragment: DocumentFragment = range.extractContents();
-    const a: HTMLAnchorElement = this.createLinkElement(fragment);
-
-    range.insertNode(a);
+    createLink({range, linkUrl: this.linkUrl});
 
     const container: Node | undefined = findParagraph({
       element: range.commonAncestorContainer,
@@ -66,16 +64,6 @@ export class Link implements ComponentInterface {
     }
 
     this.linkCreated.emit(toHTMLElement(container));
-  }
-
-  private createLinkElement(fragment: DocumentFragment): HTMLAnchorElement {
-    const a: HTMLAnchorElement = document.createElement('a');
-    a.appendChild(fragment);
-    a.href = this.linkUrl;
-
-    a.rel = 'noopener noreferrer';
-
-    return a;
   }
 
   private handleLinkEnter($event: KeyboardEvent) {
