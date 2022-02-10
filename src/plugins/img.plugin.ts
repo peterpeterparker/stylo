@@ -1,5 +1,5 @@
 import {StyloPlugin, StyloPluginCreateParagraphsParams} from '../types/plugin';
-import {createEmptyElement, createUneditableDiv} from '../utils/create-element.utils';
+import {createEmptyElement} from '../utils/create-element.utils';
 import {transformParagraph} from '../utils/paragraph.utils';
 
 export const img: StyloPlugin = {
@@ -17,13 +17,10 @@ export const img: StyloPlugin = {
     img.src = imgUrl;
     img.setAttribute('loading', 'lazy');
 
-    const element: HTMLDivElement = createUneditableDiv();
-    element.append(img);
-
     const emptyDiv: HTMLElement = createEmptyElement({nodeName: 'div'});
 
     transformParagraph({
-      elements: [element, emptyDiv],
+      elements: [img, emptyDiv],
       paragraph,
       container,
       focus: 'last'
