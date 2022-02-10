@@ -9,6 +9,7 @@
 ### Fix
 
 - add link on Firefox
+- Android v12 keyboard appearing and disappearing at the same time
 - clone image on drag
 
 # 0.0.4-1 (2022-02-08)
