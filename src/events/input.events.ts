@@ -38,6 +38,13 @@ export class InputEvents {
       return;
     }
 
+    const {data} = $event;
+
+    // User is not typing, for example an image is moved
+    if (data === null) {
+      return;
+    }
+
     // User is typing text at the root of the container therefore the browser will create a text node a direct descendant of the contenteditable
     // This can happen when user types for example before or after an image
 

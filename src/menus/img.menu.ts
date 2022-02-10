@@ -27,14 +27,10 @@ const setImageWith = ({
 }: {
   size: '25%' | '50%' | '75%' | '100%';
   paragraph: HTMLElement;
-}) => {
-  const anchorImg: HTMLImageElement = paragraph.firstElementChild as HTMLImageElement;
-  anchorImg.style.setProperty('width', size);
-};
+}) => paragraph.style.setProperty('width', size);
 
 export const imgMenu: StyloMenu = {
-  match: ({paragraph}: {paragraph: HTMLElement}) =>
-    paragraph.firstElementChild?.nodeName.toLowerCase() === 'img',
+  match: ({paragraph}: {paragraph: HTMLElement}) => paragraph.nodeName.toLowerCase() === 'img',
   actions: [
     {
       text: 'img_width_original',

@@ -4,11 +4,13 @@
 
 - preserve styles when removing links (except Firefox)
 - prevent text nodes - i.e. leaves - as direct children of the content editable when user is typing
+- `<img/>` and `<hr/>` do not need to be wrapped in a parent `contenteditable=false` anymore
 
 ### Fix
 
 - add link on Firefox
 - Android v12 keyboard appearing and disappearing at the same time
+- clone image on drag
 
 # 0.0.4-1 (2022-02-08)
 
