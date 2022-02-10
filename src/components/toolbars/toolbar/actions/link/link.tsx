@@ -1,4 +1,3 @@
-import {getSelection} from '@deckdeckgo/utils';
 import {Component, ComponentInterface, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import {ToolbarActions, ToolbarAnchorLink} from '../../../../../types/toolbar';
 import {toHTMLElement} from '../../../../../utils/node.utils';
@@ -42,64 +41,23 @@ export class Link implements ComponentInterface {
       return;
     }
 
+    const {range} = this.anchorLink;
+
+    if (!range) {
+      return;
+    }
+
     if (!this.linkUrl || this.linkUrl.length <= 0) {
       return;
     }
 
-    const selection: Selection | null = getSelection();
-    let targetContainer: Node = this.anchorLink.range.commonAncestorContainer
-      ? this.anchorLink.range.commonAncestorContainer
-      : selection?.anchorNode;
+    const fragment: DocumentFragment = range.extractContents();
+    const a: HTMLAnchorElement = this.createLinkElement(fragment);
 
-    if (!targetContainer) {
-      return;
-    }
-
-    // If node text
-    if (
-      targetContainer.nodeType === Node.TEXT_NODE ||
-      targetContainer.nodeType === Node.COMMENT_NODE
-    ) {
-      targetContainer = targetContainer.parentElement;
-    }
-
-    const target: Node = Array.from(targetContainer.childNodes).find((node: Node) => {
-      return node.textContent && node.textContent.trim().indexOf(this.anchorLink.text) > -1;
-    });
-
-    if (!target) {
-      return;
-    }
-
-    if (target.nodeType === 3) {
-      const index: number = target.textContent.indexOf(this.anchorLink.text);
-
-      const textBefore: string = index > -1 ? target.textContent.substr(0, index) : null;
-      const textAfter: string =
-        index + this.anchorLink.text.length > -1
-          ? target.textContent.substr(index + this.anchorLink.text.length)
-          : null;
-
-      if (textBefore) {
-        target.parentElement.insertBefore(document.createTextNode(textBefore), target);
-      }
-
-      const a: HTMLAnchorElement = this.createLinkElement();
-      target.parentElement.insertBefore(a, target);
-
-      if (textAfter) {
-        target.parentElement.insertBefore(document.createTextNode(textAfter), target);
-      }
-
-      target.parentElement.removeChild(target);
-    } else {
-      const a: HTMLAnchorElement = this.createLinkElement();
-
-      target.parentElement.replaceChild(a, target);
-    }
+    range.insertNode(a);
 
     const container: Node | undefined = findParagraph({
-      element: targetContainer,
+      element: range.commonAncestorContainer,
       container: this.containerRef
     });
 
@@ -110,12 +68,9 @@ export class Link implements ComponentInterface {
     this.linkCreated.emit(toHTMLElement(container));
   }
 
-  private createLinkElement(): HTMLAnchorElement {
+  private createLinkElement(fragment: DocumentFragment): HTMLAnchorElement {
     const a: HTMLAnchorElement = document.createElement('a');
-    const linkText: Text = document.createTextNode(this.anchorLink.text);
-
-    a.appendChild(linkText);
-    a.title = this.anchorLink.text;
+    a.appendChild(fragment);
     a.href = this.linkUrl;
 
     a.rel = 'noopener noreferrer';

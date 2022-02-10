@@ -66,5 +66,4 @@ export enum ToolbarFontSize {
 
 export interface ToolbarAnchorLink {
   range: Range;
-  text: string;
 }

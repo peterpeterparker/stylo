@@ -266,8 +266,7 @@ export class Toolbar implements ComponentInterface {
     if (selection.rangeCount > 0) {
       const range: Range = selection.getRangeAt(0);
       this.anchorLink = {
-        range: range,
-        text: selection.toString()
+        range: range.cloneRange()
       };
 
       this.setToolbarAnchorPosition();
