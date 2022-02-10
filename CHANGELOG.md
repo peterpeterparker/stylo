@@ -8,6 +8,7 @@
 ### Fix
 
 - add link on Firefox
+- clone image on drag
 
 # 0.0.4-1 (2022-02-08)
 
