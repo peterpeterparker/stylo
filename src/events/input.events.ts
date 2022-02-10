@@ -1,4 +1,6 @@
+import {moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
+import {createNewParagraph} from '../utils/paragraph.utils';
 import {
   BeforeInputKey,
   beforeInputTransformer,
@@ -18,8 +20,37 @@ export class InputEvents {
   }
 
   private onBeforeInput = async ($event: InputEvent) => {
+    await this.preventTextLeaves($event);
+
     await this.transformInput($event);
   };
+
+  private async preventTextLeaves($event: InputEvent) {
+    const anchorNode: Node | undefined | null = getSelection()?.anchorNode;
+
+    if (!containerStore.state.ref.isEqualNode(anchorNode)) {
+      return;
+    }
+
+    const range: Range | undefined | null = getSelection()?.getRangeAt(0);
+
+    if (!range) {
+      return;
+    }
+
+    // User is typing text at the root of the container therefore the browser will create a text node a direct descendant of the contenteditable
+    // This can happen when user types for example before or after an image
+
+    $event.preventDefault();
+
+    const div: Node | undefined = await createNewParagraph({
+      container: containerStore.state.ref,
+      range,
+      text: $event.data
+    });
+
+    moveCursorToEnd(div);
+  }
 
   private async transformInput($event: InputEvent) {
     const {data} = $event;
