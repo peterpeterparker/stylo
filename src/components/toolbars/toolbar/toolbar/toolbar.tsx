@@ -32,6 +32,7 @@ import {
 } from '../../../../types/toolbar';
 import {execCommand} from '../../../../utils/execcommand.utils';
 import {execCommandNative} from '../../../../utils/execcommnad-native.utils';
+import {removeLink} from '../../../../utils/link.utils';
 import {toHTMLElement} from '../../../../utils/node.utils';
 import {findParagraph, isParagraph} from '../../../../utils/paragraph.utils';
 import {
@@ -44,7 +45,6 @@ import {
   getUnderline
 } from '../../../../utils/toolbar.utils';
 import {Style} from '../actions/style/style';
-import {removeLink} from '../../../../utils/link.utils';
 
 @Component({
   tag: 'stylo-toolbar',

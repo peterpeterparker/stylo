@@ -26,7 +26,7 @@ export const removeLink = () => {
   const fragment: DocumentFragment = range.extractContents();
 
   container.parentElement.replaceChild(fragment, container);
-}
+};
 
 const removeFirefoxLink = () => {
   const selection: Selection | null = getSelection();
@@ -38,7 +38,7 @@ const removeFirefoxLink = () => {
 
   container.parentElement.insertBefore(document.createTextNode(container.textContent), container);
   container.parentElement.removeChild(container);
-}
+};
 
 const createLinkElement = ({
   fragment,

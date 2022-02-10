@@ -42,13 +42,13 @@ It needs only one single top container set as editable and will maintain a list 
 
 ```html
 <article contenteditable="true">
-   <div>Lorem ipsum dolor sit amet.</div>
-   <hr/>
-   <ul>
-      <li>Hello</li>
-      <li>World</li>
-   </ul>
-   <div>In ac tortor suscipit.</div>
+  <div>Lorem ipsum dolor sit amet.</div>
+  <hr />
+  <ul>
+    <li>Hello</li>
+    <li>World</li>
+  </ul>
+  <div>In ac tortor suscipit.</div>
 </article>
 ```
 
@@ -85,7 +85,7 @@ Afterwards you will need to load - i.e. import - the component in your applicati
 Lazy load the components with the help of a loader.
 
 ```js
-import { defineCustomElements } from '@papyrs/stylo/dist/loader';
+import {defineCustomElements} from '@papyrs/stylo/dist/loader';
 defineCustomElements();
 ```
 
@@ -102,7 +102,7 @@ import '@papyrs/stylo';
 It is also possible to import only selected element, as for example the `<stylo-color />` component.
 
 ```js
-import { StyloColor } from '@papyrs/stylo/dist/components/stylo-color';
+import {StyloColor} from '@papyrs/stylo/dist/components/stylo-color';
 customElements.define('stylo-color', StyloColor);
 ```
 
@@ -159,7 +159,12 @@ Stylo exposes interfaces and utilities to ease the development of new plugins. B
 For example, a plugin that generates a new paragraph that is itself a Web Component name `<hello-world/>` would look as following:
 
 ```js
-import {createEmptyElement, StyloPlugin, StyloPluginCreateParagraphsParams, transformParagraph} from '@papyrs/stylo';
+import {
+  createEmptyElement,
+  StyloPlugin,
+  StyloPluginCreateParagraphsParams,
+  transformParagraph
+} from '@papyrs/stylo';
 
 export const hr: StyloPlugin = {
   text: 'My Hello World',
@@ -168,18 +173,18 @@ export const hr: StyloPlugin = {
     </svg>
   `,
   createParagraphs: async ({container, paragraph}: StyloPluginCreateParagraphsParams) => {
-     // Create your Web Component or HTML Element
-     const helloWorld = document.createElement('hello-world');
+    // Create your Web Component or HTML Element
+    const helloWorld = document.createElement('hello-world');
 
-     // Set properties, attributes or styles
-     helloWorld.setAttributes('yolo', 'true');
+    // Set properties, attributes or styles
+    helloWorld.setAttributes('yolo', 'true');
 
-     transformParagraph({
+    transformParagraph({
       elements: [helloWorld, createEmptyElement({nodeName: 'div'})],
       paragraph,
       container,
       focus: 'first'
-    })
+    });
   }
 };
 ```
@@ -213,8 +218,7 @@ If for example you would like to display a custom menu for all `code` paragraphs
 export const editorConfig: Partial<StyloConfig> = {
   menus: [
     {
-      match: ({paragraph}: {paragraph: HTMLElement}) =>
-        paragraph.nodeName.toLowerCase() === 'code',
+      match: ({paragraph}: {paragraph: HTMLElement}) => paragraph.nodeName.toLowerCase() === 'code',
       actions: [
         {
           text: 'Edit code',

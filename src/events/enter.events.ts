@@ -7,7 +7,8 @@ import {
   appendEmptyText,
   createEmptyParagraph,
   createNewEmptyLine,
-  findParagraph, isParagraphCode,
+  findParagraph,
+  isParagraphCode,
   isParagraphList,
   replaceParagraphFirstChild
 } from '../utils/paragraph.utils';
