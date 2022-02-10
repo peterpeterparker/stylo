@@ -4,6 +4,7 @@
 
 - preserve styles when removing links (except Firefox)
 - prevent text nodes - i.e. leaves - as direct children of the content editable when user is typing
+- `<img/>` and `<hr/>` do not need to be wrapped in a parent `contenteditable=false` anymore
 
 ### Fix
 
