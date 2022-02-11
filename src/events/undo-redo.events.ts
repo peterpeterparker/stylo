@@ -321,13 +321,19 @@ export class UndoRedoEvents {
       )
     );
 
-    removedParagraphs.forEach(({paragraph}: RemovedParagraph, index: number) =>
-      changes.push({
-        outerHTML: this.cleanOuterHTML(paragraph),
+    removedParagraphs.forEach(({paragraph}: RemovedParagraph, index: number) => {
+      const elementIndex: number = index + (Number.isFinite(lowerIndex) ? lowerIndex : 0);
+
+      const undoParagraph: UndoUpdateParagraphs | undefined = this.undoUpdateParagraphs.find(({index}: UndoUpdateParagraphs) => index === elementIndex);
+
+      // cleanOuterHTML is only there as fallback, we should find the previous outerHTML value in undoUpdateParagraphs
+
+      return changes.push({
+        outerHTML: undoParagraph?.outerHTML || this.cleanOuterHTML(paragraph),
         mutation: 'remove',
-        index: index + (Number.isFinite(lowerIndex) ? lowerIndex : 0)
-      })
-    );
+        index: elementIndex
+      });
+    });
 
     return changes;
   }
