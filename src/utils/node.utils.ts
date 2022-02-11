@@ -13,3 +13,44 @@ export const elementIndex = (element: HTMLElement): number => {
 export const nodeIndex = (node: Node): number => {
   return Array.from(node.parentNode?.childNodes || []).indexOf(node as ChildNode);
 };
+
+export const nodeDepths = ({target, paragraph}: {target: Node; paragraph: Node | undefined}) => {
+  const depths: number[] = [nodeIndex(target)];
+
+  if (!paragraph) {
+    return depths;
+  }
+
+  let parentElement: HTMLElement = target.parentElement;
+
+  while (parentElement && !parentElement.isSameNode(paragraph)) {
+    depths.push(nodeIndex(parentElement));
+    parentElement = parentElement.parentElement;
+  }
+
+  return depths.reverse();
+};
+
+export const findNodeAtDepths = ({
+  parent,
+  indexDepths
+}: {
+  parent: Node | undefined;
+  indexDepths: number[];
+}): Node | undefined => {
+  const childNode: ChildNode | undefined = (
+    parent?.childNodes ? Array.from(parent?.childNodes) : []
+  )[indexDepths[0]];
+
+  if (!childNode) {
+    return undefined;
+  }
+
+  const [, ...rest] = indexDepths;
+
+  if (rest?.length <= 0) {
+    return childNode;
+  }
+
+  return findNodeAtDepths({parent: childNode, indexDepths: rest});
+};
