@@ -11,6 +11,8 @@
 - add link on Firefox
 - Android v12 keyboard appearing and disappearing at the same time
 - clone image on drag
+- remove target paragraph on `deleteContentBackward` ("avoid text to get title style when deleting and replacing it")
+- redo deleted paragraphs content
 
 # 0.0.4-1 (2022-02-08)
 
