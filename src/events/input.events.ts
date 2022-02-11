@@ -1,6 +1,6 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
-import {createNewParagraph} from '../utils/paragraph.utils';
+import {createNewParagraph, isStartNode} from '../utils/paragraph.utils';
 import {
   BeforeInputKey,
   beforeInputTransformer,
@@ -21,6 +21,8 @@ export class InputEvents {
 
   private onBeforeInput = async ($event: InputEvent) => {
     await this.preventTextLeaves($event);
+
+    await this.deleteContentBackward($event);
 
     await this.transformInput($event);
   };
@@ -57,6 +59,33 @@ export class InputEvents {
     });
 
     moveCursorToEnd(div);
+  }
+
+  private async deleteContentBackward($event: InputEvent) {
+    const {inputType} = $event;
+
+    if (!['deleteContentBackward'].includes(inputType)) {
+      return;
+    }
+
+    const range: Range | undefined | null = getSelection()?.getRangeAt(0);
+
+    // If the commonAncestorContainer is the container then we have selected multiple paragraphs
+    if (!containerStore.state.ref.isEqualNode(range?.commonAncestorContainer)) {
+      return;
+    }
+
+    // We don't have a selection that starts at the begin of an element and paragraph
+    if (range.startOffset > 0) {
+      return;
+    }
+
+    // We don't have a selection that starts at the begin of an paragraph
+    if (!isStartNode({element: range.startContainer, container: containerStore.state.ref})) {
+      return;
+    }
+
+    range.deleteContents();
   }
 
   private async transformInput($event: InputEvent) {

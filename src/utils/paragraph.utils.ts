@@ -1,13 +1,13 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
 import {createEmptyElement} from './create-element.utils';
-import {isTextNode, toHTMLElement} from './node.utils';
+import {isTextNode, nodeIndex, toHTMLElement} from './node.utils';
 
 export const findParagraph = ({
   element,
   container
 }: {
   element: Node;
-  container: Node;
+  container: Node | undefined;
 }): Node | undefined => {
   if (!container) {
     return undefined;
@@ -35,7 +35,52 @@ export const findParagraph = ({
   return findParagraph({element: parentElement, container});
 };
 
-export const isParagraph = ({element, container}: {element: Node; container: Node}): boolean => {
+/**
+ * <article>
+ *   <div>
+ *     <span>
+ *       => isStartNode = true
+ *
+ * <article>
+ *   <div>
+ *     Hello <span>
+ *             => isStartNode = false
+ */
+export const isStartNode = ({
+  element,
+  container
+}: {
+  element: Node | undefined;
+  container: Node | undefined;
+}): boolean => {
+  if (!container) {
+    return false;
+  }
+
+  // Just in case
+  if (container.nodeName.toUpperCase() === 'HTML' || container.nodeName.toUpperCase() === 'BODY') {
+    return false;
+  }
+
+  if (isParagraph({element, container})) {
+    return true;
+  }
+
+  // If node is the direct first child of it's parent, we can check the parent until we get the container
+  if (nodeIndex(element) === 0) {
+    return isStartNode({element: element.parentElement, container});
+  }
+
+  return false;
+};
+
+export const isParagraph = ({
+  element,
+  container
+}: {
+  element: Node | undefined;
+  container: Node;
+}): boolean => {
   if (!element) {
     return false;
   }
