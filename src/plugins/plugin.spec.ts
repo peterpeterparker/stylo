@@ -60,11 +60,9 @@ describe('plugins', () => {
   it('should transform to h3', () => expectTransform({plugin: h3, firstNodeName: 'h3'}));
 
   it('should transform to hr', () => {
-    expectTransform({plugin: hr, firstNodeName: 'div'});
+    expectTransform({plugin: hr, firstNodeName: 'hr'});
 
-    const {firstChild, lastChild} = container;
-
-    expect(firstChild.firstChild.nodeName.toLowerCase()).toEqual('hr');
+    const {lastChild} = container;
 
     expectEmpty(lastChild);
   });
@@ -91,15 +89,14 @@ describe('plugins', () => {
 
     expectTransform({
       plugin: img,
-      firstNodeName: 'div',
+      firstNodeName: 'img',
       files: fileList
     });
 
     const {firstChild, lastChild} = container;
 
-    expect(firstChild.firstChild.nodeName.toLowerCase()).toEqual('img');
-    expect(firstChild.firstChild.hasAttribute('src')).toBeTruthy();
-    expect(firstChild.firstChild.getAttribute('loading')).toEqual('lazy');
+    expect(firstChild.hasAttribute('src')).toBeTruthy();
+    expect(firstChild.getAttribute('loading')).toEqual('lazy');
 
     expectEmpty(lastChild);
   });
