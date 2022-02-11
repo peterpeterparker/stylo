@@ -5,7 +5,8 @@ import {
   isParagraphCode,
   isParagraphEmpty,
   isParagraphList,
-  isParagraphNotEditable
+  isParagraphNotEditable,
+  isStartNode
 } from './paragraph.utils';
 
 describe('paragraph utils', () => {
@@ -63,6 +64,38 @@ describe('paragraph utils', () => {
     const expectedParagraph = findParagraph({container, element: text});
 
     expect(expectedParagraph).not.toBeUndefined();
+  });
+
+  test('should be a start node', () => {
+    const app = createDiv({depth: 0});
+    const container = createDiv({depth: 1});
+    const paragraph = createDiv({depth: 2});
+    const text = createDiv({depth: 3});
+
+    paragraph.append(text);
+    container.append(paragraph);
+    app.append(container);
+
+    const expectedParagraph = isStartNode({container, element: text});
+
+    expect(expectedParagraph).toBeTruthy();
+  });
+
+  test('should not be a start node', () => {
+    const app = createDiv({depth: 0});
+    const container = createDiv({depth: 1});
+    const paragraph = createDiv({depth: 2});
+    const text = createDiv({depth: 3});
+    const span = createDiv({depth: 3});
+
+    paragraph.append(text);
+    paragraph.append(span);
+    container.append(paragraph);
+    app.append(container);
+
+    const expectedParagraph = isStartNode({container, element: span});
+
+    expect(expectedParagraph).toBeFalsy();
   });
 
   test('should be a paragraph', () => {
