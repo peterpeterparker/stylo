@@ -1,3 +1,9 @@
+# 0.0.5-1 (2022-02-12)
+
+### Fix
+
+- "DOMException: Failed to execute 'setStart' on 'Range': The offset 7 is larger than the node's length (1)."
+
 # 0.0.5 (2022-02-12)
 
 ### Features

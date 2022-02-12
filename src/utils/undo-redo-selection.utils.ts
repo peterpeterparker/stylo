@@ -74,6 +74,11 @@ export const redoSelection = ({
     return;
   }
 
+  // Prevent error "DOMException: Failed to execute 'setStart' on 'Range': The offset 7 is larger than the node's length (1)."
+  if (startNode.textContent.length < startOffset || endNode.textContent.length < endOffset) {
+    return
+  }
+
   const range: Range = document.createRange();
 
   if (!reverse) {
