@@ -37,16 +37,16 @@ interface UndoUpdateParagraphs extends UndoRedoUpdateParagraph {
 export class UndoRedoEvents {
   private observer: MutationObserver | undefined;
 
-  private undoInput: UndoRedoInput | undefined = undefined;
+  private undoInputs: UndoRedoInput[] | undefined = undefined;
   private undoUpdateParagraphs: UndoUpdateParagraphs[] = [];
   private undoSelection: UndoRedoSelection | undefined = undefined;
 
-  private readonly debounceUpdateInput: () => void = debounce(() => this.stackUndoInput(), 350);
+  private readonly debounceUpdateInputs: () => void = debounce(() => this.stackUndoInputs(), 350);
 
   private unsubscribe;
 
   init() {
-    this.undoInput = undefined;
+    this.undoInputs = undefined;
     this.undoUpdateParagraphs = [];
 
     this.observer = new MutationObserver(this.onMutation);
@@ -69,7 +69,7 @@ export class UndoRedoEvents {
       if (observe) {
         // We re-active the selection as if we would have selected a paragraphs because we might need to record next update
         this.copySelectedParagraphs({filterEmptySelection: false});
-        this.undoInput = undefined;
+        this.undoInputs = undefined;
 
         this.observe();
         return;
@@ -101,7 +101,7 @@ export class UndoRedoEvents {
     const {key, ctrlKey, metaKey, shiftKey} = $event;
 
     if (key === 'Enter') {
-      this.stackUndoInput();
+      this.stackUndoInputs();
       return;
     }
 
@@ -143,19 +143,22 @@ export class UndoRedoEvents {
     await this.undoRedo({undoRedo: redo});
   }
 
-  private stackUndoInput() {
+  private stackUndoInputs() {
     this.copySelectedParagraphs({filterEmptySelection: false});
 
-    if (!this.undoInput) {
+    if (!this.undoInputs) {
       return;
     }
 
-    stackUndoInput({
-      data: this.undoInput,
-      container: containerStore.state.ref
-    });
+    // TODO: no iteration - block in utils
+    for (const undoInput of this.undoInputs) {
+      stackUndoInput({
+        data: undoInput,
+        container: containerStore.state.ref
+      });
+    }
 
-    this.undoInput = undefined;
+    this.undoInputs = undefined;
   }
 
   private async undoRedo({undoRedo}: {undoRedo: () => Promise<void>}) {
@@ -236,39 +239,43 @@ export class UndoRedoEvents {
     }));
   }
 
-  private onCharacterDataMutation(mutations: MutationRecord[]) {
-    const mutation: MutationRecord | undefined = mutations[0];
+  private onCharacterDataMutations(mutations: MutationRecord[]) {
+    const characterMutations: MutationRecord[] = mutations.filter(({oldValue}: MutationRecord) => oldValue !== null);
 
-    // Not a character mutation
-    if (!mutation || !mutation.oldValue) {
+    // No character mutations
+    if (characterMutations.length <= 0) {
       return;
     }
 
-    if (!this.undoInput) {
-      const target: Node = mutation.target;
-
-      const newValue: string = target.nodeValue;
-
-      const paragraph: HTMLElement | undefined = toHTMLElement(
-        findParagraph({element: target, container: containerStore.state.ref})
-      );
-
-      if (!paragraph || !target.parentNode) {
-        return;
-      }
-
-      // We find the list of node indexes of the parent of the modified text
-      const depths: number[] = nodeDepths({target, paragraph});
-
-      this.undoInput = {
-        oldValue: mutation.oldValue,
-        offset: caretPosition({target}) + (mutation.oldValue.length - newValue.length),
-        index: elementIndex(paragraph),
-        indexDepths: depths
-      };
+    if (!this.undoInputs) {
+      this.undoInputs = characterMutations.map((mutation: MutationRecord) => this.toUndoInput(mutation));
     }
 
-    this.debounceUpdateInput();
+    this.debounceUpdateInputs();
+  }
+
+  private toUndoInput(mutation: MutationRecord): UndoRedoInput {
+    const target: Node = mutation.target;
+
+    const newValue: string = target.nodeValue;
+
+    const paragraph: HTMLElement | undefined = toHTMLElement(
+      findParagraph({element: target, container: containerStore.state.ref})
+    );
+
+    if (!paragraph || !target.parentNode) {
+      return;
+    }
+
+    // We find the list of node indexes of the parent of the modified text
+    const depths: number[] = nodeDepths({target, paragraph});
+
+    return {
+      oldValue: mutation.oldValue,
+      offset: caretPosition({target}) + (mutation.oldValue.length - newValue.length),
+      index: elementIndex(paragraph),
+      indexDepths: depths
+    };
   }
 
   private onMutation = (mutations: MutationRecord[]) => {
@@ -290,7 +297,7 @@ export class UndoRedoEvents {
 
     this.onAttributesMutation(mutations);
 
-    this.onCharacterDataMutation(mutations);
+    this.onCharacterDataMutations(mutations);
   };
 
   /**
@@ -391,7 +398,7 @@ export class UndoRedoEvents {
 
     this.copySelectedParagraphs({filterEmptySelection: true});
 
-    this.undoInput = undefined;
+    this.undoInputs = undefined;
 
     return filterUndoUpdateParagraphs;
   }
