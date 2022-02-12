@@ -1,13 +1,15 @@
-import {moveCursorToEnd, moveCursorToOffset} from '@deckdeckgo/utils';
+import {moveCursorToOffset} from '@deckdeckgo/utils';
 import undoRedoStore from '../stores/undo-redo.store';
 import {
   UndoRedoAddRemoveParagraph,
   UndoRedoChange,
   UndoRedoChanges,
   UndoRedoInput,
+  UndoRedoSelection,
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
-import {isTextNode, toHTMLElement} from './node.utils';
+import {findNodeAtDepths, isTextNode, toHTMLElement} from './node.utils';
+import {redoSelection} from './undo-redo-selection.utils';
 
 export const stackUndoInput = ({
   container,
@@ -36,11 +38,13 @@ export const stackUndoInput = ({
 export const stackUndoParagraphs = ({
   container,
   addRemoveParagraphs,
-  updateParagraphs
+  updateParagraphs,
+  selection
 }: {
   container: HTMLElement;
   addRemoveParagraphs: UndoRedoAddRemoveParagraph[];
   updateParagraphs: UndoRedoUpdateParagraph[];
+  selection?: UndoRedoSelection;
 }) => {
   if (addRemoveParagraphs.length <= 0 && updateParagraphs.length <= 0) {
     return;
@@ -68,7 +72,8 @@ export const stackUndoParagraphs = ({
         target: container,
         data: updateParagraphs
       }
-    ]
+    ],
+    selection
   };
 
   undoRedoStore.state.undo.push(changes);
@@ -125,10 +130,10 @@ const undoRedo = async ({
     return;
   }
 
-  const {changes}: UndoRedoChanges = undoChanges;
+  const {changes, selection}: UndoRedoChanges = undoChanges;
 
   const promises: Promise<UndoRedoChange>[] = changes.map((undoChange: UndoRedoChange) =>
-    undoRedoChange({undoChange})
+    undoRedoChange({undoChange, selection})
   );
   const redoChanges: UndoRedoChange[] = await Promise.all(promises);
 
@@ -138,9 +143,11 @@ const undoRedo = async ({
 };
 
 const undoRedoChange = async ({
-  undoChange
+  undoChange,
+  selection
 }: {
   undoChange: UndoRedoChange;
+  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {type} = undoChange;
 
@@ -149,10 +156,10 @@ const undoRedoChange = async ({
   }
 
   if (type === 'paragraph') {
-    return undoRedoParagraph({undoChange});
+    return undoRedoParagraph({undoChange, selection});
   }
 
-  return undoRedoUpdate({undoChange});
+  return undoRedoUpdate({undoChange, selection});
 };
 
 const undoRedoInput = async ({
@@ -168,31 +175,7 @@ const undoRedoInput = async ({
 
   const paragraph: Element | undefined = container.children[index];
 
-  const findInputNode = ({
-    parent,
-    indexDepths
-  }: {
-    parent: Node | undefined;
-    indexDepths: number[];
-  }): Node | undefined => {
-    const childNode: ChildNode | undefined = (
-      parent?.childNodes ? Array.from(parent?.childNodes) : []
-    )[indexDepths[0]];
-
-    if (!childNode) {
-      return undefined;
-    }
-
-    const [, ...rest] = indexDepths;
-
-    if (rest?.length <= 0) {
-      return childNode;
-    }
-
-    return findInputNode({parent: childNode, indexDepths: rest});
-  };
-
-  let text: Node | undefined = findInputNode({parent: paragraph, indexDepths});
+  let text: Node | undefined = findNodeAtDepths({parent: paragraph, indexDepths});
 
   if (!text || !isTextNode(text)) {
     // We try to find sibling in case the parent does not yet exist. If we find it, we can replicate such parent for the new text.
@@ -205,7 +188,7 @@ const undoRedoInput = async ({
         ? text
           ? text.parentNode
           : undefined
-        : findInputNode({parent: paragraph, indexDepths: [...cloneIndexDepths]});
+        : findNodeAtDepths({parent: paragraph, indexDepths: [...cloneIndexDepths]});
 
     if (!parent && isTextNode(toHTMLElement(paragraph)?.lastChild)) {
       text = toHTMLElement(paragraph).lastChild;
@@ -243,9 +226,11 @@ const undoRedoInput = async ({
 };
 
 const undoRedoParagraph = async ({
-  undoChange
+  undoChange,
+  selection
 }: {
   undoChange: UndoRedoChange;
+  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
@@ -285,6 +270,8 @@ const undoRedoParagraph = async ({
     }
   }
 
+  redoSelection({container, selection});
+
   return {
     ...undoChange,
     data: to
@@ -292,9 +279,11 @@ const undoRedoParagraph = async ({
 };
 
 const undoRedoUpdate = async ({
-  undoChange
+  undoChange,
+  selection
 }: {
   undoChange: UndoRedoChange;
+  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
@@ -310,11 +299,12 @@ const undoRedoUpdate = async ({
     const {previousOuterHTML} = await updateNode({
       container,
       index,
-      outerHTML,
-      moveCursor: paragraphs.length === 1
+      outerHTML
     });
     to.push({index, outerHTML: previousOuterHTML});
   }
+
+  redoSelection({container, selection});
 
   return {
     ...undoChange,
@@ -337,13 +327,12 @@ const insertNode = ({
   container: HTMLElement;
 }): Promise<void> =>
   new Promise<void>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      changeObserver.disconnect();
-
-      moveCursorToEnd(mutations[0].addedNodes[0]);
-
-      resolve();
-    });
+    const changeObserver: MutationObserver = new MutationObserver(
+      (_mutations: MutationRecord[]) => {
+        changeObserver.disconnect();
+        resolve();
+      }
+    );
 
     changeObserver.observe(container, {childList: true, subtree: true});
 
@@ -371,28 +360,23 @@ const removeNode = ({container, index}: {index: number; container: HTMLElement})
 const updateNode = ({
   container,
   index,
-  outerHTML,
-  moveCursor
+  outerHTML
 }: {
   outerHTML: string;
   index: number;
   container: HTMLElement;
-  moveCursor: boolean;
 }): Promise<{previousOuterHTML: string}> =>
   new Promise<{previousOuterHTML: string}>((resolve) => {
     const paragraph: Element = container.children[Math.min(index, container.children.length - 1)];
 
     const previousOuterHTML: string = paragraph.outerHTML;
 
-    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      changeObserver.disconnect();
-
-      if (moveCursor) {
-        moveCursorToEnd(mutations[0].addedNodes[0]);
+    const changeObserver: MutationObserver = new MutationObserver(
+      (_mutations: MutationRecord[]) => {
+        changeObserver.disconnect();
+        resolve({previousOuterHTML});
       }
-
-      resolve({previousOuterHTML});
-    });
+    );
 
     changeObserver.observe(container, {childList: true, subtree: true});
 

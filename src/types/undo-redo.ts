@@ -22,6 +22,17 @@ export interface UndoRedoChange {
   data: UndoRedoInput | UndoRedoAddRemoveParagraph[] | UndoRedoUpdateParagraph[];
 }
 
+export interface UndoRedoSelection {
+  startIndex: number;
+  startIndexDepths: number[];
+  startOffset: number;
+  endIndex: number;
+  endIndexDepths: number[];
+  endOffset: number;
+  reverse: boolean;
+}
+
 export interface UndoRedoChanges {
   changes: UndoRedoChange[];
+  selection?: UndoRedoSelection;
 }

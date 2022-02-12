@@ -3,8 +3,9 @@
 ### Features
 
 - preserve styles when removing links (except Firefox)
-- prevent text nodes - i.e. leaves - as direct children of the content editable when user is typing
+- prevent creation of text nodes - i.e. leaves - when user is typing (direct children of the content editable should all be HTML elements)
 - `<img/>` and `<hr/>` do not need to be wrapped in a parent `contenteditable=false` anymore
+- redo user selection after "undo-redo"
 
 ### Fix
 

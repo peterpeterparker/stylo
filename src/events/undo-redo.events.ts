@@ -5,9 +5,10 @@ import undoRedoStore from '../stores/undo-redo.store';
 import {
   UndoRedoAddRemoveParagraph,
   UndoRedoInput,
+  UndoRedoSelection,
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
-import {elementIndex, nodeIndex, toHTMLElement} from '../utils/node.utils';
+import {elementIndex, nodeDepths, toHTMLElement} from '../utils/node.utils';
 import {findParagraph} from '../utils/paragraph.utils';
 import {
   filterAttributesMutations,
@@ -19,6 +20,7 @@ import {
   findUpdatedParagraphs,
   RemovedParagraph
 } from '../utils/paragraphs.utils';
+import {toUndoRedoSelection} from '../utils/undo-redo-selection.utils';
 import {
   nextRedoChanges,
   nextUndoChanges,
@@ -37,6 +39,7 @@ export class UndoRedoEvents {
 
   private undoInput: UndoRedoInput | undefined = undefined;
   private undoUpdateParagraphs: UndoUpdateParagraphs[] = [];
+  private undoSelection: UndoRedoSelection | undefined = undefined;
 
   private readonly debounceUpdateInput: () => void = debounce(() => this.stackUndoInput(), 350);
 
@@ -56,6 +59,8 @@ export class UndoRedoEvents {
     containerStore.state.ref?.addEventListener('mousedown', this.onMouseTouchDown);
     containerStore.state.ref?.addEventListener('touchstart', this.onMouseTouchDown);
     containerStore.state.ref?.addEventListener('snapshotParagraph', this.onSnapshotParagraph);
+
+    document.addEventListener('selectionchange', this.onSelectionChange);
 
     document.addEventListener('toolbarActivated', this.onToolbarActivated);
     document.addEventListener('menuActivated', this.onMenuActivated);
@@ -83,6 +88,8 @@ export class UndoRedoEvents {
     containerStore.state.ref?.removeEventListener('mousedown', this.onMouseTouchDown);
     containerStore.state.ref?.removeEventListener('touchstart', this.onMouseTouchDown);
     containerStore.state.ref?.removeEventListener('snapshotParagraph', this.onSnapshotParagraph);
+
+    document.removeEventListener('selectionchange', this.onSelectionChange);
 
     document.removeEventListener('toolbarActivated', this.onToolbarActivated);
     document.removeEventListener('menuActivated', this.onMenuActivated);
@@ -112,6 +119,9 @@ export class UndoRedoEvents {
   private onKeyup = () => {
     this.onEventUpdateParagraphs(getSelection()?.anchorNode);
   };
+
+  private onSelectionChange = () =>
+    (this.undoSelection = toUndoRedoSelection(containerStore.state.ref));
 
   private async undo($event: KeyboardEvent) {
     $event.preventDefault();
@@ -248,19 +258,13 @@ export class UndoRedoEvents {
       }
 
       // We find the list of node indexes of the parent of the modified text
-      const depths: number[] = [nodeIndex(target)];
-
-      let parentElement: HTMLElement = target.parentElement;
-      while (!parentElement.isSameNode(paragraph)) {
-        depths.push(nodeIndex(parentElement));
-        parentElement = parentElement.parentElement;
-      }
+      const depths: number[] = nodeDepths({target, paragraph});
 
       this.undoInput = {
         oldValue: mutation.oldValue,
         offset: caretPosition({target}) + (mutation.oldValue.length - newValue.length),
         index: elementIndex(paragraph),
-        indexDepths: depths.reverse()
+        indexDepths: depths
       };
     }
 
@@ -275,7 +279,8 @@ export class UndoRedoEvents {
     stackUndoParagraphs({
       container: containerStore.state.ref,
       addRemoveParagraphs,
-      updateParagraphs
+      updateParagraphs,
+      selection: this.undoSelection
     });
 
     // We assume that all paragraphs updates do contain attributes and input changes
@@ -324,7 +329,9 @@ export class UndoRedoEvents {
     removedParagraphs.forEach(({paragraph}: RemovedParagraph, index: number) => {
       const elementIndex: number = index + (Number.isFinite(lowerIndex) ? lowerIndex : 0);
 
-      const undoParagraph: UndoUpdateParagraphs | undefined = this.undoUpdateParagraphs.find(({index}: UndoUpdateParagraphs) => index === elementIndex);
+      const undoParagraph: UndoUpdateParagraphs | undefined = this.undoUpdateParagraphs.find(
+        ({index}: UndoUpdateParagraphs) => index === elementIndex
+      );
 
       // cleanOuterHTML is only there as fallback, we should find the previous outerHTML value in undoUpdateParagraphs
 
@@ -415,7 +422,8 @@ export class UndoRedoEvents {
     stackUndoParagraphs({
       container: containerStore.state.ref,
       addRemoveParagraphs: [],
-      updateParagraphs: this.undoUpdateParagraphs
+      updateParagraphs: this.undoUpdateParagraphs,
+      selection: this.undoSelection
     });
 
     this.undoUpdateParagraphs = this.toUpdateParagraphs(updateParagraphs);
