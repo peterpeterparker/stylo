@@ -1,3 +1,9 @@
+# 0.0.6-1 (2022-02-12)
+
+### Fix
+
+- deleteContentBackward amend zeroWidthSpace and preventDefault
+
 # 0.0.6 (2022-02-12)
 
 ### Features
