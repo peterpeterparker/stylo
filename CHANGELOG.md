@@ -1,5 +1,9 @@
 # 0.0.5-1 (2022-02-12)
 
+### Features
+
+- "undo-redo" array of inputs because `characterdata` changes can actually be triggered in multiple paragraphs at once
+
 ### Fix
 
 - "DOMException: Failed to execute 'setStart' on 'Range': The offset 7 is larger than the node's length (1)."
