@@ -16,20 +16,18 @@ export const stackUndoInput = ({
   data
 }: {
   container: HTMLElement;
-  data: UndoRedoInput;
+  data: UndoRedoInput[];
 }) => {
   if (!undoRedoStore.state.undo) {
     undoRedoStore.state.undo = [];
   }
 
   undoRedoStore.state.undo.push({
-    changes: [
-      {
-        type: 'input',
-        target: container,
-        data
-      }
-    ]
+    changes: data.map((undoRedoInput: UndoRedoInput) => ({
+      type: 'input',
+      target: container,
+      data: undoRedoInput
+    }))
   });
 
   undoRedoStore.state.redo = [];
