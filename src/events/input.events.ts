@@ -1,4 +1,4 @@
-import {moveCursorToEnd} from '@deckdeckgo/utils';
+import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import {createNewParagraph, isStartNode} from '../utils/paragraph.utils';
 import {
@@ -75,6 +75,13 @@ export class InputEvents {
       return;
     }
 
+    // If first char is a zeroWidthSpace and the offset start at the second character, reset range to begin
+    const zeroWidthSpace: boolean =
+      range.startOffset === 1 && range.startContainer.textContent.charAt(0) === '\u200B';
+    if (zeroWidthSpace) {
+      range.setStart(range.startContainer, 0);
+    }
+
     // We don't have a selection that starts at the begin of an element and paragraph
     if (range.startOffset > 0) {
       return;
@@ -84,6 +91,8 @@ export class InputEvents {
     if (!isStartNode({element: range.startContainer, container: containerStore.state.ref})) {
       return;
     }
+
+    $event.preventDefault();
 
     range.deleteContents();
   }
