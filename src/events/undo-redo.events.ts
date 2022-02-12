@@ -329,7 +329,9 @@ export class UndoRedoEvents {
     removedParagraphs.forEach(({paragraph}: RemovedParagraph, index: number) => {
       const elementIndex: number = index + (Number.isFinite(lowerIndex) ? lowerIndex : 0);
 
-      const undoParagraph: UndoUpdateParagraphs | undefined = this.undoUpdateParagraphs.find(({index}: UndoUpdateParagraphs) => index === elementIndex);
+      const undoParagraph: UndoUpdateParagraphs | undefined = this.undoUpdateParagraphs.find(
+        ({index}: UndoUpdateParagraphs) => index === elementIndex
+      );
 
       // cleanOuterHTML is only there as fallback, we should find the previous outerHTML value in undoUpdateParagraphs
 

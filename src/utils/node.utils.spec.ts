@@ -100,14 +100,20 @@ describe('node utils', () => {
     ).toEqual('child1');
 
     expect(
-      (findNodeAtDepths({parent: container, indexDepths: [0, 0]}) as HTMLElement).getAttribute('name')
+      (findNodeAtDepths({parent: container, indexDepths: [0, 0]}) as HTMLElement).getAttribute(
+        'name'
+      )
     ).toEqual('child2a');
     expect(
-      (findNodeAtDepths({parent: container, indexDepths: [0, 1]}) as HTMLElement).getAttribute('name')
+      (findNodeAtDepths({parent: container, indexDepths: [0, 1]}) as HTMLElement).getAttribute(
+        'name'
+      )
     ).toEqual('child2b');
 
     expect(
-      (findNodeAtDepths({parent: container, indexDepths: [0, 1, 0]}) as HTMLElement).getAttribute('name')
+      (findNodeAtDepths({parent: container, indexDepths: [0, 1, 0]}) as HTMLElement).getAttribute(
+        'name'
+      )
     ).toEqual('child3');
   });
 });

@@ -147,7 +147,7 @@ const undoRedoChange = async ({
   selection
 }: {
   undoChange: UndoRedoChange;
-  selection: UndoRedoSelection
+  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {type} = undoChange;
 

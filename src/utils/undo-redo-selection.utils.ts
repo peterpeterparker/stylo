@@ -89,5 +89,4 @@ export const redoSelection = ({
   windowSelection?.addRange(range);
 
   range.detach();
-
 };
