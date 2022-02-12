@@ -9,7 +9,7 @@ import {
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
 import {findNodeAtDepths, isTextNode, toHTMLElement} from './node.utils';
-import {redoSelection} from './selection.utils';
+import {redoSelection} from './undo-redo-selection.utils';
 
 export const stackUndoInput = ({
   container,

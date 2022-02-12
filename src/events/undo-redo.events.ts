@@ -20,7 +20,7 @@ import {
   findUpdatedParagraphs,
   RemovedParagraph
 } from '../utils/paragraphs.utils';
-import {toUndoRedoSelection} from '../utils/selection.utils';
+import {toUndoRedoSelection} from '../utils/undo-redo-selection.utils';
 import {
   nextRedoChanges,
   nextUndoChanges,
