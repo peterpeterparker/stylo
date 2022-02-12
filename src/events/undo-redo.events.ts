@@ -150,13 +150,10 @@ export class UndoRedoEvents {
       return;
     }
 
-    // TODO: no iteration - block in utils
-    for (const undoInput of this.undoInputs) {
-      stackUndoInput({
-        data: undoInput,
-        container: containerStore.state.ref
-      });
-    }
+    stackUndoInput({
+      data: this.undoInputs,
+      container: containerStore.state.ref
+    });
 
     this.undoInputs = undefined;
   }
