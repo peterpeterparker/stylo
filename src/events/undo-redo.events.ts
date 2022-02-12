@@ -237,7 +237,9 @@ export class UndoRedoEvents {
   }
 
   private onCharacterDataMutations(mutations: MutationRecord[]) {
-    const characterMutations: MutationRecord[] = mutations.filter(({oldValue}: MutationRecord) => oldValue !== null);
+    const characterMutations: MutationRecord[] = mutations.filter(
+      ({oldValue}: MutationRecord) => oldValue !== null
+    );
 
     // No character mutations
     if (characterMutations.length <= 0) {
@@ -245,7 +247,9 @@ export class UndoRedoEvents {
     }
 
     if (!this.undoInputs) {
-      this.undoInputs = characterMutations.map((mutation: MutationRecord) => this.toUndoInput(mutation));
+      this.undoInputs = characterMutations.map((mutation: MutationRecord) =>
+        this.toUndoInput(mutation)
+      );
     }
 
     this.debounceUpdateInputs();
