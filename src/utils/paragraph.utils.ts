@@ -87,6 +87,10 @@ export const isParagraph = ({
 
   const {parentElement} = element;
 
+  if (!parentElement) {
+    return false;
+  }
+
   return parentElement?.isEqualNode(container);
 };
 
