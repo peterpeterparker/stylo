@@ -167,7 +167,9 @@ export class Add implements ComponentInterface {
       return;
     }
 
-    if (window.getComputedStyle(this.paragraph, ':before').getPropertyValue('content') !== '""') {
+    const css: CSSStyleDeclaration = window.getComputedStyle(this.paragraph, ':before');
+
+    if (!['""', 'none'].includes(css.getPropertyValue('content'))) {
       // An external source use :before to style this paragraph
       return;
     }

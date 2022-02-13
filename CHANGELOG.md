@@ -1,3 +1,13 @@
+# 0.0.7 (2022-02-13)
+
+### Features
+
+- reset undo stack on destroy
+
+### Fix
+
+- display placeholders "Press / for plugins"
+
 # 0.0.6-1 (2022-02-12)
 
 ### Fix
