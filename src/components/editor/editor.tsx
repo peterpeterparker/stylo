@@ -24,6 +24,7 @@ import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
 import {StyloConfig} from '../../types/config';
 import {injectHeadCSS} from '../../utils/css.utils';
+import undoRedoStore from '../../stores/undo-redo.store';
 
 @Component({
   tag: 'stylo-editor',
@@ -80,21 +81,21 @@ export class Editor implements ComponentInterface {
   disconnectedCallback() {
     window?.removeEventListener('resize', this.debounceSize);
 
-    this.destroyEvents();
+    this.destroy();
 
     this.attributesObserver?.disconnect();
   }
 
   @Watch('containerRef')
   onContainerRefChange() {
-    this.destroyEvents();
+    this.destroy();
 
     this.init();
   }
 
   @Watch('config')
   onConfigChange() {
-    this.destroyEvents();
+    this.destroy();
 
     this.applyConfig();
 
@@ -147,7 +148,7 @@ export class Editor implements ComponentInterface {
         return;
       }
 
-      this.destroyEvents();
+      this.destroy();
     });
 
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true});
@@ -191,12 +192,14 @@ export class Editor implements ComponentInterface {
     ];
   }
 
-  private destroyEvents() {
+  private destroy() {
     this.undoRedoEvents.destroy();
     this.inputEvents.destroy();
     this.enterEvents.destroy();
     this.tabEvents.destroy();
     this.dataEvents.destroy();
+
+    undoRedoStore.reset();
   }
 
   private initEvents() {
