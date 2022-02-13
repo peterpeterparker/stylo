@@ -247,15 +247,15 @@ export class UndoRedoEvents {
     }
 
     if (!this.undoInputs) {
-      this.undoInputs = characterMutations.map((mutation: MutationRecord) =>
-        this.toUndoInput(mutation)
-      );
+      this.undoInputs = characterMutations
+        .map((mutation: MutationRecord) => this.toUndoInput(mutation))
+        .filter((undoInput: UndoRedoInput | undefined) => undoInput !== undefined);
     }
 
     this.debounceUpdateInputs();
   }
 
-  private toUndoInput(mutation: MutationRecord): UndoRedoInput {
+  private toUndoInput(mutation: MutationRecord): UndoRedoInput | undefined {
     const target: Node = mutation.target;
 
     const newValue: string = target.nodeValue;
@@ -265,7 +265,7 @@ export class UndoRedoEvents {
     );
 
     if (!paragraph || !target.parentNode) {
-      return;
+      return undefined;
     }
 
     // We find the list of node indexes of the parent of the modified text
@@ -286,7 +286,7 @@ export class UndoRedoEvents {
 
     stackUndoParagraphs({
       container: containerStore.state.ref,
-      addRemoveParagraphs,
+      addRemoveParagraphs: addRemoveParagraphs,
       updateParagraphs,
       selection: this.undoSelection
     });
