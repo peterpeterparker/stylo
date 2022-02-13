@@ -7,6 +7,7 @@
 ### Fix
 
 - display placeholders "Press / for plugins"
+- create preventive HTML element for text inputs only if targeted container does not accept text
 
 # 0.0.6-1 (2022-02-12)
 

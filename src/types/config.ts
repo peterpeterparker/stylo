@@ -17,6 +17,10 @@ export interface StyloConfig {
    */
   placeholders?: string[];
   /**
+   * The paragraphs that accept text. In case user / browser tries to enter text withing another type of paragraphs, Stylo will first preprend the text in a new div to avoid text nodes at the root of the contenteditable container.
+   */
+  textParagraphs?: string[];
+  /**
    * Exclude attributes that should not be observed for changes
    */
   excludeAttributes?: string[];
