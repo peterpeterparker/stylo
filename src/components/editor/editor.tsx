@@ -202,7 +202,8 @@ export class Editor implements ComponentInterface {
     this.tabEvents.destroy();
     this.dataEvents.destroy();
 
-    undoRedoStore.reset();
+    undoRedoStore.state.undo = [];
+    undoRedoStore.state.redo = [];
   }
 
   private initEvents() {
