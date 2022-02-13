@@ -8,12 +8,13 @@
 
 - display placeholders "Press / for plugins"
 - create preventive HTML element for text inputs only if targeted container does not accept text
+- on `deleteContentBackward` reset range to cover the all target paragraphs (do not keep empty elements in dom)
 
 # 0.0.6-1 (2022-02-12)
 
 ### Fix
 
-- deleteContentBackward amend zeroWidthSpace and preventDefault
+- `deleteContentBackward` amend zeroWidthSpace and preventDefault
 
 # 0.0.6 (2022-02-12)
 

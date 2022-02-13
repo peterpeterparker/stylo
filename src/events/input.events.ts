@@ -1,14 +1,14 @@
 import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
+import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
-import {findNodeAtDepths} from '../utils/node.utils';
-import {createNewParagraph, isStartNode} from '../utils/paragraph.utils';
+import {elementIndex, findNodeAtDepths, toHTMLElement} from '../utils/node.utils';
+import {createNewParagraph, findParagraph, isStartNode} from '../utils/paragraph.utils';
 import {
   BeforeInputKey,
   beforeInputTransformer,
   transformInput,
   TransformInput
 } from '../utils/transform.utils';
-import configStore from '../stores/config.store';
 
 export class InputEvents {
   private lastBeforeInput: BeforeInputKey | undefined = undefined;
@@ -96,15 +96,27 @@ export class InputEvents {
       range.setStart(range.startContainer, 0);
     }
 
-    // We don't have a selection that starts at the begin of an element and paragraph
+    // We don't have a selection that starts at the beginning of an element and paragraph
     if (range.startOffset > 0) {
       return;
     }
 
-    // We don't have a selection that starts at the begin of an paragraph
+    // We don't have a selection that starts at the beginning of a paragraph
     if (!isStartNode({element: range.startContainer, container: containerStore.state.ref})) {
       return;
     }
+
+    const paragraph: HTMLElement | undefined = toHTMLElement(
+      findParagraph({element: range.startContainer, container: containerStore.state.ref})
+    );
+
+    if (!paragraph) {
+      return;
+    }
+
+    // Reset range to begin of the paragraph in case it contains children
+    const index: number = elementIndex(paragraph);
+    range.setStart(containerStore.state.ref, index);
 
     $event.preventDefault();
 

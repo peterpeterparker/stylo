@@ -335,6 +335,12 @@ const insertNode = ({
     changeObserver.observe(container, {childList: true, subtree: true});
 
     const previousSiblingIndex: number = index - 1;
+
+    if (previousSiblingIndex === -1) {
+      container.insertAdjacentHTML('afterbegin', outerHTML);
+      return;
+    }
+
     container.children[
       Math.min(previousSiblingIndex, container.children.length - 1)
     ].insertAdjacentHTML('afterend', outerHTML);
