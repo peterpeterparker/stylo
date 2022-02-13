@@ -24,7 +24,7 @@ export class InputEvents {
   private onBeforeInput = async ($event: InputEvent) => {
     await this.preventTextLeaves($event);
 
-    await this.deleteContentBackward($event);
+    this.deleteContentBackward($event);
 
     await this.transformInput($event);
   };
@@ -75,7 +75,7 @@ export class InputEvents {
     moveCursorToEnd(div);
   }
 
-  private async deleteContentBackward($event: InputEvent) {
+  private deleteContentBackward($event: InputEvent) {
     const {inputType} = $event;
 
     if (!['deleteContentBackward'].includes(inputType)) {
