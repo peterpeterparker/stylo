@@ -142,7 +142,7 @@ export class Editor implements ComponentInterface {
         return;
       }
 
-      this.contentEditable = this.containerRef.getAttribute('contenteditable') === 'true';
+      this.contentEditable = this.containerRef.hasAttribute('contenteditable');
 
       if (this.contentEditable) {
         this.initEvents();
@@ -154,7 +154,7 @@ export class Editor implements ComponentInterface {
 
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true});
 
-    this.contentEditable = this.containerRef.getAttribute('contenteditable') === 'true';
+    this.contentEditable = this.containerRef.hasAttribute('contenteditable');
   }
 
   private applyConfig() {
