@@ -18,13 +18,14 @@ import configStore, {
   DEFAULT_EXCLUDE_ATTRIBUTES,
   DEFAULT_PLACEHOLDERS,
   DEFAULT_PLUGINS,
+  DEFAULT_TEXT_PARAGRAPHS,
   DEFAULT_TOOLBAR
 } from '../../stores/config.store';
 import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
+import undoRedoStore from '../../stores/undo-redo.store';
 import {StyloConfig} from '../../types/config';
 import {injectHeadCSS} from '../../utils/css.utils';
-import undoRedoStore from '../../stores/undo-redo.store';
 
 @Component({
   tag: 'stylo-editor',
@@ -166,6 +167,7 @@ export class Editor implements ComponentInterface {
       toolbar,
       i18n: customI18n,
       placeholders,
+      textParagraphs,
       menus,
       excludeAttributes
     } = this.config;
@@ -184,6 +186,7 @@ export class Editor implements ComponentInterface {
       : DEFAULT_TOOLBAR;
 
     configStore.state.placeholders = placeholders || DEFAULT_PLACEHOLDERS;
+    configStore.state.textParagraphs = textParagraphs || DEFAULT_TEXT_PARAGRAPHS;
 
     configStore.state.menus = menus;
     configStore.state.excludeAttributes = [

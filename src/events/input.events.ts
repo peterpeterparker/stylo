@@ -1,5 +1,6 @@
 import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
+import {findNodeAtDepths} from '../utils/node.utils';
 import {createNewParagraph, isStartNode} from '../utils/paragraph.utils';
 import {
   BeforeInputKey,
@@ -7,6 +8,7 @@ import {
   transformInput,
   TransformInput
 } from '../utils/transform.utils';
+import configStore from '../stores/config.store';
 
 export class InputEvents {
   private lastBeforeInput: BeforeInputKey | undefined = undefined;
@@ -47,6 +49,18 @@ export class InputEvents {
       return;
     }
 
+    const {startOffset} = range;
+
+    const target: Node | undefined = findNodeAtDepths({
+      parent: containerStore.state.ref,
+      indexDepths: [startOffset]
+    });
+
+    // We create a div - i.e. new HTML element - only if the actual target an editable paragraph that accepts text
+    if (configStore.state.textParagraphs?.includes(target?.nodeName.toLowerCase())) {
+      return;
+    }
+
     // User is typing text at the root of the container therefore the browser will create a text node a direct descendant of the contenteditable
     // This can happen when user types for example before or after an image
 
@@ -55,7 +69,7 @@ export class InputEvents {
     const div: Node | undefined = await createNewParagraph({
       container: containerStore.state.ref,
       range,
-      text: $event.data
+      text: data
     });
 
     moveCursorToEnd(div);
