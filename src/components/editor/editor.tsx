@@ -19,8 +19,7 @@ import configStore, {
   DEFAULT_PLACEHOLDERS,
   DEFAULT_PLUGINS,
   DEFAULT_TEXT_PARAGRAPHS,
-  DEFAULT_TOOLBAR,
-  DEFAULT_DONT_INJECT_HEAD_CSS
+  DEFAULT_TOOLBAR
 } from '../../stores/config.store';
 import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
@@ -75,9 +74,6 @@ export class Editor implements ComponentInterface {
   }
 
   componentDidLoad() {
-    if (!configStore.state.dontInjectHeadCss)
-    injectHeadCSS();
-
     window?.addEventListener('resize', this.debounceSize);
   }
 
@@ -120,6 +116,8 @@ export class Editor implements ComponentInterface {
       return;
     }
 
+    injectHeadCSS(this.containerRef.getRootNode());
+
     containerStore.state.ref.classList.add('stylo-container');
 
     this.containerRefEditable();
@@ -144,8 +142,7 @@ export class Editor implements ComponentInterface {
         return;
       }
 
-      const contentEditableAttribute = this.containerRef.getAttribute('contenteditable')
-      this.contentEditable = contentEditableAttribute === 'true' || contentEditableAttribute === '';
+      this.contentEditable = ['true', ''].includes(this.containerRef.getAttribute('contenteditable'));
 
       if (this.contentEditable) {
         this.initEvents();
@@ -157,8 +154,7 @@ export class Editor implements ComponentInterface {
 
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true});
 
-    const contentEditableAttribute = this.containerRef.getAttribute('contenteditable')
-    this.contentEditable = contentEditableAttribute === 'true' || contentEditableAttribute === '';
+    this.contentEditable = ['true', ''].includes(this.containerRef.getAttribute('contenteditable'));
   }
 
   private applyConfig() {
@@ -173,8 +169,7 @@ export class Editor implements ComponentInterface {
       placeholders,
       textParagraphs,
       menus,
-      excludeAttributes,
-      dontInjectHeadCss
+      excludeAttributes
     } = this.config;
 
     i18n.state.custom = customI18n?.custom;
@@ -198,8 +193,6 @@ export class Editor implements ComponentInterface {
       ...DEFAULT_EXCLUDE_ATTRIBUTES,
       ...(excludeAttributes || [])
     ];
-
-    configStore.state.dontInjectHeadCss = dontInjectHeadCss || DEFAULT_DONT_INJECT_HEAD_CSS
   }
 
   private destroy() {
