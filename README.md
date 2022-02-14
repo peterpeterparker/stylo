@@ -75,7 +75,7 @@ That's it, the component is imported and loaded.
 Install the editor in your project from [npm](https://www.npmjs.com/package/@papyrs/stylo):
 
 ```bash
-npm install @papyrs/stylo@alpha
+npm install @papyrs/stylo
 ```
 
 Afterwards you will need to load - i.e. import - the component in your application. Use one of the following methods, the one that fits the best your needs or framework.
