@@ -1,3 +1,9 @@
+# 0.0.7-1 (2022-02-14)
+
+### Fix
+
+- custom `deleteContentBackward` in Firefox
+
 # 0.0.7 (2022-02-13)
 
 ### Features
