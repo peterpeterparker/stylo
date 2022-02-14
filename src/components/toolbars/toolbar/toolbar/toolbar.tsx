@@ -285,14 +285,23 @@ export class Toolbar implements ComponentInterface {
     const range: Range | undefined = selection?.getRangeAt(0);
     const rect: DOMRect | undefined = range?.getBoundingClientRect();
 
-    //const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
-    const styloContainerRect = (this.tools.parentNode as ShadowRoot).host.getBoundingClientRect();
+    const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
+    const styloContainerRect = this.el.shadowRoot.host.getBoundingClientRect();
 
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
 
     const x: number = eventX - styloContainerRect.x;
     const y: number = eventY - styloContainerRect.y;
+
+    /*let x: number =
+      rect && containerRect
+      ? rect.left - containerRect.left + this.containerRef.offsetLeft + rect.width / 2
+      : eventX;
+    let y: number =
+      rect && containerRect
+      ? rect.top - containerRect.top + this.containerRef.offsetTop
+      : eventY;*/
 
     const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
 
@@ -306,14 +315,16 @@ export class Toolbar implements ComponentInterface {
 
     // Limit overflow right
     const overflowLeft: boolean = this.tools.offsetWidth / 2 + safeAreaMarginX > x;
+
     const overflowRight: boolean =
       innerWidth > 0 && fixedLeft > innerWidth - (this.tools.offsetWidth + safeAreaMarginX);
+    const overflowRightPos: number = innerWidth - this.tools.offsetWidth - safeAreaMarginX - styloContainerRect.x;
 
     // To set the position of the tools
     this.toolsPosition = {
       top,
-      left: overflowRight ? `auto` : overflowLeft ? `${safeAreaMarginX}px` : `${x}px`,
-      right: overflowRight ? `${safeAreaMarginX}px` : `auto`,
+      left: overflowRight ? `${overflowRightPos}px` : overflowLeft ? `${safeAreaMarginX}px` : `${x}px`,
+      right: `auto`,
       position,
       align: overflowRight ? 'end' : overflowLeft ? 'start' : 'center',
       anchorLeft: overflowLeft

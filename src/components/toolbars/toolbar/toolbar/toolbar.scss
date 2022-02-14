@@ -3,6 +3,7 @@
 
 :host {
   direction: ltr;
+  position: absolute;
 
   @include variables.colors;
 }
