@@ -24,4 +24,8 @@ export interface StyloConfig {
    * Exclude attributes that should not be observed for changes
    */
   excludeAttributes?: string[];
+  /**
+   * Do not inject HeadCss (for example stylo is used inside of a webcomponent)
+   */
+  dontInjectHeadCss?: boolean
 }

@@ -18,6 +18,7 @@ interface ConfigStore {
   placeholders: string[] | undefined;
   textParagraphs: string[] | undefined;
   excludeAttributes: string[];
+  dontInjectHeadCss: boolean;
 }
 
 export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, img, code, hr];
@@ -45,13 +46,16 @@ export const DEFAULT_EXCLUDE_ATTRIBUTES = [
   'contenteditable'
 ];
 
+export const DEFAULT_DONT_INJECT_HEAD_CSS = false;
+
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,
   toolbar: DEFAULT_TOOLBAR,
   placeholders: DEFAULT_PLACEHOLDERS,
   textParagraphs: DEFAULT_TEXT_PARAGRAPHS,
   menus: undefined,
-  excludeAttributes: DEFAULT_EXCLUDE_ATTRIBUTES
+  excludeAttributes: DEFAULT_EXCLUDE_ATTRIBUTES,
+  dontInjectHeadCss: DEFAULT_DONT_INJECT_HEAD_CSS
 });
 
 export default {state, onChange};

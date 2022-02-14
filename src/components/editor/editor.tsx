@@ -19,7 +19,8 @@ import configStore, {
   DEFAULT_PLACEHOLDERS,
   DEFAULT_PLUGINS,
   DEFAULT_TEXT_PARAGRAPHS,
-  DEFAULT_TOOLBAR
+  DEFAULT_TOOLBAR,
+  DEFAULT_DONT_INJECT_HEAD_CSS
 } from '../../stores/config.store';
 import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
@@ -74,6 +75,7 @@ export class Editor implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!configStore.state.dontInjectHeadCss)
     injectHeadCSS();
 
     window?.addEventListener('resize', this.debounceSize);
@@ -169,7 +171,8 @@ export class Editor implements ComponentInterface {
       placeholders,
       textParagraphs,
       menus,
-      excludeAttributes
+      excludeAttributes,
+      dontInjectHeadCss
     } = this.config;
 
     i18n.state.custom = customI18n?.custom;
@@ -193,6 +196,8 @@ export class Editor implements ComponentInterface {
       ...DEFAULT_EXCLUDE_ATTRIBUTES,
       ...(excludeAttributes || [])
     ];
+
+    configStore.state.dontInjectHeadCss = dontInjectHeadCss || DEFAULT_DONT_INJECT_HEAD_CSS
   }
 
   private destroy() {
