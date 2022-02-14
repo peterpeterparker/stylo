@@ -284,6 +284,7 @@ export class Toolbar implements ComponentInterface {
     const rect: DOMRect | undefined = range?.getBoundingClientRect();
 
     const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
+    const styloContainerRect = (this.tools.parentNode as ShadowRoot).host.getBoundingClientRect();
 
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
@@ -291,9 +292,11 @@ export class Toolbar implements ComponentInterface {
     const x: number =
       rect && containerRect
         ? rect.left - containerRect.left + this.containerRef.offsetLeft + rect.width / 2
-        : eventX;
+        : eventX - styloContainerRect.x;
     const y: number =
-      rect && containerRect ? rect.top - containerRect.top + this.containerRef.offsetTop : eventY;
+      rect && containerRect
+        ? rect.top - containerRect.top + this.containerRef.offsetTop
+        : eventY - styloContainerRect.y;
 
     const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
 
