@@ -105,6 +105,7 @@ export class Toolbar implements ComponentInterface {
 
   private anchorLink: ToolbarAnchorLink = null;
   private anchorEvent: MouseEvent | TouchEvent | undefined;
+  private anchorEventComposedPath: EventTarget[];
 
   @State()
   private link: boolean = false;
@@ -235,6 +236,7 @@ export class Toolbar implements ComponentInterface {
     }
 
     this.anchorEvent = $event;
+    this.anchorEventComposedPath = $event.composedPath();
   };
 
   private displayTools() {
@@ -245,7 +247,7 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    if (this.containerRef && !this.containerRef.contains(this.anchorEvent.target as Node)) {
+    if (this.containerRef && !this.containerRef.contains(this.anchorEvent.target as Node) && !this.containerRef.contains(this.anchorEventComposedPath[0] as Node)) {
       this.reset(false);
       return;
     }
@@ -283,20 +285,14 @@ export class Toolbar implements ComponentInterface {
     const range: Range | undefined = selection?.getRangeAt(0);
     const rect: DOMRect | undefined = range?.getBoundingClientRect();
 
-    const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
+    //const containerRect: DOMRect | undefined = this.containerRef?.getBoundingClientRect();
     const styloContainerRect = (this.tools.parentNode as ShadowRoot).host.getBoundingClientRect();
 
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
 
-    const x: number =
-      rect && containerRect
-        ? rect.left - containerRect.left + this.containerRef.offsetLeft + rect.width / 2
-        : eventX - styloContainerRect.x;
-    const y: number =
-      rect && containerRect
-        ? rect.top - containerRect.top + this.containerRef.offsetTop
-        : eventY - styloContainerRect.y;
+    const x: number = eventX - styloContainerRect.x;
+    const y: number = eventY - styloContainerRect.y;
 
     const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
 

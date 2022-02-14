@@ -245,6 +245,10 @@ export class Editor implements ComponentInterface {
       return undefined;
     }
 
-    return <stylo-toolbar containerRef={this.containerRef}></stylo-toolbar>;
+    const style: Record<string, string> = {
+          'position': 'absolute'
+        };
+
+    return <stylo-toolbar containerRef={this.containerRef} style={style}></stylo-toolbar>;
   }
 }
