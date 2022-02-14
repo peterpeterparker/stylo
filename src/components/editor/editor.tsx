@@ -144,7 +144,8 @@ export class Editor implements ComponentInterface {
         return;
       }
 
-      this.contentEditable = this.containerRef.hasAttribute('contenteditable');
+      const contentEditableAttribute = this.containerRef.getAttribute('contenteditable')
+      this.contentEditable = contentEditableAttribute === 'true' || contentEditableAttribute === '';
 
       if (this.contentEditable) {
         this.initEvents();
@@ -156,7 +157,8 @@ export class Editor implements ComponentInterface {
 
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true});
 
-    this.contentEditable = this.containerRef.hasAttribute('contenteditable');
+    const contentEditableAttribute = this.containerRef.getAttribute('contenteditable')
+    this.contentEditable = contentEditableAttribute === 'true' || contentEditableAttribute === '';
   }
 
   private applyConfig() {
