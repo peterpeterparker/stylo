@@ -252,6 +252,11 @@ export class UndoRedoEvents {
         .filter((undoInput: UndoRedoInput | undefined) => undoInput !== undefined);
     }
 
+    if (this.undoInputs.length <= 0) {
+      this.undoInputs = undefined;
+      return;
+    }
+
     this.debounceUpdateInputs();
   }
 
@@ -259,6 +264,11 @@ export class UndoRedoEvents {
     const target: Node = mutation.target;
 
     const newValue: string = target.nodeValue;
+
+    // Firefox triggers a character mutation that has same previous and new value when we delete a range in deleteContentBackward
+    if (newValue === mutation.oldValue) {
+      return undefined;
+    }
 
     const paragraph: HTMLElement | undefined = toHTMLElement(
       findParagraph({element: target, container: containerStore.state.ref})
