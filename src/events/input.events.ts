@@ -15,18 +15,23 @@ export class InputEvents {
 
   init() {
     containerStore.state.ref?.addEventListener('beforeinput', this.onBeforeInput);
+    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown);
   }
 
   destroy() {
     containerStore.state.ref?.removeEventListener('beforeinput', this.onBeforeInput);
+    containerStore.state.ref?.removeEventListener('keydown', this.onKeyDown);
   }
 
   private onBeforeInput = async ($event: InputEvent) => {
     await this.preventTextLeaves($event);
 
-    this.deleteContentBackward($event);
-
     await this.transformInput($event);
+  };
+
+  private onKeyDown = ($event: KeyboardEvent) => {
+    // This should be an on keydown listener because Firefox do not provide the same range in before input
+    this.deleteContentBackward($event);
   };
 
   private async preventTextLeaves($event: InputEvent) {
@@ -75,10 +80,29 @@ export class InputEvents {
     moveCursorToEnd(div);
   }
 
-  private deleteContentBackward($event: InputEvent) {
-    const {inputType} = $event;
+  private async transformInput($event: InputEvent) {
+    const {data} = $event;
 
-    if (!['deleteContentBackward'].includes(inputType)) {
+    const transformer: TransformInput | undefined = beforeInputTransformer.find(
+      ({match}: TransformInput) => match({key: {key: data}, lastKey: this.lastBeforeInput})
+    );
+
+    if (transformer !== undefined) {
+      await transformInput({$event, transformInput: transformer});
+
+      await transformer.postTransform?.();
+
+      this.lastBeforeInput = undefined;
+      return;
+    }
+
+    this.lastBeforeInput = {key: data};
+  }
+
+  private deleteContentBackward($event: KeyboardEvent) {
+    const {key} = $event;
+
+    if (!['Delete', 'Backspace'].includes(key)) {
       return;
     }
 
@@ -119,26 +143,8 @@ export class InputEvents {
     range.setStart(containerStore.state.ref, index);
 
     $event.preventDefault();
+    $event.stopImmediatePropagation();
 
     range.deleteContents();
-  }
-
-  private async transformInput($event: InputEvent) {
-    const {data} = $event;
-
-    const transformer: TransformInput | undefined = beforeInputTransformer.find(
-      ({match}: TransformInput) => match({key: {key: data}, lastKey: this.lastBeforeInput})
-    );
-
-    if (transformer !== undefined) {
-      await transformInput({$event, transformInput: transformer});
-
-      await transformer.postTransform?.();
-
-      this.lastBeforeInput = undefined;
-      return;
-    }
-
-    this.lastBeforeInput = {key: data};
   }
 }
