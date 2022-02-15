@@ -1,10 +1,8 @@
-export const injectHeadCSS = (rootNode: Node) => {
-  let style: HTMLStyleElement | null
+export const injectCSS = (rootNode: Node) => {
+  let style: HTMLStyleElement | null;
 
-  if (rootNode == document)
-    style = document.head.querySelector('style[stylo-editor]');
-  else
-    style = (<ShadowRoot>rootNode).querySelector('style[stylo-editor]');
+  if (rootNode === document) style = document.head.querySelector('style[stylo-editor]');
+  else style = (<ShadowRoot>rootNode).querySelector('style[stylo-editor]');
 
   if (style !== null) {
     return;
@@ -23,8 +21,6 @@ export const injectHeadCSS = (rootNode: Node) => {
     }
   `;
 
-  if (rootNode == document)
-    document.head.append(style);
-  else
-    style = (<ShadowRoot>rootNode).insertBefore(style, (<ShadowRoot>rootNode).firstElementChild);
+  if (rootNode === document) document.head.append(style);
+  else style = (<ShadowRoot>rootNode).insertBefore(style, (<ShadowRoot>rootNode).firstElementChild);
 };

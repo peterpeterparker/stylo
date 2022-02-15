@@ -25,7 +25,7 @@ import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
 import undoRedoStore from '../../stores/undo-redo.store';
 import {StyloConfig} from '../../types/config';
-import {injectHeadCSS} from '../../utils/css.utils';
+import {injectCSS} from '../../utils/css.utils';
 
 @Component({
   tag: 'stylo-editor',
@@ -116,7 +116,7 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    injectHeadCSS(this.containerRef.getRootNode());
+    injectCSS(this.containerRef.getRootNode());
 
     containerStore.state.ref.classList.add('stylo-container');
 
@@ -142,7 +142,9 @@ export class Editor implements ComponentInterface {
         return;
       }
 
-      this.contentEditable = ['true', ''].includes(this.containerRef.getAttribute('contenteditable'));
+      this.contentEditable = ['true', ''].includes(
+        this.containerRef.getAttribute('contenteditable')
+      );
 
       if (this.contentEditable) {
         this.initEvents();
