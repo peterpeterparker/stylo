@@ -285,51 +285,67 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    const selection: Selection | null = getSelection();
-    const range: Range | undefined = selection?.getRangeAt(0);
-    const rect: DOMRect | undefined = range?.getBoundingClientRect();
-
-    const styloContainerRect = this.el.shadowRoot.host.getBoundingClientRect();
-
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
 
-    const x: number = eventX - styloContainerRect.x;
-    const y: number = eventY - styloContainerRect.y;
+    const refRootNode = this.containerRef.getRootNode();
+    const isShadowRoot = refRootNode instanceof ShadowRoot;
+    const hasShadowRootSelectionApi = isShadowRoot && (refRootNode as any).getSelection;
+
+    let selection: Selection | null = getSelection();
+    if (hasShadowRootSelectionApi) {
+      selection = (refRootNode as any).getSelection();
+    }
+    const selectionRange: Range | undefined = selection?.getRangeAt(0);
+    const selectionRect: DOMRect | undefined = selectionRange?.getBoundingClientRect();
+
+    // Calculate the absolute position on the screen where the container should be (if it's above the selection)
+    const targetAbsoluteX = selectionRect ? selectionRect.x + selectionRect.width / 2 : eventX;
+    const targetAbsoluteY = selectionRect ? selectionRect.y : eventY;
+
+    const styloContainerRect = this.el.shadowRoot.host.getBoundingClientRect();
+
+    // calculate the relative position between the containers
+    const relativeX = targetAbsoluteX - styloContainerRect.x;
+    const relativeY = targetAbsoluteY - styloContainerRect.y;
 
     const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
 
-    let top: number = position === 'above' ? y - 16 : y + (rect?.height || 0) + 8;
-
+    // TODO: this maybe not always be the case that the whole window size could be used for overlay
     const innerWidth: number = isIOS() ? screen.width : window.innerWidth;
 
-    const fixedLeft: number = (rect?.left || eventX) - 40;
+    const topOffset = 16;
+    const top: number =
+      position === 'above' ? relativeY - topOffset : relativeY + (selectionRect?.height || 0) + 8;
 
     const safeAreaMarginX: number = 16;
 
     // Limit overflow right
-    const overflowLeft: boolean = this.tools.offsetWidth / 2 + safeAreaMarginX > x;
+    const overflowLeft: boolean = this.tools.offsetWidth / 2 + safeAreaMarginX > relativeX;
+
+    const fixedLeft: number = (selectionRect?.left || eventX) - 40;
 
     const overflowRight: boolean =
-      innerWidth > 0 && fixedLeft > innerWidth - (this.tools.offsetWidth + safeAreaMarginX);
-    const overflowRightPos: number =
-      innerWidth - this.tools.offsetWidth - safeAreaMarginX - styloContainerRect.x;
+      innerWidth > 0 && fixedLeft > innerWidth - (this.tools.offsetWidth / 2 + safeAreaMarginX);
+
+    const left = overflowRight
+      ? `${innerWidth - styloContainerRect.x - this.tools.offsetWidth - safeAreaMarginX}px`
+      : overflowLeft
+      ? `${safeAreaMarginX}px`
+      : `${relativeX}px`;
+    const right = `auto`;
 
     // To set the position of the tools
     this.toolsPosition = {
       top,
-      left: overflowRight
-        ? `${overflowRightPos}px`
-        : overflowLeft
-        ? `${safeAreaMarginX}px`
-        : `${x}px`,
-      right: `auto`,
+      left,
+      right,
       position,
       align: overflowRight ? 'end' : overflowLeft ? 'start' : 'center',
       anchorLeft: overflowLeft
-        ? x - safeAreaMarginX
+        ? relativeX - safeAreaMarginX
         : overflowRight
-        ? x - (innerWidth - safeAreaMarginX - this.tools.offsetWidth)
+        ? relativeX - (innerWidth - safeAreaMarginX - this.tools.offsetWidth)
         : this.tools.offsetWidth / 2
     };
   }
