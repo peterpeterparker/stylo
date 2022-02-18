@@ -2,7 +2,6 @@ import {
   clearTheSelection,
   debounce,
   getAnchorElement,
-  getSelection,
   isIOS,
   isMobile,
   isRTL,
@@ -35,6 +34,7 @@ import {execCommandNative} from '../../../../utils/execcommnad-native.utils';
 import {removeLink} from '../../../../utils/link.utils';
 import {toHTMLElement} from '../../../../utils/node.utils';
 import {findParagraph, isParagraph} from '../../../../utils/paragraph.utils';
+import {getSelectionIncludingShadowroot} from '../../../../utils/selection.utils.js';
 import {
   getBold,
   getContentAlignment,
@@ -102,6 +102,7 @@ export class Toolbar implements ComponentInterface {
   });
 
   private selection: Selection = null;
+  private selectionParagraph: Node | undefined = undefined;
 
   private anchorLink: ToolbarAnchorLink = null;
   private anchorEvent: MouseEvent | TouchEvent | undefined;
@@ -240,7 +241,7 @@ export class Toolbar implements ComponentInterface {
   };
 
   private displayTools() {
-    const selection: Selection | null = getSelection();
+    let selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
 
     if (!this.anchorEvent) {
       this.reset(false);
@@ -269,6 +270,10 @@ export class Toolbar implements ComponentInterface {
     }
 
     this.selection = selection;
+    this.selectionParagraph = findParagraph({
+      element: !this.selection ? document.activeElement : this.selection.anchorNode,
+      container: this.containerRef
+    });
 
     if (selection.rangeCount > 0) {
       const range: Range = selection.getRangeAt(0);
@@ -288,14 +293,8 @@ export class Toolbar implements ComponentInterface {
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
 
-    const refRootNode = this.containerRef.getRootNode();
-    const isShadowRoot = refRootNode instanceof ShadowRoot;
-    const hasShadowRootSelectionApi = isShadowRoot && (refRootNode as any).getSelection;
+    const selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
 
-    let selection: Selection | null = getSelection();
-    if (hasShadowRootSelectionApi) {
-      selection = (refRootNode as any).getSelection();
-    }
     const selectionRange: Range | undefined = selection?.getRangeAt(0);
     const selectionRect: DOMRect | undefined = selectionRange?.getBoundingClientRect();
 
@@ -394,7 +393,7 @@ export class Toolbar implements ComponentInterface {
 
   // We iterate until we find the root container to detect if bold, underline or italic are active
   private findStyle(node: Node | undefined) {
-    if (!node) {
+    if (!node || node instanceof ShadowRoot) {
       return;
     }
 
@@ -482,6 +481,7 @@ export class Toolbar implements ComponentInterface {
     }
 
     this.selection = null;
+    this.selectionParagraph = null;
 
     this.toolbarActions = ToolbarActions.STYLE;
     this.anchorLink = null;
@@ -542,16 +542,11 @@ export class Toolbar implements ComponentInterface {
       this.reset(true);
     }
 
-    const container: Node | undefined = findParagraph({
-      element: !this.selection ? document.activeElement : this.selection.anchorNode,
-      container: this.containerRef
-    });
-
-    if (!container) {
+    if (!this.selectionParagraph) {
       return;
     }
 
-    this.styleDidChange.emit(toHTMLElement(container));
+    this.styleDidChange.emit(toHTMLElement(this.selectionParagraph));
   };
 
   private onAttributesChangesInitStyle() {
