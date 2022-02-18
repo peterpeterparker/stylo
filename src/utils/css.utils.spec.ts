@@ -19,7 +19,7 @@ describe('css', () => {
 });
 
 describe('css shadow', () => {
-  it('should inject global css in shadowRoor', () => {
+  it('should inject global css in shadowRoot', () => {
     const div = document.createElement('div');
     const shadowRoot = div.attachShadow({mode: 'open'});
     const divInner = document.createElement('div');
@@ -27,11 +27,11 @@ describe('css shadow', () => {
 
     injectCSS(divInner.getRootNode());
 
-    let style: HTMLStyleElement | null = document.head.querySelector('style[stylo-editor]');
+    let style: HTMLStyleElement | null = shadowRoot.querySelector('style[stylo-editor]');
     expect(style).not.toBeNull();
   });
 
-  it('should not inject twice global css in head', () => {
+  it('should not inject twice global css in shadowRoot', () => {
     const div = document.createElement('div');
     const shadowRoot = div.attachShadow({mode: 'open'});
     const divInner = document.createElement('div');
@@ -41,7 +41,7 @@ describe('css shadow', () => {
     injectCSS(divInner.getRootNode());
 
     let styles: NodeListOf<HTMLStyleElement> =
-      document.head.querySelectorAll('style[stylo-editor]');
+      shadowRoot.querySelectorAll('style[stylo-editor]');
     expect(styles.length).toEqual(1);
   });
 });
