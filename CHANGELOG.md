@@ -1,3 +1,9 @@
+# 0.0.8 (2022-02-19)
+
+### Fix
+
+- "enter" new paragraph if focus at begin of an existing paragraph
+
 # 0.0.7-1 (2022-02-14)
 
 ### Fix

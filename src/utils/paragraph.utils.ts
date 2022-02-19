@@ -179,7 +179,7 @@ export const createEmptyParagraph = ({
   });
 };
 
-export const replaceParagraphFirstChild = ({
+export const addParagraph = ({
   paragraph,
   container,
   fragment
@@ -187,17 +187,17 @@ export const replaceParagraphFirstChild = ({
   container: HTMLElement;
   paragraph: HTMLElement;
   fragment: DocumentFragment;
-}): Promise<void> => {
-  return new Promise<void>((resolve) => {
-    const addObserver: MutationObserver = new MutationObserver((_mutations: MutationRecord[]) => {
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       addObserver.disconnect();
 
-      resolve();
+      resolve(mutations[0]?.addedNodes?.[0]);
     });
 
     addObserver.observe(container, {childList: true, subtree: true});
 
-    paragraph.replaceChild(fragment, paragraph.firstChild);
+    paragraph.after(fragment);
   });
 };
 
@@ -248,7 +248,26 @@ const insertNodeInRange = ({
   });
 };
 
-export const appendEmptyText = ({
+export const prependEmptyText = ({
+  paragraph
+}: {
+  paragraph: HTMLElement;
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve(mutations[0]?.addedNodes?.[0]);
+    });
+
+    addObserver.observe(paragraph, {childList: true, subtree: true});
+
+    const text: Text = document.createTextNode('\u200B');
+    paragraph.prepend(text);
+  });
+};
+
+export const addEmptyText = ({
   paragraph,
   element
 }: {
