@@ -130,6 +130,8 @@ export class EnterEvents {
     // We don't move the cursor, we keep the position at the beginning of the new paragraph
 
     undoRedoStore.state.observe = true;
+
+    moveCursorToStart(newParagraph);
   }
 
   private toAddParagraphs(paragraphs: HTMLElement[]): UndoRedoAddRemoveParagraph[] {
