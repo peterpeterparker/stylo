@@ -1,5 +1,9 @@
 # 0.0.8 (2022-02-19)
 
+### Features
+
+- integration of Stylo inside of other webcomponents
+
 ### Fix
 
 - "enter" new paragraph if focus at begin of an existing paragraph
