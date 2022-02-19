@@ -1,5 +1,6 @@
 import {createStore} from '@stencil/store';
 import {en} from '../assets/i18n/en';
+import {I18n, Languages} from '../types/i18n';
 
 interface I18nStore extends I18n {
   custom?: Record<string, string>;

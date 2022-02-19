@@ -8,6 +8,7 @@ export * from './plugins/hr.plugin';
 export * from './plugins/img.plugin';
 export * from './plugins/ul.plugin';
 export * from './types/config';
+export * from './types/i18n';
 export * from './types/icon';
 export {StyloIcon} from './types/icon';
 export * from './types/menu';
