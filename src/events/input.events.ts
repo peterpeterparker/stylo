@@ -1,8 +1,9 @@
-import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
+import {moveCursorToEnd} from '@deckdeckgo/utils';
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {elementIndex, findNodeAtDepths, toHTMLElement} from '../utils/node.utils';
 import {createNewParagraph, findParagraph, isStartNode} from '../utils/paragraph.utils';
+import {getRange} from '../utils/selection.utils';
 import {
   BeforeInputKey,
   beforeInputTransformer,
@@ -35,15 +36,15 @@ export class InputEvents {
   };
 
   private async preventTextLeaves($event: InputEvent) {
-    const anchorNode: Node | undefined | null = getSelection()?.anchorNode;
+    const {range, selection} = getRange(containerStore.state.ref);
 
-    if (!containerStore.state.ref.isEqualNode(anchorNode)) {
+    if (!range) {
       return;
     }
 
-    const range: Range | undefined | null = getSelection()?.getRangeAt(0);
+    const anchorNode: Node | undefined | null = selection?.anchorNode;
 
-    if (!range) {
+    if (!containerStore.state.ref.isEqualNode(anchorNode)) {
       return;
     }
 
@@ -106,7 +107,11 @@ export class InputEvents {
       return;
     }
 
-    const range: Range | undefined | null = getSelection()?.getRangeAt(0);
+    const {range} = getRange(containerStore.state.ref);
+
+    if (!range) {
+      return;
+    }
 
     // If the commonAncestorContainer is the container then we have selected multiple paragraphs
     if (!containerStore.state.ref.isEqualNode(range?.commonAncestorContainer)) {

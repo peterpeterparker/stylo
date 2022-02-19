@@ -13,6 +13,7 @@ import {
   addParagraph, prependEmptyText
 } from '../utils/paragraph.utils';
 import {stackUndoParagraphs} from '../utils/undo-redo.utils';
+import {getRange} from '../utils/selection.utils';
 
 export class EnterEvents {
   init() {
@@ -34,7 +35,13 @@ export class EnterEvents {
   };
 
   private async createParagraph($event: KeyboardEvent) {
-    const anchor: HTMLElement | undefined = toHTMLElement(getSelection()?.anchorNode);
+    const {range, selection} = getRange(containerStore.state.ref);
+
+    if (!range) {
+      return;
+    }
+
+    const anchor: HTMLElement | undefined = toHTMLElement(selection?.anchorNode);
 
     // Create only if we have an anchor otherwise let the browser deals with it
     if (!anchor) {
@@ -58,7 +65,6 @@ export class EnterEvents {
     $event.preventDefault();
 
     // Extract the rest of the "line" (the paragraph) form the cursor position to end
-    const range: Range = getSelection().getRangeAt(0);
     range.collapse(true);
     range.setEndAfter(paragraph);
 

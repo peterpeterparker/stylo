@@ -1,6 +1,6 @@
-import {getSelection} from '@deckdeckgo/utils';
 import {isTextNode, toHTMLElement} from './node.utils';
 import {findParagraph, isParagraph, isParagraphEmpty, isTargetContainer} from './paragraph.utils';
+import {getRange} from './selection.utils';
 
 export interface RemovedParagraph {
   paragraph: HTMLElement;
@@ -168,8 +168,7 @@ export const findSelectionParagraphs = ({
   container: HTMLElement;
   filterEmptySelection: boolean;
 }): HTMLElement[] | undefined => {
-  const selection: Selection | null = getSelection();
-  const range: Range | undefined = selection?.rangeCount > 0 ? selection?.getRangeAt(0) : undefined;
+  const {range, selection} = getRange(container);
 
   if (!range || (filterEmptySelection && selection?.toString().length === 0)) {
     return undefined;

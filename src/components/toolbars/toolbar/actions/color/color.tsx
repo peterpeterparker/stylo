@@ -3,7 +3,7 @@ import {Component, Event, EventEmitter, h, Prop, State} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
 import {toHTMLElement} from '../../../../../utils/node.utils';
-import {getSelection} from '../../../../../utils/selection.utils';
+import {getRange, getSelection} from '../../../../../utils/selection.utils';
 import {findStyleNode} from '../../../../../utils/toolbar.utils';
 
 @Component({
@@ -31,8 +31,8 @@ export class Color {
   }
 
   private initColor() {
-    const selection: Selection | null = getSelection(this.containerRef);
-    this.range = selection?.getRangeAt(0);
+    const {range, selection} = getRange(this.containerRef);
+    this.range = range;
 
     const anchor: HTMLElement | null = getAnchorElement(selection);
 

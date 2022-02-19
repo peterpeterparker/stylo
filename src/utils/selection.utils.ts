@@ -23,8 +23,8 @@ const hasShadowRootSelectionApi = (container?: HTMLElement): boolean =>
 const getShadowRootSelection = (container: HTMLElement): Selection | null =>
   (container.getRootNode() as any).getSelection();
 
-export const getRange = (): {range: Range | null; selection: Selection | null} => {
-  const selection: Selection | null = getSelection();
+export const getRange = (container?: HTMLElement): {range: Range | null; selection: Selection | null} => {
+  const selection: Selection | null = getSelection(container);
 
   if (!selection || selection.rangeCount <= 0) {
     return {
