@@ -318,7 +318,7 @@ export class Toolbar implements ComponentInterface {
     const top: number =
       position === 'above' ? relativeY - topOffset : relativeY + (selectionRect?.height || 0) + 8;
 
-    const safeAreaMarginX: number = 16;
+    const safeAreaMarginX: number = 32;
 
     // Limit overflow right
     const overflowLeft: boolean = this.tools.offsetWidth / 2 + safeAreaMarginX > relativeX;
