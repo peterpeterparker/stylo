@@ -3,6 +3,7 @@
 ### Fix
 
 - "enter" new paragraph if focus at begin of an existing paragraph
+- range 0 is not a valid index (on window resize)
 
 # 0.0.7-1 (2022-02-14)
 
