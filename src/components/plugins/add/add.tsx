@@ -1,4 +1,4 @@
-import {getSelection, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
+import {isMobile, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -21,6 +21,7 @@ import {
   isParagraphNotEditable
 } from '../../../utils/paragraph.utils';
 import {IconAdd} from '../../icons/add';
+import {getSelection} from '../../../utils/selection.utils';
 
 @Component({
   tag: 'stylo-add',
@@ -81,7 +82,7 @@ export class Add implements ComponentInterface {
     }
 
     if (['ArrowDown', 'ArrowUp'].includes(code)) {
-      this.initParagraph(getSelection()?.anchorNode);
+      this.initParagraph(getSelection(containerStore.state.ref)?.anchorNode);
       return;
     }
   }

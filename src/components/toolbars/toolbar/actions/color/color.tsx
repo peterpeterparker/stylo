@@ -58,7 +58,7 @@ export class Color {
   }
 
   private selectColor($event: CustomEvent) {
-    const selection: Selection | undefined = getSelection();
+    const selection: Selection | undefined = getSelection(this.containerRef);
 
     if (!selection || !$event || !$event.detail) {
       return;

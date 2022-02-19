@@ -1,4 +1,4 @@
-import {getSelection, moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
+import {moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {UndoRedoAddRemoveParagraph, UndoRedoUpdateParagraph} from '../types/undo-redo';
@@ -13,7 +13,7 @@ import {
   addParagraph, prependEmptyText
 } from '../utils/paragraph.utils';
 import {stackUndoParagraphs} from '../utils/undo-redo.utils';
-import {getRange} from '../utils/selection.utils';
+import {getRange, getSelection} from '../utils/selection.utils';
 
 export class EnterEvents {
   init() {
@@ -175,7 +175,7 @@ export class EnterEvents {
     });
 
     // Reset range end we do not want to select empty text
-    range.setEndAfter(getSelection().anchorNode);
+    range.setEndAfter(getSelection(containerStore.state.ref).anchorNode);
 
     const newNode: Node | undefined = await createNewEmptyLine({
       paragraph: anchor,

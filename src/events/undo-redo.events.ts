@@ -29,6 +29,7 @@ import {
   stackUndoParagraphs,
   undo
 } from '../utils/undo-redo.utils';
+import {getSelection} from '../utils/selection.utils';
 
 interface UndoUpdateParagraphs extends UndoRedoUpdateParagraph {
   paragraph: HTMLElement;
@@ -117,7 +118,7 @@ export class UndoRedoEvents {
   };
 
   private onKeyup = () => {
-    this.onEventUpdateParagraphs(getSelection()?.anchorNode);
+    this.onEventUpdateParagraphs(getSelection(containerStore.state.ref)?.anchorNode);
   };
 
   private onSelectionChange = () =>

@@ -1,4 +1,4 @@
-import {getSelection, isFirefox} from '@deckdeckgo/utils';
+import {isFirefox} from '@deckdeckgo/utils';
 import {toHTMLElement} from './node.utils';
 import {getRange} from './selection.utils';
 
@@ -10,14 +10,14 @@ export const createLink = ({range, linkUrl}: {range: Range; linkUrl: string}) =>
 };
 
 export const removeLink = (container?: HTMLElement) => {
-  if (isFirefox()) {
-    removeFirefoxLink();
-    return;
-  }
-
   const {range, selection} = getRange(container);
 
   if (!range) {
+    return;
+  }
+
+  if (isFirefox()) {
+    removeFirefoxLink(selection);
     return;
   }
 
@@ -28,9 +28,8 @@ export const removeLink = (container?: HTMLElement) => {
   anchor.parentElement.replaceChild(fragment, anchor);
 };
 
-const removeFirefoxLink = () => {
-  const selection: Selection | null = getSelection();
-  const container: HTMLElement | undefined = toHTMLElement(selection?.anchorNode);
+const removeFirefoxLink = (selection: Selection) => {
+  const container: HTMLElement | undefined = toHTMLElement(selection.anchorNode);
 
   if (!container || container.nodeName.toLowerCase() !== 'a') {
     return;
