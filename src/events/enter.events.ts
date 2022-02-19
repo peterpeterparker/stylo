@@ -5,15 +5,16 @@ import {UndoRedoAddRemoveParagraph, UndoRedoUpdateParagraph} from '../types/undo
 import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
   addEmptyText,
+  addParagraph,
   createEmptyParagraph,
   createNewEmptyLine,
   findParagraph,
   isParagraphCode,
   isParagraphList,
-  addParagraph, prependEmptyText
+  prependEmptyText
 } from '../utils/paragraph.utils';
-import {stackUndoParagraphs} from '../utils/undo-redo.utils';
 import {getRange, getSelection} from '../utils/selection.utils';
+import {stackUndoParagraphs} from '../utils/undo-redo.utils';
 
 export class EnterEvents {
   init() {

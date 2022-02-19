@@ -20,8 +20,8 @@ import {
   isParagraphEmpty,
   isParagraphNotEditable
 } from '../../../utils/paragraph.utils';
-import {IconAdd} from '../../icons/add';
 import {getSelection} from '../../../utils/selection.utils';
+import {IconAdd} from '../../icons/add';
 
 @Component({
   tag: 'stylo-add',
