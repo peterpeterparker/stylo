@@ -2,7 +2,7 @@ import {getSelection} from '@deckdeckgo/utils';
 import {UndoRedoSelection} from '../types/undo-redo';
 import {elementIndex, findNodeAtDepths, nodeDepths, toHTMLElement} from './node.utils';
 import {findParagraph} from './paragraph.utils';
-import {getRange} from './selection.utils';
+import {getRange} from './range.utils';
 
 export const toUndoRedoSelection = (container: Node): UndoRedoSelection | undefined => {
   const {range, selection} = getRange();
