@@ -1,9 +1,9 @@
-import {getAnchorElement, getSelection, hexToRgb} from '@deckdeckgo/utils';
+import {getAnchorElement, hexToRgb} from '@deckdeckgo/utils';
 import {Component, Event, EventEmitter, h, Prop, State} from '@stencil/core';
 import configStore from '../../../../../stores/config.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
 import {toHTMLElement} from '../../../../../utils/node.utils';
-import {getSelectionIncludingShadowroot} from '../../../../../utils/selection.utils.js';
+import {getRange, getSelection} from '../../../../../utils/selection.utils';
 import {findStyleNode} from '../../../../../utils/toolbar.utils';
 
 @Component({
@@ -31,8 +31,8 @@ export class Color {
   }
 
   private initColor() {
-    const selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
-    this.range = selection?.getRangeAt(0);
+    const {range, selection} = getRange(this.containerRef);
+    this.range = range;
 
     const anchor: HTMLElement | null = getAnchorElement(selection);
 
@@ -58,7 +58,7 @@ export class Color {
   }
 
   private selectColor($event: CustomEvent) {
-    const selection: Selection | undefined = getSelection();
+    const selection: Selection | undefined = getSelection(this.containerRef);
 
     if (!selection || !$event || !$event.detail) {
       return;

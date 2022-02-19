@@ -1,6 +1,7 @@
-import {getSelection, moveCursorToEnd} from '@deckdeckgo/utils';
+import {moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import {isTextNode} from '../utils/node.utils';
+import {getRange} from '../utils/selection.utils';
 
 export class TabEvents {
   init() {
@@ -22,16 +23,20 @@ export class TabEvents {
   };
 
   private catchTab($event: KeyboardEvent) {
-    $event.preventDefault();
+    const {range, selection} = getRange(containerStore.state.ref);
 
-    const selection: Selection | null = getSelection();
+    if (!range) {
+      return;
+    }
+
     const node: Node | undefined = selection?.focusNode;
 
     if (!isTextNode(node)) {
       return;
     }
 
-    const range: Range | undefined = selection?.getRangeAt(0);
+    $event.preventDefault();
+
     const text: Text = document.createTextNode('\u0009');
     range?.insertNode(text);
 

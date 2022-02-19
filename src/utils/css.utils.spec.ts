@@ -40,8 +40,7 @@ describe('css shadow', () => {
     injectCSS(divInner.getRootNode());
     injectCSS(divInner.getRootNode());
 
-    let styles: NodeListOf<HTMLStyleElement> =
-      shadowRoot.querySelectorAll('style[stylo-editor]');
+    let styles: NodeListOf<HTMLStyleElement> = shadowRoot.querySelectorAll('style[stylo-editor]');
     expect(styles.length).toEqual(1);
   });
 });

@@ -1,4 +1,4 @@
-import {getSelection, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
+import {isMobile, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -20,6 +20,7 @@ import {
   isParagraphEmpty,
   isParagraphNotEditable
 } from '../../../utils/paragraph.utils';
+import {getSelection} from '../../../utils/selection.utils';
 import {IconAdd} from '../../icons/add';
 
 @Component({
@@ -81,7 +82,7 @@ export class Add implements ComponentInterface {
     }
 
     if (['ArrowDown', 'ArrowUp'].includes(code)) {
-      this.initParagraph(getSelection()?.anchorNode);
+      this.initParagraph(getSelection(containerStore.state.ref)?.anchorNode);
       return;
     }
   }

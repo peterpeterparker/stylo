@@ -1,14 +1,8 @@
-import {
-  caretPosition,
-  getSelection,
-  isFirefox,
-  isIOS,
-  isSafari,
-  moveCursorToEnd
-} from '@deckdeckgo/utils';
+import {caretPosition, isFirefox, isIOS, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {isTextNode, toHTMLElement} from './node.utils';
+import {getSelection} from './selection.utils';
 
 export interface BeforeInputKey {
   key: string;
@@ -81,7 +75,7 @@ export const transformInput = async ({
   $event: KeyboardEvent | InputEvent;
   transformInput: TransformInput;
 }) => {
-  const selection: Selection | null = getSelection();
+  const selection: Selection | null = getSelection(containerStore.state.ref);
 
   if (!selection) {
     return;
@@ -130,7 +124,7 @@ const replaceBacktick = (): Promise<void> => {
  * Firefox renders the new mark and let the backtick in the previous text element
  */
 const replaceBacktickFirefox = async (): Promise<void> => {
-  const markElement: Node | null = getSelection()?.anchorNode;
+  const markElement: Node | null = getSelection(containerStore.state.ref)?.anchorNode;
   const previousSibling: Node | null = markElement?.previousSibling;
 
   if (!previousSibling) {

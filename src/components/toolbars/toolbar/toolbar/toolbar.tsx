@@ -34,7 +34,7 @@ import {execCommandNative} from '../../../../utils/execcommnad-native.utils';
 import {removeLink} from '../../../../utils/link.utils';
 import {toHTMLElement} from '../../../../utils/node.utils';
 import {findParagraph, isParagraph} from '../../../../utils/paragraph.utils';
-import {getSelectionIncludingShadowroot} from '../../../../utils/selection.utils.js';
+import {getRange, getSelection} from '../../../../utils/selection.utils';
 import {
   getBold,
   getContentAlignment,
@@ -241,7 +241,7 @@ export class Toolbar implements ComponentInterface {
   };
 
   private displayTools() {
-    let selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
+    let selection: Selection | null = getSelection(this.containerRef);
 
     if (!this.anchorEvent) {
       this.reset(false);
@@ -293,25 +293,26 @@ export class Toolbar implements ComponentInterface {
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
 
-    const selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
+    const {range} = getRange(this.containerRef);
 
-    const selectionRange: Range | undefined = selection?.getRangeAt(0);
-    const selectionRect: DOMRect | undefined = selectionRange?.getBoundingClientRect();
+    const selectionRect: DOMRect | undefined = range?.getBoundingClientRect();
 
     // Calculate the absolute position on the screen where the container should be (if it's above the selection)
-    const targetAbsoluteX = selectionRect ? selectionRect.x + selectionRect.width / 2 : eventX;
-    const targetAbsoluteY = selectionRect ? selectionRect.y : eventY;
+    const targetAbsoluteX: number = selectionRect
+      ? selectionRect.x + selectionRect.width / 2
+      : eventX;
+    const targetAbsoluteY: number = selectionRect ? selectionRect.y : eventY;
 
-    const styloContainerRect = this.el.shadowRoot.host.getBoundingClientRect();
+    const {x, y}: DOMRect = this.el.shadowRoot.host.getBoundingClientRect();
 
     // calculate the relative position between the containers
-    const relativeX = targetAbsoluteX - styloContainerRect.x;
-    const relativeY = targetAbsoluteY - styloContainerRect.y;
+    const relativeX: number = targetAbsoluteX - x;
+    const relativeY: number = targetAbsoluteY - y;
 
     const position: 'above' | 'under' = eventY > 100 ? 'above' : 'under';
 
     // TODO: this maybe not always be the case that the whole window size could be used for overlay
-    const innerWidth: number = isIOS() ? screen.width : window.innerWidth;
+    const {innerWidth} = window;
 
     const topOffset = 16;
     const top: number =
@@ -328,7 +329,7 @@ export class Toolbar implements ComponentInterface {
       innerWidth > 0 && fixedLeft > innerWidth - (this.tools.offsetWidth / 2 + safeAreaMarginX);
 
     const left = overflowRight
-      ? `${innerWidth - styloContainerRect.x - this.tools.offsetWidth - safeAreaMarginX}px`
+      ? `${innerWidth - x - this.tools.offsetWidth - safeAreaMarginX}px`
       : overflowLeft
       ? `${safeAreaMarginX}px`
       : `${relativeX}px`;
@@ -498,7 +499,7 @@ export class Toolbar implements ComponentInterface {
 
   private toggleLink = () => {
     if (this.link) {
-      removeLink();
+      removeLink(this.containerRef);
       this.reset(true);
     } else {
       this.openLink();

@@ -1,17 +1,19 @@
-import {getSelection, moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
+import {moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {UndoRedoAddRemoveParagraph, UndoRedoUpdateParagraph} from '../types/undo-redo';
 import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
   addEmptyText,
+  addParagraph,
   createEmptyParagraph,
   createNewEmptyLine,
   findParagraph,
   isParagraphCode,
   isParagraphList,
-  addParagraph, prependEmptyText
+  prependEmptyText
 } from '../utils/paragraph.utils';
+import {getRange, getSelection} from '../utils/selection.utils';
 import {stackUndoParagraphs} from '../utils/undo-redo.utils';
 
 export class EnterEvents {
@@ -34,7 +36,13 @@ export class EnterEvents {
   };
 
   private async createParagraph($event: KeyboardEvent) {
-    const anchor: HTMLElement | undefined = toHTMLElement(getSelection()?.anchorNode);
+    const {range, selection} = getRange(containerStore.state.ref);
+
+    if (!range) {
+      return;
+    }
+
+    const anchor: HTMLElement | undefined = toHTMLElement(selection?.anchorNode);
 
     // Create only if we have an anchor otherwise let the browser deals with it
     if (!anchor) {
@@ -58,7 +66,6 @@ export class EnterEvents {
     $event.preventDefault();
 
     // Extract the rest of the "line" (the paragraph) form the cursor position to end
-    const range: Range = getSelection().getRangeAt(0);
     range.collapse(true);
     range.setEndAfter(paragraph);
 
@@ -169,7 +176,7 @@ export class EnterEvents {
     });
 
     // Reset range end we do not want to select empty text
-    range.setEndAfter(getSelection().anchorNode);
+    range.setEndAfter(getSelection(containerStore.state.ref).anchorNode);
 
     const newNode: Node | undefined = await createNewEmptyLine({
       paragraph: anchor,

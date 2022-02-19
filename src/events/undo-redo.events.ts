@@ -20,6 +20,7 @@ import {
   findUpdatedParagraphs,
   RemovedParagraph
 } from '../utils/paragraphs.utils';
+import {getSelection} from '../utils/selection.utils';
 import {toUndoRedoSelection} from '../utils/undo-redo-selection.utils';
 import {
   nextRedoChanges,
@@ -117,7 +118,7 @@ export class UndoRedoEvents {
   };
 
   private onKeyup = () => {
-    this.onEventUpdateParagraphs(getSelection()?.anchorNode);
+    this.onEventUpdateParagraphs(getSelection(containerStore.state.ref)?.anchorNode);
   };
 
   private onSelectionChange = () =>
