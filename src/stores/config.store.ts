@@ -45,6 +45,8 @@ export const DEFAULT_EXCLUDE_ATTRIBUTES = [
   'contenteditable'
 ];
 
+export const DEFAULT_DONT_INJECT_HEAD_CSS = false;
+
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,
   toolbar: DEFAULT_TOOLBAR,

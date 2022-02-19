@@ -25,7 +25,7 @@ import containerStore from '../../stores/container.store';
 import i18n from '../../stores/i18n.store';
 import undoRedoStore from '../../stores/undo-redo.store';
 import {StyloConfig} from '../../types/config';
-import {injectHeadCSS} from '../../utils/css.utils';
+import {injectCSS} from '../../utils/css.utils';
 
 @Component({
   tag: 'stylo-editor',
@@ -74,8 +74,6 @@ export class Editor implements ComponentInterface {
   }
 
   componentDidLoad() {
-    injectHeadCSS();
-
     window?.addEventListener('resize', this.debounceSize);
   }
 
@@ -118,6 +116,8 @@ export class Editor implements ComponentInterface {
       return;
     }
 
+    injectCSS(this.containerRef.getRootNode());
+
     containerStore.state.ref.classList.add('stylo-container');
 
     this.containerRefEditable();
@@ -142,7 +142,9 @@ export class Editor implements ComponentInterface {
         return;
       }
 
-      this.contentEditable = this.containerRef.getAttribute('contenteditable') === 'true';
+      this.contentEditable = ['true', ''].includes(
+        this.containerRef.getAttribute('contenteditable')
+      );
 
       if (this.contentEditable) {
         this.initEvents();
@@ -154,7 +156,7 @@ export class Editor implements ComponentInterface {
 
     this.attributesObserver.observe(containerStore.state.ref, {attributes: true});
 
-    this.contentEditable = this.containerRef.getAttribute('contenteditable') === 'true';
+    this.contentEditable = ['true', ''].includes(this.containerRef.getAttribute('contenteditable'));
   }
 
   private applyConfig() {
