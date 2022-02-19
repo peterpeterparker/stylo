@@ -1,16 +1,16 @@
 import {getSelection, moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
-import {UndoRedoUpdateParagraph} from '../types/undo-redo';
+import {UndoRedoAddRemoveParagraph, UndoRedoUpdateParagraph} from '../types/undo-redo';
 import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
-  appendEmptyText,
+  addEmptyText,
   createEmptyParagraph,
   createNewEmptyLine,
   findParagraph,
   isParagraphCode,
   isParagraphList,
-  replaceParagraphFirstChild
+  addParagraph, prependEmptyText
 } from '../utils/paragraph.utils';
 import {stackUndoParagraphs} from '../utils/undo-redo.utils';
 
@@ -62,7 +62,7 @@ export class EnterEvents {
     range.collapse(true);
     range.setEndAfter(paragraph);
 
-    const fragment: DocumentFragment = getSelection().getRangeAt(0).cloneContents();
+    const fragment: DocumentFragment = range.cloneContents();
     const isEndOfParagraph: boolean = fragment.textContent === '';
 
     const {shiftKey} = $event;
@@ -73,50 +73,71 @@ export class EnterEvents {
       return;
     }
 
-    const newParagraph: Node | undefined = await createEmptyParagraph({
-      container: containerStore.state.ref,
-      paragraph
-    });
-
-    if (!newParagraph) {
-      return;
-    }
-
     // We created a new paragraph with the cursor at the end aka we pressed "Enter" with the cursor at the end of the paragraph
     if (isEndOfParagraph) {
+      const newParagraph: Node | undefined = await createEmptyParagraph({
+        container: containerStore.state.ref,
+        paragraph
+      });
+
       moveCursorToEnd(newParagraph);
       return;
     }
 
-    await this.createParagraphWithContent({paragraph, newParagraph: newParagraph as HTMLElement});
+    await this.createParagraphWithContent({
+      range,
+      paragraph
+    });
   }
 
   private async createParagraphWithContent({
     paragraph,
-    newParagraph
+    range
   }: {
     paragraph: HTMLElement;
-    newParagraph: HTMLElement;
+    range: Range;
   }) {
-    // We have to handle undo-redo manually otherwise we will get two entries in the stack, one for the "extractContents" and one when we replace the child in the new paragraph
+    // We have to handle undo-redo manually because we want the redo to redo everything in one block
     undoRedoStore.state.observe = false;
+
+    // We undo-redo stack an update of the current paragraph value
+    const updateParagraphs: UndoRedoUpdateParagraph[] = this.toUpdateParagraphs([paragraph]);
+
+    // The new fragment is a div - i.e. is a paragraph
+    const moveFragment: DocumentFragment = range.extractContents();
+    const newParagraph: Node | undefined = await addParagraph({
+      container: containerStore.state.ref,
+      paragraph,
+      fragment: moveFragment
+    });
+
+    // We undo-redo stack the new paragraph to remove it on undo
+    const addRemoveParagraphs = this.toAddParagraphs([toHTMLElement(newParagraph)]);
+
+    // If original paragraph is now empty - the all content has been moved to a new paragraph - we add a zero length width otherwise the div has no height
+    // We do not need to add this to undo-redo stack
+    // Happens for example when user click enter at the begin of the paragraph
+    if (paragraph.textContent === '') {
+      await prependEmptyText({paragraph});
+    }
 
     stackUndoParagraphs({
       container: containerStore.state.ref,
-      addRemoveParagraphs: [],
-      updateParagraphs: this.toUpdateParagraphs([paragraph, newParagraph])
-    });
-
-    const moveFragment: DocumentFragment = getSelection().getRangeAt(0).extractContents();
-    await replaceParagraphFirstChild({
-      container: containerStore.state.ref,
-      paragraph: newParagraph,
-      fragment: moveFragment
+      addRemoveParagraphs,
+      updateParagraphs
     });
 
     // We don't move the cursor, we keep the position at the beginning of the new paragraph
 
     undoRedoStore.state.observe = true;
+  }
+
+  private toAddParagraphs(paragraphs: HTMLElement[]): UndoRedoAddRemoveParagraph[] {
+    return paragraphs.map((paragraph: HTMLElement) => ({
+      outerHTML: paragraph.outerHTML,
+      index: elementIndex(paragraph),
+      mutation: 'add'
+    }));
   }
 
   private toUpdateParagraphs(paragraphs: HTMLElement[]): UndoRedoUpdateParagraph[] {
@@ -160,7 +181,7 @@ export class EnterEvents {
       return;
     }
 
-    const text: Node | undefined = await appendEmptyText({
+    const text: Node | undefined = await addEmptyText({
       paragraph,
       element: newNode as HTMLElement
     });
