@@ -1,4 +1,4 @@
-interface I18nPlugins {
+export interface I18nPlugins {
   huge_title: string;
   large_title: string;
   small_title: string;
@@ -9,12 +9,12 @@ interface I18nPlugins {
   code: string;
 }
 
-interface I18nAdd {
+export interface I18nAdd {
   placeholder: string;
   add_element: string;
 }
 
-interface I18Toolbar {
+export interface I18Toolbar {
   align_left: string;
   align_center: string;
   align_right: string;
@@ -33,7 +33,7 @@ interface I18Toolbar {
   strikethrough: string;
 }
 
-interface I18Menus {
+export interface I18Menus {
   img_width_original: string;
   img_width_large: string;
   img_width_medium: string;
@@ -41,9 +41,9 @@ interface I18Menus {
   img_delete: string;
 }
 
-type Languages = 'en' | 'es' | 'de' | 'nl';
+export type Languages = 'en' | 'es' | 'de' | 'nl';
 
-interface I18n {
+export interface I18n {
   lang: Languages;
   plugins: I18nPlugins;
   add: I18nAdd;

@@ -137,7 +137,7 @@ The editor is provided with a default configuration. It can be customized by set
 
 For more information:
 
-- [i18.d.ts](src/types/i18.d.ts) for the list of languages
+- [i18.d.ts](src/types/i18n.ts) for the list of languages
 - [config.store.ts](src/stores/config.store.ts) for the default plugins and toolbar configuration
 
 ## Plugins
@@ -298,7 +298,7 @@ English, German, Spanish and Dutch are currently supported. More translations ar
 ### Contributions
 
 - add a new translation file in [src/assets/i18n](src/assets/i18n)
-- extends the list of supported `Languages` in [src/types/i18.d.ts](src/types/i18.d.ts)
+- extends the list of supported `Languages` in [src/types/i18.d.ts](src/types/i18n.ts)
 - update README with the new language
 
 ### Customization

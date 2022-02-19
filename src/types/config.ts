@@ -1,3 +1,4 @@
+import {Languages} from './i18n';
 import {StyloMenu} from './menu';
 import {StyloPlugin} from './plugin';
 import {StyloConfigToolbar} from './toolbar';
