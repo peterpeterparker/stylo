@@ -105,8 +105,13 @@ export class Toolbar implements ComponentInterface {
   private selectionParagraph: Node | undefined = undefined;
 
   private anchorLink: ToolbarAnchorLink = null;
-  private anchorEvent: MouseEvent | TouchEvent | undefined;
-  private anchorEventComposedPath: EventTarget[];
+
+  private anchorEvent:
+    | {
+        $event: MouseEvent | TouchEvent;
+        composedPath: EventTarget[];
+      }
+    | undefined;
 
   @State()
   private link: boolean = false;
@@ -236,8 +241,10 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    this.anchorEvent = $event;
-    this.anchorEventComposedPath = $event.composedPath();
+    this.anchorEvent = {
+      $event,
+      composedPath: $event.composedPath()
+    };
   };
 
   private displayTools() {
@@ -248,10 +255,12 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
+    const {$event, composedPath} = this.anchorEvent;
+
     if (
       this.containerRef &&
-      !this.containerRef.contains(this.anchorEvent.target as Node) &&
-      !this.containerRef.contains(this.anchorEventComposedPath[0] as Node)
+      !this.containerRef.contains($event.target as Node) &&
+      !this.containerRef.contains(composedPath[0] as Node)
     ) {
       this.reset(false);
       return;
@@ -290,8 +299,10 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    const eventX: number = unifyEvent(this.anchorEvent).clientX;
-    const eventY: number = unifyEvent(this.anchorEvent).clientY;
+    const {$event} = this.anchorEvent;
+
+    const eventX: number = unifyEvent($event).clientX;
+    const eventY: number = unifyEvent($event).clientY;
 
     const {range} = getRange(this.containerRef);
 
@@ -625,7 +636,7 @@ export class Toolbar implements ComponentInterface {
       return (
         <stylo-toolbar-align
           containerRef={this.containerRef}
-          anchorEvent={this.anchorEvent}
+          anchorEvent={this.anchorEvent.$event}
           align={this.align}
           onAlignModified={() => this.reset(true)}></stylo-toolbar-align>
       );
