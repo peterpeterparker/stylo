@@ -34,7 +34,7 @@ import {execCommandNative} from '../../../../utils/execcommnad-native.utils';
 import {removeLink} from '../../../../utils/link.utils';
 import {toHTMLElement} from '../../../../utils/node.utils';
 import {findParagraph, isParagraph} from '../../../../utils/paragraph.utils';
-import {getSelectionIncludingShadowroot} from '../../../../utils/selection.utils.js';
+import {getSelection} from '../../../../utils/selection.utils';
 import {
   getBold,
   getContentAlignment,
@@ -241,7 +241,7 @@ export class Toolbar implements ComponentInterface {
   };
 
   private displayTools() {
-    let selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
+    let selection: Selection | null = getSelection(this.containerRef);
 
     if (!this.anchorEvent) {
       this.reset(false);
@@ -293,7 +293,7 @@ export class Toolbar implements ComponentInterface {
     const eventX: number = unifyEvent(this.anchorEvent).clientX;
     const eventY: number = unifyEvent(this.anchorEvent).clientY;
 
-    const selection: Selection | null = getSelectionIncludingShadowroot(this.containerRef);
+    const selection: Selection | null = getSelection(this.containerRef);
 
     const selectionRange: Range | undefined = selection?.getRangeAt(0);
     const selectionRect: DOMRect | undefined = selectionRange?.getBoundingClientRect();
