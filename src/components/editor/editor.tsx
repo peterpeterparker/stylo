@@ -116,7 +116,7 @@ export class Editor implements ComponentInterface {
       return;
     }
 
-    injectCSS(this.containerRef.getRootNode());
+    injectCSS({rootNode: this.containerRef.getRootNode()});
 
     containerStore.state.ref.classList.add('stylo-container');
 
