@@ -1,3 +1,9 @@
+# 0.0.8-2 (2022-02-19)
+
+### Style
+
+- inline `plugin` style to bypass `.hydrated` class
+
 # 0.0.8-1 (2022-02-19)
 
 ### Features

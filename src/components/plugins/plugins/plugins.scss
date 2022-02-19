@@ -10,7 +10,6 @@
   left: var(--actions-left);
   transform: translate(0, var(--actions-translate-y)) scale(0.95);
 
-  visibility: hidden;
   opacity: 0;
 
   margin: 2px 0;
@@ -25,17 +24,18 @@
   @include overlay.overlay;
 
   pointer-events: none;
-}
 
-:host(.hydrated) {
   transition-property: opacity, transform;
   transition-duration: 0.15s, 0.15s;
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275),
-    cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-:host(.hydrated.display) {
-  visibility: visible;
+:host(:not(.display)) {
+
+}
+
+:host(.display) {
   opacity: 1;
   transform: translate(0, var(--actions-translate-y)) scale(1);
   pointer-events: all;
