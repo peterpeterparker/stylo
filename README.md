@@ -65,7 +65,7 @@ You can use Stylo via CDN or by installing it locally.
 Add the following code to your page to load the editor.
 
 ```html
-<script type="module" src="https://unpkg.com/@papyrs/stylo@alpha/dist/stylo/stylo.esm.js"></script>
+<script type="module" src="https://unpkg.com/@papyrs/stylo@latest/dist/stylo/stylo.esm.js"></script>
 ```
 
 That's it, the component is imported and loaded.
