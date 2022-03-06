@@ -77,9 +77,7 @@ export const stackUndoParagraphs = ({
 
   undoRedoStore.state.undo.push(changes);
 
-  if (!undoRedoStore.state.redo) {
-    undoRedoStore.state.redo = [];
-  }
+  undoRedoStore.state.redo = [];
 };
 
 export const nextUndoChanges = (): UndoRedoChanges | undefined =>
