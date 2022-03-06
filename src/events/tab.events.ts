@@ -37,9 +37,11 @@ export class TabEvents {
 
     $event.preventDefault();
 
-    const text: Text = document.createTextNode('\u0009');
-    range?.insertNode(text);
+    const span: HTMLSpanElement = document.createElement('span');
+    span.innerHTML = '\u0009';
 
-    moveCursorToEnd(text);
+    range?.insertNode(span);
+
+    moveCursorToEnd(span);
   }
 }
