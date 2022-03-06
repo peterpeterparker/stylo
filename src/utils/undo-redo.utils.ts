@@ -131,10 +131,11 @@ const undoRedo = async ({
 
   const {changes, selection}: UndoRedoChanges = undoChanges;
 
-  const promises: Promise<UndoRedoChange>[] = changes.map((undoChange: UndoRedoChange) =>
-    undoRedoChange({undoChange})
-  );
-  const redoChanges: UndoRedoChange[] = await Promise.all(promises);
+  let redoChanges: UndoRedoChange[] = [];
+
+  for (const undoChange of changes) {
+    redoChanges = [await undoRedoChange({undoChange}), ...redoChanges];
+  }
 
   redoSelection({container: containerStore.state.ref, selection});
 
