@@ -10,7 +10,7 @@ import {
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
 import {findNodeAtDepths, isTextNode, toHTMLElement} from './node.utils';
-import {redoSelection} from './undo-redo-selection.utils';
+import {redoSelection, toUndoRedoSelection} from './undo-redo-selection.utils';
 
 export const stackUndoInput = ({
   container,
@@ -127,6 +127,8 @@ const undoRedo = async ({
     return;
   }
 
+  const currentSelection: UndoRedoSelection = toUndoRedoSelection(containerStore.state.ref);
+
   const {changes, selection}: UndoRedoChanges = undoChanges;
 
   let redoChanges: UndoRedoChange[] = [];
@@ -137,7 +139,7 @@ const undoRedo = async ({
 
   redoSelection({container: containerStore.state.ref, selection});
 
-  pushTo({changes: redoChanges, selection});
+  pushTo({changes: redoChanges, selection: currentSelection});
 
   popFrom();
 };
