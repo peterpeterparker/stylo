@@ -84,6 +84,10 @@ export class Plugins implements ComponentInterface {
 
   private displayAndFocus() {
     const onRender = async (_mutations: MutationRecord[], observer: MutationObserver) => {
+      if (this.el.style.visibility !== 'visible') {
+        return;
+      }
+
       observer.disconnect();
 
       await this.el.shadowRoot.querySelector('stylo-list')?.focusFirstButton();
@@ -164,16 +168,14 @@ export class Plugins implements ComponentInterface {
       ...(this.position === undefined
         ? {}
         : {
-          '--actions-top': `${this.position.top}px`,
-          '--actions-left': `${this.position.left}px`,
-          '--actions-translate-y': `${this.position.downward ? '0' : '-100%'}`,
-        })
+            '--actions-top': `${this.position.top}px`,
+            '--actions-left': `${this.position.left}px`,
+            '--actions-translate-y': `${this.position.downward ? '0' : '-100%'}`
+          })
     };
 
     return (
-      <Host
-        style={style}
-        class={`${this.display ? 'display' : 'hidden'}`}>
+      <Host style={style} class={`${this.display ? 'display' : 'hidden'}`}>
         {this.renderList()}
 
         {this.renderInputs()}
