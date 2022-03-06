@@ -1,3 +1,11 @@
+# 0.0.9 (2022-03-06)
+
+### Fix
+
+- focus list of plugins on display
+- miscellaneous selection and order fixes for undo-redo
+- preserve cursor position on undo-redo tab
+
 # 0.0.8-2 (2022-02-19)
 
 ### Style
