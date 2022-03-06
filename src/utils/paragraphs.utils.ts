@@ -181,7 +181,7 @@ export const findSelectionParagraphs = ({
     findParagraph({element: range.endContainer, container})
   );
 
-  if (!end || start?.isSameNode(end)) {
+  if (!end || !start || start?.isSameNode(end)) {
     return start ? [start] : [];
   }
 

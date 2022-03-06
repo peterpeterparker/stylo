@@ -1,4 +1,5 @@
 import {moveCursorToOffset} from '@deckdeckgo/utils';
+import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {
   UndoRedoAddRemoveParagraph,
@@ -9,7 +10,7 @@ import {
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
 import {findNodeAtDepths, isTextNode, toHTMLElement} from './node.utils';
-import {redoSelection} from './undo-redo-selection.utils';
+import {redoSelection, toUndoRedoSelection} from './undo-redo-selection.utils';
 
 export const stackUndoInput = ({
   container,
@@ -76,9 +77,7 @@ export const stackUndoParagraphs = ({
 
   undoRedoStore.state.undo.push(changes);
 
-  if (!undoRedoStore.state.redo) {
-    undoRedoStore.state.redo = [];
-  }
+  undoRedoStore.state.redo = [];
 };
 
 export const nextUndoChanges = (): UndoRedoChanges | undefined =>
@@ -128,24 +127,27 @@ const undoRedo = async ({
     return;
   }
 
+  const currentSelection: UndoRedoSelection = toUndoRedoSelection(containerStore.state.ref);
+
   const {changes, selection}: UndoRedoChanges = undoChanges;
 
-  const promises: Promise<UndoRedoChange>[] = changes.map((undoChange: UndoRedoChange) =>
-    undoRedoChange({undoChange, selection})
-  );
-  const redoChanges: UndoRedoChange[] = await Promise.all(promises);
+  let redoChanges: UndoRedoChange[] = [];
 
-  pushTo({changes: redoChanges});
+  for (const undoChange of changes) {
+    redoChanges = [await undoRedoChange({undoChange}), ...redoChanges];
+  }
+
+  redoSelection({container: containerStore.state.ref, selection});
+
+  pushTo({changes: redoChanges, selection: currentSelection});
 
   popFrom();
 };
 
 const undoRedoChange = async ({
-  undoChange,
-  selection
+  undoChange
 }: {
   undoChange: UndoRedoChange;
-  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {type} = undoChange;
 
@@ -154,10 +156,10 @@ const undoRedoChange = async ({
   }
 
   if (type === 'paragraph') {
-    return undoRedoParagraph({undoChange, selection});
+    return undoRedoParagraph({undoChange});
   }
 
-  return undoRedoUpdate({undoChange, selection});
+  return undoRedoUpdate({undoChange});
 };
 
 const undoRedoInput = async ({
@@ -224,11 +226,9 @@ const undoRedoInput = async ({
 };
 
 const undoRedoParagraph = async ({
-  undoChange,
-  selection
+  undoChange
 }: {
   undoChange: UndoRedoChange;
-  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
@@ -268,8 +268,6 @@ const undoRedoParagraph = async ({
     }
   }
 
-  redoSelection({container, selection});
-
   return {
     ...undoChange,
     data: to
@@ -277,11 +275,9 @@ const undoRedoParagraph = async ({
 };
 
 const undoRedoUpdate = async ({
-  undoChange,
-  selection
+  undoChange
 }: {
   undoChange: UndoRedoChange;
-  selection: UndoRedoSelection;
 }): Promise<UndoRedoChange> => {
   const {data, target} = undoChange;
 
@@ -301,8 +297,6 @@ const undoRedoUpdate = async ({
     });
     to.push({index, outerHTML: previousOuterHTML});
   }
-
-  redoSelection({container, selection});
 
   return {
     ...undoChange,
