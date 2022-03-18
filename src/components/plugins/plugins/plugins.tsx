@@ -165,6 +165,7 @@ export class Plugins implements ComponentInterface {
   render() {
     const style: Record<string, string> = {
       visibility: this.display ? 'visible' : 'hidden',
+      ...(!this.display && {height: '0px'}),
       ...(this.position === undefined
         ? {}
         : {
