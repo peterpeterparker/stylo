@@ -15,6 +15,7 @@ div.tools {
 
   visibility: hidden;
   opacity: 0;
+  height: 0;
 
   animation: 0s ease 0s 1 normal none running none;
   transition: opacity 0.1s ease-out;
@@ -43,15 +44,15 @@ div.tools {
    */
   min-width: var(--stylo-toolbar-min-width, 280px);
 
-  /**
-   * @prop --stylo-toolbar-min-height: The height of the toolbar
-   * @default 44px
-   */
-  min-height: var(--stylo-toolbar-min-height, 44px);
-
   &.tools-activated {
     visibility: visible;
     opacity: 1;
+
+    /**
+     * @prop --stylo-toolbar-min-height: The height of the toolbar
+     * @default 44px
+     */
+    min-height: var(--stylo-toolbar-min-height, 44px);
   }
 }
 

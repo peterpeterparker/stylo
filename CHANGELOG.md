@@ -1,3 +1,9 @@
+# 0.0.10 (2022-03-XX)
+
+### Style
+
+- use no height if invisible
+
 # 0.0.9 (2022-03-06)
 
 ### Fix
