@@ -34,6 +34,8 @@ button {
 
   font-size: 1rem;
 
+  color: var(--stylo-toolbar-button-color, black);
+
   &:hover,
   &:focus {
     background: var(--background-active);
