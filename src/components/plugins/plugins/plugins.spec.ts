@@ -9,7 +9,7 @@ describe('plugins', () => {
     });
 
     expect(root).toEqualHtml(`
-      <stylo-plugins class="hidden" style="visibility: hidden;">
+      <stylo-plugins class="hidden" style="visibility: hidden; height: 0px;">
        <mock:shadow-root>
          <stylo-list></stylo-list>
          <input accept="image/x-png,image/jpeg,image/gif,image/svg+xml,image/webp" type="file">
