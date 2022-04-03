@@ -8,6 +8,7 @@
 ### Style
 
 - use no height if invisible
+- placeholder and add colors
 
 # 0.0.9 (2022-03-06)
 
