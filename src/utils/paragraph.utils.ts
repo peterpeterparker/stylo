@@ -137,14 +137,14 @@ export const transformParagraph = ({
 
   addObserver.observe(container, {childList: true, subtree: true});
 
-  const anchor: HTMLElement | undefined = toHTMLElement(paragraph.previousElementSibling);
+  const anchor: HTMLElement | null = toHTMLElement(paragraph.previousElementSibling);
 
   // We delete present paragraph and add the new element and assumes the mutation observer will trigger both delete and add in a single mutation.
   // Thanks to this, only one entry will be added in the undo-redo stack.
   container.removeChild(paragraph);
 
   if (!anchor) {
-    container.append(...elements);
+    container.prepend(...elements);
     return;
   }
 
