@@ -4,6 +4,7 @@
 
 - transform very first paragraph
 - delete content backward
+- placeholder position if browser adds a `<br/>` at begin of new paragraph
 
 ### Style
 
