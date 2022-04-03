@@ -22,6 +22,7 @@ Type: `Promise<void>`
 | Name                             | Description                                                                           |
 | -------------------------------- | ------------------------------------------------------------------------------------- |
 | `--stylo-list-background-active` | Background on focus and hover in the list @default --light (see \_variables.scss)     |
+| `--stylo-list-border-active`     | Border on focus and hover in the list @default 1px solid var(--background-active)     |
 | `--stylo-list-color-active`      | Color on focus and hover in the list @default --light-contrast (see \_variables.scss) |
 
 ## Dependencies

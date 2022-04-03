@@ -16,7 +16,7 @@ export const injectCSS = ({rootNode}: {rootNode: Node}) => {
 
     .stylo-container > *:after {
       content: attr(placeholder);
-      color: #6e6d6f;
+      color: var(--style-placeholder-color, #6e6d6f);
     }
   `;
 
