@@ -1,7 +1,7 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
-import {elementIndex, findNodeAtDepths, toHTMLElement} from '../utils/node.utils';
+import {findNodeAtDepths, toHTMLElement} from '../utils/node.utils';
 import {createNewParagraph, findParagraph, isStartNode} from '../utils/paragraph.utils';
 import {getRange} from '../utils/selection.utils';
 import {
@@ -144,8 +144,7 @@ export class InputEvents {
     }
 
     // Reset range to begin of the paragraph in case it contains children
-    const index: number = elementIndex(paragraph);
-    range.setStart(containerStore.state.ref, index);
+    range.setStartBefore(paragraph);
 
     $event.preventDefault();
     $event.stopImmediatePropagation();

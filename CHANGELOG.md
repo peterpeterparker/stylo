@@ -3,6 +3,7 @@
 ### Fix
 
 - transform very first paragraph
+- delete content backward
 
 ### Style
 
