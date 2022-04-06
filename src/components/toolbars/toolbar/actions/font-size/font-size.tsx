@@ -50,7 +50,7 @@ export class FontSize {
   private renderAction(size: ToolbarFontSize) {
     return (
       <stylo-toolbar-button
-        label={`${i18n.state.toolbar.align_center} ${size}`}
+        label={`${i18n.state.toolbar.font_size} ${size}`}
         onAction={($event: CustomEvent<UIEvent>) => this.modifyFontSize($event.detail, size)}
         class={this.fontSize === size ? 'active' : undefined}>
         <span>{size.toString()}</span>
