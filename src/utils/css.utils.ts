@@ -12,11 +12,14 @@ export const injectCSS = ({rootNode}: {rootNode: Node}) => {
   style.innerHTML = `
     .stylo-container > * {
       white-space: pre-wrap;
+      position: relative;
     }
 
     .stylo-container > *:after {
       content: attr(placeholder);
       color: var(--style-placeholder-color, #6e6d6f);
+      position: absolute;
+      top: 0;
     }
   `;
 
