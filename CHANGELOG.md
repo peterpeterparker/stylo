@@ -1,3 +1,14 @@
+# 0.0.12 (2022-04-10)
+
+### Features
+
+- debounce display of placeholder "Press "/" for plugins"
+
+### Style
+
+- position of all paragraphs set to `relative` and placeholder set to `absolute`
+- color picker height and alignment for Brave and Safari
+
 # 0.0.11 (2022-04-03)
 
 ### Style
