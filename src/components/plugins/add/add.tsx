@@ -1,4 +1,4 @@
-import {isMobile, moveCursorToStart} from '@deckdeckgo/utils';
+import {debounce, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -48,6 +48,8 @@ export class Add implements ComponentInterface {
    */
   @Event()
   hidePlugins: EventEmitter<void>;
+
+  private readonly debouncePlaceholder: () => void = debounce(() => this.addPlaceholder(), 350);
 
   componentDidLoad() {
     window?.addEventListener('resize', () => this.hide());
@@ -150,12 +152,16 @@ export class Add implements ComponentInterface {
 
     this.top = this.paragraph.offsetTop;
 
-    this.addPlaceholder();
+    this.editPlaceholder();
   };
 
-  private addPlaceholder() {
+  private editPlaceholder() {
     this.removePlaceholder();
 
+    this.debouncePlaceholder();
+  }
+
+  private addPlaceholder() {
     if (!isParagraphEmpty({paragraph: this.paragraph})) {
       return;
     }
@@ -168,14 +174,20 @@ export class Add implements ComponentInterface {
       return;
     }
 
-    const css: CSSStyleDeclaration = window.getComputedStyle(this.paragraph, ':before');
+    const cssBefore: CSSStyleDeclaration = window.getComputedStyle(this.paragraph, ':before');
+    const cssAfter: CSSStyleDeclaration = window.getComputedStyle(this.paragraph, ':after');
 
-    if (!['""', 'none'].includes(css.getPropertyValue('content'))) {
-      // An external source use :before to style this paragraph
+    const emptyPseudoElement: string[] = ['""', 'none'];
+
+    if (
+      !emptyPseudoElement.includes(cssBefore.getPropertyValue('content')) ||
+      !emptyPseudoElement.includes(cssAfter.getPropertyValue('content'))
+    ) {
+      // An external source use :before or :after to style this paragraph, we don't want to add noise in the ui
       return;
     }
 
-    setTimeout(() => this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder), 150);
+    this.paragraph.setAttribute('placeholder', i18n.state.add.placeholder);
   }
 
   private removePlaceholder() {

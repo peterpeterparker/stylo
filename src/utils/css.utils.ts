@@ -14,7 +14,7 @@ export const injectCSS = ({rootNode}: {rootNode: Node}) => {
       white-space: pre-wrap;
     }
 
-    .stylo-container > *:before {
+    .stylo-container > *:after {
       content: attr(placeholder);
       color: var(--style-placeholder-color, #6e6d6f);
     }
