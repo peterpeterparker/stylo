@@ -48,6 +48,8 @@ div.tools {
     visibility: visible;
     opacity: 1;
 
+    height: unset;
+
     /**
      * @prop --stylo-toolbar-min-height: The height of the toolbar
      * @default 44px

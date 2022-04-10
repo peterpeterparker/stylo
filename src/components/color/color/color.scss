@@ -1,6 +1,7 @@
 :host {
   display: flex;
   align-items: center;
+  justify-content: center;
   /**
    * @prop --stylo-color-flex-wrap: Component flex-wrap
    * @default wrap
@@ -20,7 +21,7 @@
    * @prop --stylo-color-padding: Component width
    * @default 288px
    */
-  width: var(--stylo-color-width, 288px);
+  width: var(--stylo-color-width, 298px);
 }
 
 button {
