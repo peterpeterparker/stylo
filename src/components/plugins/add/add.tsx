@@ -53,10 +53,12 @@ export class Add implements ComponentInterface {
 
   componentDidLoad() {
     window?.addEventListener('resize', () => this.hide());
+    document?.addEventListener('focusout', this.onFocusout);
   }
 
   disconnectedCallback() {
     window?.removeEventListener('resize', () => this.hide());
+    document?.removeEventListener('focusout', this.onFocusout);
   }
 
   /**
@@ -124,7 +126,10 @@ export class Add implements ComponentInterface {
     this.initParagraph(addedParagraphs[0]);
   }
 
+  private onFocusout = () => this.top = undefined;
+
   private hide() {
+    // On Android, keyboard display resize screen
     if (isMobile()) {
       return;
     }
