@@ -1,4 +1,4 @@
-import {debounce, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
+import {debounce, isIOS, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -126,7 +126,14 @@ export class Add implements ComponentInterface {
     this.initParagraph(addedParagraphs[0]);
   }
 
-  private onFocusout = () => this.top = undefined;
+  private onFocusout = () => {
+    // Only if not mobile because the event bubble and is triggered often
+    if (!isIOS()) {
+      return;
+    }
+
+    this.top = undefined;
+  };
 
   private hide() {
     // On Android, keyboard display resize screen
