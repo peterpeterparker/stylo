@@ -1,3 +1,9 @@
+# 0.0.13-1 (2022-04-12)
+
+### Fix
+
+- focusout only for iOS
+
 # 0.0.13 (2022-04-12)
 
 ### Features
