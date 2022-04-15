@@ -9,10 +9,10 @@ Another kind of rich text editor.
 - Future Proof 🚀
 - Open Source ⭐️
 
-A project from [DeckDeckGo](https://deckdeckgo.com), an editor for presentations, documents and blog posts.
+A project from [Papyrs](https://papy.rs), a blogging platform on web3.
 
 [![GitHub release](https://img.shields.io/github/release/papyrs/stylo/all?logo=GitHub&color=lightgrey)](https://github.com/papyrs/stylo/releases/latest)
-[![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fstylojs.com)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fstylojs.com&text=Another%20kind%20of%20rich%20text%20editor%20by%20%40deckdeckgo)
+[![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fstylojs.com)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fstylojs.com&text=Another%20kind%20of%20rich%20text%20editor%20by%20%40PapyrsApp)
 
 ## Table of contents
 
