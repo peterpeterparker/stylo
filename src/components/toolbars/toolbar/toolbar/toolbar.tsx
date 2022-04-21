@@ -206,6 +206,11 @@ export class Toolbar implements ComponentInterface {
     this.displayTools();
   }
 
+  @Listen('contextmenu', {target: 'document', passive: true})
+  onContextMenu() {
+    this.reset(false);
+  }
+
   @Listen('resize', {target: 'window'})
   onResize() {
     // On Android, keyboard display resize screen
@@ -229,18 +234,6 @@ export class Toolbar implements ComponentInterface {
   }
 
   private startSelection = ($event: MouseEvent | TouchEvent) => {
-    const action: boolean = $event.composedPath().includes(this.el);
-
-    if (action) {
-      return;
-    }
-
-    if (this.displayToolsActivated && !action) {
-      // If use in a shadowed containerRef context, onSelectionChange might not be triggered
-      this.reset(true);
-      return;
-    }
-
     this.anchorEvent = {
       $event,
       composedPath: $event.composedPath()
