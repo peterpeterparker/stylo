@@ -1,3 +1,9 @@
+# 0.0.14 (2022-04-21)
+
+### Fix
+
+- right click - context menu support
+
 # 0.0.13-1 (2022-04-12)
 
 ### Fix
