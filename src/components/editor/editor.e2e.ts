@@ -87,7 +87,7 @@ describe('editor', () => {
         ({style}: HTMLElement) => style.getPropertyValue('--actions-left')
       );
 
-      expect(styleTop).toEqual('109.5px');
+      expect(styleTop).toEqual('108.5px');
       expect(styleLeft).toEqual('80px');
 
       const transform = await page.find('stylo-plugins');
