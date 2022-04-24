@@ -32,7 +32,7 @@ export class InputEvents {
 
   private onKeyDown = ($event: KeyboardEvent) => {
     // This should be an on keydown listener because Firefox do not provide the same range in before input
-    this.deleteContentBackward($event);
+    this.deleteSelection($event);
   };
 
   private async preventTextLeaves($event: InputEvent) {
@@ -100,7 +100,7 @@ export class InputEvents {
     this.lastBeforeInput = {key: data};
   }
 
-  private deleteContentBackward($event: KeyboardEvent) {
+  private deleteSelection($event: KeyboardEvent) {
     const {key} = $event;
 
     if (!['Delete', 'Backspace'].includes(key)) {
