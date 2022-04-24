@@ -20,7 +20,7 @@ import {
   findUpdatedParagraphs,
   RemovedParagraph
 } from '../utils/paragraphs.utils';
-import {getSelection} from '../utils/selection.utils';
+import {getRange, getSelection} from '../utils/selection.utils';
 import {toUndoRedoSelection} from '../utils/undo-redo-selection.utils';
 import {
   nextRedoChanges,
@@ -115,6 +115,10 @@ export class UndoRedoEvents {
       await this.redo($event);
       return;
     }
+
+    if (key === 'Backspace') {
+      this.stackBackspace();
+    }
   };
 
   private onKeyup = () => {
@@ -157,6 +161,45 @@ export class UndoRedoEvents {
     });
 
     this.undoInputs = undefined;
+  }
+
+  // When user hits backspace at the begin of a paragraph we should stack previous paragraph for update and current one because it will be removed
+  private stackBackspace() {
+    const {range} = getRange(containerStore.state.ref);
+
+    if (!range) {
+      return;
+    }
+
+    const zeroWidthSpace: boolean =
+      range.startOffset === 1 && range.startContainer.textContent.charAt(0) === '\u200B';
+
+    // Begin of paragraph?
+    if (!(range.startOffset === 0 || zeroWidthSpace)) {
+      return;
+    }
+
+    const anchorNode: Node | undefined = getSelection(containerStore.state.ref)?.anchorNode;
+
+    if (!anchorNode) {
+      return;
+    }
+
+    const paragraph: HTMLElement | undefined = toHTMLElement(
+      findParagraph({
+        element: anchorNode,
+        container: containerStore.state.ref
+      })
+    );
+
+    if (!paragraph) {
+      return;
+    }
+
+    this.undoUpdateParagraphs = this.toUpdateParagraphs([
+      ...(paragraph.previousElementSibling ? [paragraph.previousSibling as HTMLElement] : []),
+      paragraph
+    ]);
   }
 
   private async undoRedo({undoRedo}: {undoRedo: () => Promise<void>}) {
