@@ -1,3 +1,9 @@
+# 0.0.15 (2022-04-24)
+
+### Fix
+
+- delete backward empty paragraph
+
 # 0.0.14 (2022-04-21)
 
 ### Fix
