@@ -1,3 +1,13 @@
+# 0.0.16 (2022-04-24)
+
+### Style
+
+- placeholder default color `rgba(55, 53, 47, 0.5)`
+
+### Fix
+
+- placeholder color style variable typo `--stylo-placeholder-color` not `--style-placeholder-color`
+
 # 0.0.15 (2022-04-24)
 
 ### Fix
