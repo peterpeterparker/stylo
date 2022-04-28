@@ -250,6 +250,8 @@ Each paragraph is a direct child of the editable container.
 
 Unlike `addParagraphs` and `deleteParagraphs` that are triggered only if elements are such level are added or removed, `updateParagraphs` is triggered if the paragraphs themselves or any of their children (HTML elements and text nodes) are modified.
 
+Stylo can detect changes for paragraphs and elements that are added or updated but cannot detect deletion of paragraphs without a hint. The Mutation Observer API does not provide yet enough information. To overcome this issue, Stylo set an attribute with empty value to identify what elements are paragraphs.
+
 Changes following keyboard inputs are debounced.
 
 ### Attributes
