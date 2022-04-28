@@ -51,7 +51,7 @@ export class DataEvents {
     this.updateParagraphs(
       filterAttributesMutations({
         mutations,
-        excludeAttributes: configStore.state.excludeAttributes
+        excludeAttributes: configStore.state.attributes.exclude
       })
     );
   };
@@ -87,22 +87,17 @@ export class DataEvents {
       return;
     }
 
-    // Only those the target is the container are paragraphs
     const removedNodes: Node[] = mutations.reduce(
-      (acc: Node[], {removedNodes, target}: MutationRecord) => {
-        if (!target.isEqualNode(containerStore.state.ref)) {
-          return acc;
-        }
-
-        return [...acc, ...Array.from(removedNodes)];
-      },
+      (acc: Node[], {removedNodes}: MutationRecord) => [...acc, ...Array.from(removedNodes)],
       []
     );
 
-    // We remove text node, should not happen we only want elements as children of the container
     const removedParagraphs: HTMLElement[] = removedNodes
       .filter((node: Node) => !isTextNode(node))
-      .map((node: Node) => toHTMLElement(node));
+      .map((node: Node) => toHTMLElement(node))
+      .filter((element: HTMLElement | undefined | null) =>
+        element?.hasAttribute(configStore.state.attributes.paragraphIdentifier)
+      );
 
     if (removedParagraphs.length <= 0) {
       return;
@@ -126,7 +121,7 @@ export class DataEvents {
     });
     const removedNodesMutations: MutationRecord[] = findRemovedNodesParagraphs({
       mutations,
-      container: containerStore.state.ref
+      paragraphIdentifier: configStore.state.attributes.paragraphIdentifier
     });
 
     this.updateParagraphs([...addedNodesMutations, ...removedNodesMutations]);

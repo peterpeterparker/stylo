@@ -22,7 +22,11 @@ describe('paragraphs utils', () => {
   const container = createDiv({depth: 1});
 
   const child1 = createDiv({depth: 2});
+  child1.setAttribute('paragraph_id', '');
+
   const child2 = createDiv({depth: 2});
+  child1.setAttribute('paragraph_id', '');
+
   const text = document.createTextNode('test');
   const leaf = createDiv({depth: 1});
 
@@ -54,7 +58,8 @@ describe('paragraphs utils', () => {
 
     const removedParagraphs = findRemovedParagraphs({
       mutations: [mutation, mutationRemoved, mutation],
-      container
+      container,
+      paragraphIdentifier: 'paragraph_id'
     });
     expect(removedParagraphs.length).toEqual(1);
   });
@@ -88,7 +93,7 @@ describe('paragraphs utils', () => {
     expect(mutations.length).toEqual(1);
   });
 
-  it('should find removed nodes', () => {
+  it.only('should find removed nodes', () => {
     const mutationParagraphs = {
       removedNodes: [child1, text, child2],
       target: container
@@ -105,10 +110,10 @@ describe('paragraphs utils', () => {
     } as unknown as MutationRecord;
 
     const mutations = findRemovedNodesParagraphs({
-      container,
+      paragraphIdentifier: 'paragraph_id',
       mutations: [mutationParagraphs, mutationNode, mutationLeaf]
     });
 
-    expect(mutations.length).toEqual(1);
+    expect(mutations.length).toEqual(2);
   });
 });

@@ -379,7 +379,8 @@ export class UndoRedoEvents {
     // Paragraphs removed
     const removedParagraphs: RemovedParagraph[] = findRemovedParagraphs({
       mutations,
-      container: containerStore.state.ref
+      container: containerStore.state.ref,
+      paragraphIdentifier: configStore.state.attributes.paragraphIdentifier
     });
 
     const lowerIndex: number = Math.min(
@@ -421,7 +422,7 @@ export class UndoRedoEvents {
     });
     const removedNodesMutations: MutationRecord[] = findRemovedNodesParagraphs({
       mutations,
-      container: containerStore.state.ref
+      paragraphIdentifier: configStore.state.attributes.paragraphIdentifier
     });
 
     const needsUpdate: boolean = addedNodesMutations.length > 0 || removedNodesMutations.length > 0;
@@ -468,7 +469,7 @@ export class UndoRedoEvents {
     const updateParagraphs: HTMLElement[] = findUpdatedParagraphs({
       mutations: filterAttributesMutations({
         mutations,
-        excludeAttributes: configStore.state.excludeAttributes
+        excludeAttributes: configStore.state.attributes.exclude
       }),
       container: containerStore.state.ref
     });

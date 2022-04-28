@@ -94,9 +94,6 @@ export const isParagraph = ({
   return parentElement?.isEqualNode(container);
 };
 
-export const isTargetContainer = ({target, container}: {target: Node; container: Node}): boolean =>
-  target.isEqualNode(container);
-
 export const focusParagraph = ({paragraph}: {paragraph: Node | undefined}) => {
   if (!isTextNode(paragraph)) {
     toHTMLElement(paragraph).focus();

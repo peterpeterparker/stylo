@@ -16,6 +16,7 @@ import {TabEvents} from '../../events/tab.events';
 import {UndoRedoEvents} from '../../events/undo-redo.events';
 import configStore, {
   DEFAULT_EXCLUDE_ATTRIBUTES,
+  DEFAULT_PARAGRAPH_IDENTIFIER,
   DEFAULT_PLACEHOLDERS,
   DEFAULT_PLUGINS,
   DEFAULT_TEXT_PARAGRAPHS,
@@ -173,7 +174,7 @@ export class Editor implements ComponentInterface {
       placeholders,
       textParagraphs,
       menus,
-      excludeAttributes
+      attributes
     } = this.config;
 
     i18n.state.custom = customI18n?.custom;
@@ -193,10 +194,14 @@ export class Editor implements ComponentInterface {
     configStore.state.textParagraphs = textParagraphs || DEFAULT_TEXT_PARAGRAPHS;
 
     configStore.state.menus = menus;
-    configStore.state.excludeAttributes = [
-      ...DEFAULT_EXCLUDE_ATTRIBUTES,
-      ...(excludeAttributes || [])
-    ];
+
+    const paragraphIdentifier: string =
+      attributes?.paragraphIdentifier ?? DEFAULT_PARAGRAPH_IDENTIFIER;
+
+    configStore.state.attributes = {
+      paragraphIdentifier,
+      exclude: [...(attributes?.exclude || DEFAULT_EXCLUDE_ATTRIBUTES), paragraphIdentifier]
+    };
   }
 
   private destroy() {

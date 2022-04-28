@@ -6,6 +6,7 @@ import {h3} from '../plugins/h3.plugin';
 import {hr} from '../plugins/hr.plugin';
 import {img} from '../plugins/img.plugin';
 import {ul} from '../plugins/ul.plugin';
+import {StyloConfigAttributes} from '../types/attributes';
 import {StyloMenu} from '../types/menu';
 import {DEFAULT_PALETTE} from '../types/palette';
 import {StyloPlugin} from '../types/plugin';
@@ -17,7 +18,7 @@ interface ConfigStore {
   menus: StyloMenu[] | undefined;
   placeholders: string[] | undefined;
   textParagraphs: string[] | undefined;
-  excludeAttributes: string[];
+  attributes: StyloConfigAttributes;
 }
 
 export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, img, code, hr];
@@ -48,13 +49,20 @@ export const DEFAULT_EXCLUDE_ATTRIBUTES = [
   'data-gr-id'
 ];
 
+export const DEFAULT_PARAGRAPH_IDENTIFIER: string = 'paragraph_id';
+
+const DEFAULT_ATTRIBUTES: StyloConfigAttributes = {
+  paragraphIdentifier: DEFAULT_PARAGRAPH_IDENTIFIER,
+  exclude: [...DEFAULT_EXCLUDE_ATTRIBUTES, DEFAULT_PARAGRAPH_IDENTIFIER]
+};
+
 const {state, onChange} = createStore<ConfigStore>({
   plugins: DEFAULT_PLUGINS,
   toolbar: DEFAULT_TOOLBAR,
   placeholders: DEFAULT_PLACEHOLDERS,
   textParagraphs: DEFAULT_TEXT_PARAGRAPHS,
   menus: undefined,
-  excludeAttributes: DEFAULT_EXCLUDE_ATTRIBUTES
+  attributes: DEFAULT_ATTRIBUTES
 });
 
 export default {state, onChange};
