@@ -243,12 +243,18 @@ If you are using a rich text editor, there is a chance that you are looking to p
 For such purpose, the `<stylo-editor/>` component triggers following custom events:
 
 - `addParagraphs`: triggered each time new paragraph(s) is added to the editable container
-- `deleteParagraphs`: triggered each time paragraph(s) are removed
 - `updateParagraphs`: triggered each time paragraph(s) are updated
+- `deleteElements`: triggered each time HTML elements(s) are removed
 
-Each paragraph is a direct child of the editable container.
+A paragraph is a direct child of the editable container.
 
-Unlike `addParagraphs` and `deleteParagraphs` that are triggered only if elements are such level are added or removed, `updateParagraphs` is triggered if the paragraphs themselves or any of their children (HTML elements and text nodes) are modified.
+The `addParagraphs` is triggered only if elements on such level is added or removed.
+
+Unlike previous event `updateParagraphs` and `deleteElements` are triggered if the paragraphs themselves or any of their children (HTML elements and text nodes) are modified.
+
+`updateParagraphs` provide the information about which paragraphs are updated - e.g. three children of a paragraph are updated at a time, only one event for the paragraph is emitted.
+
+However `deleteElements` emits any elements. With the current implementation of the mutation observer and without any external hint (such as an attribute to observe) it is not possible to detect which paragraphs was deleted.
 
 Changes following keyboard inputs are debounced.
 

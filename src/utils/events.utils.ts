@@ -6,13 +6,13 @@ export const emitAddParagraphs = ({
   addedParagraphs: HTMLElement[];
 }) => emit<HTMLElement[]>({editorRef, detail: addedParagraphs, message: 'addParagraphs'});
 
-export const emitDeleteParagraphs = ({
+export const emitDeleteElements = ({
   editorRef,
-  removedParagraphs
+  removedElements
 }: {
   editorRef: HTMLElement | undefined;
-  removedParagraphs: HTMLElement[];
-}) => emit<HTMLElement[]>({editorRef, detail: removedParagraphs, message: 'deleteParagraphs'});
+  removedElements: HTMLElement[];
+}) => emit<HTMLElement[]>({editorRef, detail: removedElements, message: 'deleteElements'});
 
 export const emitUpdateParagraphs = ({
   editorRef,

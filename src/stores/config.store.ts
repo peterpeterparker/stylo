@@ -39,10 +39,13 @@ export const DEFAULT_TEXT_PARAGRAPHS = ['h1', 'h2', 'h3', 'div', 'p'];
 
 export const DEFAULT_EXCLUDE_ATTRIBUTES = [
   'placeholder',
-  'data-gramm',
   'class',
   'spellcheck',
-  'contenteditable'
+  'contenteditable',
+  'data-gramm',
+  'data-gramm_id',
+  'data-gramm_editor',
+  'data-gr-id'
 ];
 
 export const DEFAULT_DONT_INJECT_HEAD_CSS = false;

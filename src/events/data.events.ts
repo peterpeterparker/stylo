@@ -1,7 +1,7 @@
 import {debounce} from '@deckdeckgo/utils';
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
-import {emitAddParagraphs, emitDeleteParagraphs, emitUpdateParagraphs} from '../utils/events.utils';
+import {emitAddParagraphs, emitDeleteElements, emitUpdateParagraphs} from '../utils/events.utils';
 import {isTextNode, toHTMLElement} from '../utils/node.utils';
 import {
   filterAttributesMutations,
@@ -43,7 +43,7 @@ export class DataEvents {
 
   private onTreeMutation = (mutations: MutationRecord[]) => {
     this.addParagraphs(mutations);
-    this.deleteParagraphs(mutations);
+    this.deleteElements(mutations);
     this.updateAddedNodesParagraphs(mutations);
   };
 
@@ -78,7 +78,7 @@ export class DataEvents {
     emitAddParagraphs({editorRef: this.editorRef, addedParagraphs});
   }
 
-  private deleteParagraphs(mutations: MutationRecord[]) {
+  private deleteElements(mutations: MutationRecord[]) {
     if (!containerStore.state.ref) {
       return;
     }
@@ -87,28 +87,21 @@ export class DataEvents {
       return;
     }
 
-    // Only those the target is the container are paragraphs
     const removedNodes: Node[] = mutations.reduce(
-      (acc: Node[], {removedNodes, target}: MutationRecord) => {
-        if (!target.isEqualNode(containerStore.state.ref)) {
-          return acc;
-        }
-
-        return [...acc, ...Array.from(removedNodes)];
-      },
+      (acc: Node[], {removedNodes}: MutationRecord) => [...acc, ...Array.from(removedNodes)],
       []
     );
 
-    // We remove text node, should not happen we only want elements as children of the container
-    const removedParagraphs: HTMLElement[] = removedNodes
+    // We remove text node, we emit only those which are elements
+    const removedElements: HTMLElement[] = removedNodes
       .filter((node: Node) => !isTextNode(node))
       .map((node: Node) => toHTMLElement(node));
 
-    if (removedParagraphs.length <= 0) {
+    if (removedElements.length <= 0) {
       return;
     }
 
-    emitDeleteParagraphs({editorRef: this.editorRef, removedParagraphs});
+    emitDeleteElements({editorRef: this.editorRef, removedElements});
   }
 
   private updateAddedNodesParagraphs(mutations: MutationRecord[]) {

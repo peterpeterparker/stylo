@@ -1,5 +1,5 @@
 import {MockHTMLElement} from '@stencil/core/mock-doc';
-import {emitAddParagraphs, emitDeleteParagraphs, emitUpdateParagraphs} from './events.utils';
+import {emitAddParagraphs, emitDeleteElements, emitUpdateParagraphs} from './events.utils';
 
 describe('event', () => {
   let editorRef, element, dispatchEventSpy;
@@ -36,15 +36,15 @@ describe('event', () => {
     expectDispatched({eventName: 'addParagraphs'});
   });
 
-  it('should emit deleteParagraphs', () => {
-    const removedParagraphs = [element];
+  it('should emit deleteElements', () => {
+    const removedElements = [element];
 
-    emitDeleteParagraphs({
+    emitDeleteElements({
       editorRef,
-      removedParagraphs
+      removedElements
     });
 
-    expectDispatched({eventName: 'deleteParagraphs'});
+    expectDispatched({eventName: 'deleteElements'});
   });
 
   it('should emit updateParagraphs', () => {
