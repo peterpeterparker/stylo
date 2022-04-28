@@ -3,6 +3,7 @@ import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {emitAddParagraphs, emitDeleteParagraphs, emitUpdateParagraphs} from '../utils/events.utils';
 import {isTextNode, toHTMLElement} from '../utils/node.utils';
+import {setParagraphAttribute} from '../utils/paragraph.utils';
 import {
   filterAttributesMutations,
   findAddedNodesParagraphs,
@@ -41,8 +42,8 @@ export class DataEvents {
     this.dataObserver?.disconnect();
   }
 
-  private onTreeMutation = (mutations: MutationRecord[]) => {
-    this.addParagraphs(mutations);
+  private onTreeMutation = async (mutations: MutationRecord[]) => {
+    await this.addParagraphs(mutations);
     this.deleteParagraphs(mutations);
     this.updateAddedNodesParagraphs(mutations);
   };
@@ -61,7 +62,7 @@ export class DataEvents {
     this.debounceUpdateInput();
   };
 
-  private addParagraphs(mutations: MutationRecord[]) {
+  private async addParagraphs(mutations: MutationRecord[]) {
     if (!containerStore.state.ref) {
       return;
     }
@@ -74,6 +75,15 @@ export class DataEvents {
     if (addedParagraphs.length <= 0) {
       return;
     }
+
+    await Promise.all(
+      addedParagraphs.map((paragraph: HTMLElement) =>
+        setParagraphAttribute({
+          paragraph,
+          attributeName: configStore.state.attributes.paragraphIdentifier
+        })
+      )
+    );
 
     emitAddParagraphs({editorRef: this.editorRef, addedParagraphs});
   }

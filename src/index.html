@@ -507,7 +507,7 @@
       <article contenteditable="true">
         <h2 paragraph_id><span style="color: rgb(255, 101, 169);">Stylo</span></h2>
         <div paragraph_id>Stylo is an open source <a href="https://en.wikipedia.org/wiki/WYSIWYG" rel="noopener noreferrer">WYSIWYG</a> interactive editor for JavaScript. Its goal is to bring great user experience and interactivity to the web, for everyone, with no dependencies. Stylo is a <a href="https://papy.rs" rel="noopener noreferrer">Papyrs</a> project.</div>
-        <hr paragparagraph_idraph />
+        <hr paragraph_id />
         <div paragraph_id>This is an <span style="font-weight: bold">&ZeroWidthSpace;alpha</span>&ZeroWidthSpace; version! ⚠️ The project is under active development and contributions on <a href="https://github.com/papyrs/stylo" rel="noopener noreferrer">GitHub</a> are most welcome.</div>
         <hr paragraph_id/>
         <h2 paragraph_id>Features</h2>
@@ -644,13 +644,13 @@
             menus: [imgMenu]
           };
 
-          stylo.addEventListener('addParagraphs', ($event) => console.log('addParagraphs', $event));
-          stylo.addEventListener('deleteParagraphs', ($event) =>
-            console.log('deleteParagraphs', $event)
-          );
-          stylo.addEventListener('updateParagraphs', ($event) =>
-            console.log('updateParagraphs', $event)
-          );
+          // stylo.addEventListener('addParagraphs', ($event) => console.log('addParagraphs', $event));
+          // stylo.addEventListener('deleteParagraphs', ($event) =>
+          //   console.log('deleteParagraphs', $event)
+          // );
+          // stylo.addEventListener('updateParagraphs', ($event) =>
+          //   console.log('updateParagraphs', $event)
+          // );
         });
 
         styloObserver.observe(stylo, {attributes: true});
