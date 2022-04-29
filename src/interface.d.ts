@@ -16,4 +16,4 @@ export * from './types/palette';
 export * from './types/plugin';
 export * from './types/toolbar';
 export {createEmptyElement} from './utils/create-element.utils';
-export {transformParagraph} from './utils/transform-paragraph.utils';
+export {transformParagraph} from './utils/paragraph.utils';
