@@ -2,7 +2,7 @@
 
 ### Fix
 
-- use and add an attribute `paragraph_id` (can be customized) to identify each paragraph*
+- use and add an attribute `paragraph_id` (can be customized) to identify each paragraph\*
 
 ### Features
 
