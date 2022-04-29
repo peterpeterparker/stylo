@@ -1,4 +1,12 @@
+# 0.0.19 (2022-04-29)
+
+### Fix
+
+- incorrect undo-redo history on transform paragraph
+
 # 0.0.18 (2022-04-29)
+
+**REVERTED**: Fix was invalid. Code was reverted and unpublished from npm.
 
 ### Fix
 
