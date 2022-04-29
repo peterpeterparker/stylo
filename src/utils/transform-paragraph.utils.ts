@@ -48,7 +48,7 @@ export const transformParagraph = ({
   const index: number = elementIndex(paragraph);
 
   const addRemoveParagraphs: UndoRedoAddRemoveParagraph[] = [
-    ...toAddParagraphs({paragraphs: elements, mutation: 'add', index}),
+    ...(toAddParagraphs({paragraphs: elements, mutation: 'add', index}).reverse()),
     ...toAddParagraphs({paragraphs: [paragraph], mutation: 'remove', index})
   ];
 
