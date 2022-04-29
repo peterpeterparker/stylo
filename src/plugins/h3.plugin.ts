@@ -1,6 +1,6 @@
 import {StyloPlugin, StyloPluginCreateParagraphsParams} from '../types/plugin';
 import {createEmptyElement} from '../utils/create-element.utils';
-import {transformParagraph} from '../utils/paragraph.utils';
+import {transformParagraph} from '../utils/transform-paragraph.utils';
 
 export const h3: StyloPlugin = {
   text: 'small_title',

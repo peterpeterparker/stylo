@@ -1,9 +1,6 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
-import undoRedoStore from '../stores/undo-redo.store';
-import {UndoRedoAddRemoveParagraph} from '../types/undo-redo';
 import {createEmptyElement} from './create-element.utils';
-import {elementIndex, isTextNode, nodeIndex, toHTMLElement} from './node.utils';
-import {stackUndoParagraphs} from './undo-redo.utils';
+import {isTextNode, nodeIndex, toHTMLElement} from './node.utils';
 
 export const findParagraph = ({
   element,
@@ -103,87 +100,6 @@ export const focusParagraph = ({paragraph}: {paragraph: Node | undefined}) => {
   }
 
   moveCursorToEnd(paragraph);
-};
-
-export const transformParagraph = ({
-  elements,
-  paragraph,
-  container,
-  focus = 'first'
-}: {
-  elements: [HTMLElement, ...HTMLElement[]];
-  container: HTMLElement;
-  paragraph: HTMLElement;
-  focus?: 'first' | 'last';
-}) => {
-  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-    addObserver.disconnect();
-
-    undoRedoStore.state.observe = true;
-
-    const addedNodes: Node[] = mutations.reduce(
-      (acc: Node[], {addedNodes}: MutationRecord) => [...acc, ...Array.from(addedNodes)],
-      []
-    );
-
-    if (addedNodes.length <= 0) {
-      return;
-    }
-
-    const {firstChild}: Node = toHTMLElement(
-      addedNodes[focus === 'first' ? 0 : addedNodes.length - 1]
-    );
-
-    moveCursorToEnd(firstChild);
-  });
-
-  addObserver.observe(container, {childList: true, subtree: true});
-
-  const anchor: HTMLElement | null = toHTMLElement(paragraph.previousElementSibling);
-
-  undoRedoStore.state.observe = false;
-
-  const toAddParagraphs = ({
-    paragraphs,
-    mutation,
-    index
-  }: {
-    paragraphs: HTMLElement[];
-    mutation: 'add' | 'remove';
-    index:  number
-  }): UndoRedoAddRemoveParagraph[] => {
-    return paragraphs.map((paragraph: HTMLElement, i: number) => ({
-      outerHTML: paragraph.outerHTML,
-      index: index + i,
-      mutation
-    }));
-  };
-
-  const index: number = elementIndex(paragraph);
-
-  const addRemoveParagraphs: UndoRedoAddRemoveParagraph[] = [
-    ...toAddParagraphs({paragraphs: elements, mutation: 'add', index}),
-    ...toAddParagraphs({paragraphs: [paragraph], mutation: 'remove', index})
-  ];
-
-  console.log(index, addRemoveParagraphs)
-
-  // We delete present paragraph and add the new element and assumes the mutation observer will trigger both delete and add in a single mutation.
-  // Thanks to this, only one entry will be added in the undo-redo stack.
-  container.removeChild(paragraph);
-
-  if (!anchor) {
-    container.prepend(...elements);
-    return;
-  }
-
-  anchor.after(...elements);
-
-  stackUndoParagraphs({
-    container,
-    addRemoveParagraphs,
-    updateParagraphs: []
-  });
 };
 
 export const createEmptyParagraph = ({
