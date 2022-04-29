@@ -366,6 +366,7 @@ export class UndoRedoEvents {
       mutations,
       container: containerStore.state.ref
     });
+
     addedParagraphs.forEach((paragraph: HTMLElement) =>
       changes.push({
         outerHTML: this.cleanOuterHTML(paragraph),
@@ -375,6 +376,9 @@ export class UndoRedoEvents {
           : 0
       })
     );
+
+    // Sort descending because undo-redo will remove the items in that order with their index
+    changes.sort(({index: indexA}: UndoRedoAddRemoveParagraph, {index: indexB}: UndoRedoAddRemoveParagraph) => indexB - indexA)
 
     // Paragraphs removed
     const removedParagraphs: RemovedParagraph[] = findRemovedParagraphs({
