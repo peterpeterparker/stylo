@@ -97,6 +97,11 @@ export class DataEvents {
       return;
     }
 
+    const addedNodes: Node[] = mutations.reduce(
+      (acc: Node[], {addedNodes}: MutationRecord) => [...acc, ...Array.from(addedNodes)],
+      []
+    );
+
     const removedNodes: Node[] = mutations.reduce(
       (acc: Node[], {removedNodes}: MutationRecord) => [...acc, ...Array.from(removedNodes)],
       []
@@ -104,6 +109,10 @@ export class DataEvents {
 
     const removedParagraphs: HTMLElement[] = removedNodes
       .filter((node: Node) => !isTextNode(node))
+      .filter(
+        (removedNode: Node) =>
+          addedNodes.find((addedNode: Node) => addedNode.isEqualNode(removedNode)) === undefined
+      )
       .map((node: Node) => toHTMLElement(node))
       .filter((element: HTMLElement | undefined | null) =>
         element?.hasAttribute(configStore.state.attributes.paragraphIdentifier)
