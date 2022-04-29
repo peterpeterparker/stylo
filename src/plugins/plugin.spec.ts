@@ -17,13 +17,15 @@ describe('plugins', () => {
     paragraph = document.createElement('div');
     paragraph.setAttribute('test', 'test');
 
-    Object.defineProperty(container, 'after', {
+    Object.defineProperty(paragraph, 'replaceWith', {
       value: jest.fn((node1, node2) => {
         container.append(node1);
 
         if (node2) {
           container.append(node2);
         }
+
+        paragraph.parentElement.removeChild(paragraph);
       })
     });
 
