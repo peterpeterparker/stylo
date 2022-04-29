@@ -93,7 +93,7 @@ describe('paragraphs utils', () => {
     expect(mutations.length).toEqual(1);
   });
 
-  it.only('should find removed nodes', () => {
+  it('should find removed nodes', () => {
     const mutationParagraphs = {
       removedNodes: [child1, text, child2],
       target: container
