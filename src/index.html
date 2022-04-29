@@ -505,19 +505,19 @@
     <section class="editor">
       <!-- prettier-ignore -->
       <article contenteditable="true">
-        <h2><span style="color: rgb(255, 101, 169);">Stylo</span></h2>
-        <div>Stylo is an open source <a href="https://en.wikipedia.org/wiki/WYSIWYG" rel="noopener noreferrer">WYSIWYG</a> interactive editor for JavaScript. Its goal is to bring great user experience and interactivity to the web, for everyone, with no dependencies. Stylo is a <a href="https://papy.rs" rel="noopener noreferrer">Papyrs</a> project.</div>
-        <hr />
-        <div>This is an <span style="font-weight: bold">&ZeroWidthSpace;alpha</span>&ZeroWidthSpace; version! ⚠️ The project is under active development and contributions on <a href="https://github.com/papyrs/stylo" rel="noopener noreferrer">GitHub</a> are most welcome.</div>
-        <hr />
-        <h2>Features</h2>
-        <ul><li>Interactive design 🎯</li><li>Customizable 💪</li><li>Framework agnostic 😎</li><li>Lightweight (30kb gzipped, 0 deps) 🪶</li><li>Future Proof 🚀</li><li>Open Source (MIT license) ⭐️</li></ul>
-        <hr />
-        <div>Pro tips: trigger <span style="font-weight: bold;">bold</span> mode with "**", <span style="font-style: italic">italic</span> mode with whitespace and "_", and <mark>mark</mark> mode with whitespace and "`". 👾</div>
-        <div>&ZeroWidthSpace;</div>
-        <div>Cheers<br/>David</div>
-        <div>&ZeroWidthSpace;</div>
-        <img src="/assets/mogwai.jpg" loading="lazy" style="width: 50%;" />
+        <h2 paragraph_id><span style="color: rgb(255, 101, 169);">Stylo</span></h2>
+        <div paragraph_id>Stylo is an open source <a href="https://en.wikipedia.org/wiki/WYSIWYG" rel="noopener noreferrer">WYSIWYG</a> interactive editor for JavaScript. Its goal is to bring great user experience and interactivity to the web, for everyone, with no dependencies. Stylo is a <a href="https://papy.rs" rel="noopener noreferrer">Papyrs</a> project.</div>
+        <hr paragraph_id />
+        <div paragraph_id>This is an <span style="font-weight: bold">&ZeroWidthSpace;alpha</span>&ZeroWidthSpace; version! ⚠️ The project is under active development and contributions on <a href="https://github.com/papyrs/stylo" rel="noopener noreferrer">GitHub</a> are most welcome.</div>
+        <hr paragraph_id/>
+        <h2 paragraph_id>Features</h2>
+        <ul paragraph_id><li>Interactive design 🎯</li><li>Customizable 💪</li><li>Framework agnostic 😎</li><li>Lightweight (30kb gzipped, 0 deps) 🪶</li><li>Future Proof 🚀</li><li>Open Source (MIT license) ⭐️</li></ul>
+        <hr paragraph_id/>
+        <div paragraph_id>Pro tips: trigger <span style="font-weight: bold;">bold</span> mode with "**", <span style="font-style: italic">italic</span> mode with whitespace and "_", and <mark>mark</mark> mode with whitespace and "`". 👾</div>
+        <div paragraph_id>&ZeroWidthSpace;</div>
+        <div paragraph_id>Cheers<br/>David</div>
+        <div paragraph_id>&ZeroWidthSpace;</div>
+        <img paragraph_id src="/assets/mogwai.jpg" loading="lazy" style="width: 50%;" />
       </article>
 
       <stylo-editor> </stylo-editor>
@@ -644,9 +644,7 @@
             menus: [imgMenu]
           };
 
-          // stylo.addEventListener('addParagraphs', ($event) =>
-          //   console.log('addParagraphs', $event)
-          // );
+          // stylo.addEventListener('addParagraphs', ($event) => console.log('addParagraphs', $event));
           // stylo.addEventListener('deleteParagraphs', ($event) =>
           //   console.log('deleteParagraphs', $event)
           // );

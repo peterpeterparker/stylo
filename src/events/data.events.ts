@@ -3,6 +3,7 @@ import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {emitAddParagraphs, emitDeleteParagraphs, emitUpdateParagraphs} from '../utils/events.utils';
 import {isTextNode, toHTMLElement} from '../utils/node.utils';
+import {setParagraphAttribute} from '../utils/paragraph.utils';
 import {
   filterAttributesMutations,
   findAddedNodesParagraphs,
@@ -41,8 +42,8 @@ export class DataEvents {
     this.dataObserver?.disconnect();
   }
 
-  private onTreeMutation = (mutations: MutationRecord[]) => {
-    this.addParagraphs(mutations);
+  private onTreeMutation = async (mutations: MutationRecord[]) => {
+    await this.addParagraphs(mutations);
     this.deleteParagraphs(mutations);
     this.updateAddedNodesParagraphs(mutations);
   };
@@ -51,7 +52,7 @@ export class DataEvents {
     this.updateParagraphs(
       filterAttributesMutations({
         mutations,
-        excludeAttributes: configStore.state.excludeAttributes
+        excludeAttributes: configStore.state.attributes.exclude
       })
     );
   };
@@ -61,7 +62,7 @@ export class DataEvents {
     this.debounceUpdateInput();
   };
 
-  private addParagraphs(mutations: MutationRecord[]) {
+  private async addParagraphs(mutations: MutationRecord[]) {
     if (!containerStore.state.ref) {
       return;
     }
@@ -75,6 +76,15 @@ export class DataEvents {
       return;
     }
 
+    await Promise.all(
+      addedParagraphs.map((paragraph: HTMLElement) =>
+        setParagraphAttribute({
+          paragraph,
+          attributeName: configStore.state.attributes.paragraphIdentifier
+        })
+      )
+    );
+
     emitAddParagraphs({editorRef: this.editorRef, addedParagraphs});
   }
 
@@ -87,22 +97,26 @@ export class DataEvents {
       return;
     }
 
-    // Only those the target is the container are paragraphs
-    const removedNodes: Node[] = mutations.reduce(
-      (acc: Node[], {removedNodes, target}: MutationRecord) => {
-        if (!target.isEqualNode(containerStore.state.ref)) {
-          return acc;
-        }
-
-        return [...acc, ...Array.from(removedNodes)];
-      },
+    const addedNodes: Node[] = mutations.reduce(
+      (acc: Node[], {addedNodes}: MutationRecord) => [...acc, ...Array.from(addedNodes)],
       []
     );
 
-    // We remove text node, should not happen we only want elements as children of the container
+    const removedNodes: Node[] = mutations.reduce(
+      (acc: Node[], {removedNodes}: MutationRecord) => [...acc, ...Array.from(removedNodes)],
+      []
+    );
+
     const removedParagraphs: HTMLElement[] = removedNodes
       .filter((node: Node) => !isTextNode(node))
-      .map((node: Node) => toHTMLElement(node));
+      .filter(
+        (removedNode: Node) =>
+          addedNodes.find((addedNode: Node) => addedNode.isEqualNode(removedNode)) === undefined
+      )
+      .map((node: Node) => toHTMLElement(node))
+      .filter((element: HTMLElement | undefined | null) =>
+        element?.hasAttribute(configStore.state.attributes.paragraphIdentifier)
+      );
 
     if (removedParagraphs.length <= 0) {
       return;
@@ -126,7 +140,7 @@ export class DataEvents {
     });
     const removedNodesMutations: MutationRecord[] = findRemovedNodesParagraphs({
       mutations,
-      container: containerStore.state.ref
+      paragraphIdentifier: configStore.state.attributes.paragraphIdentifier
     });
 
     this.updateParagraphs([...addedNodesMutations, ...removedNodesMutations]);

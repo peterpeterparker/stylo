@@ -94,9 +94,6 @@ export const isParagraph = ({
   return parentElement?.isEqualNode(container);
 };
 
-export const isTargetContainer = ({target, container}: {target: Node; container: Node}): boolean =>
-  target.isEqualNode(container);
-
 export const focusParagraph = ({paragraph}: {paragraph: Node | undefined}) => {
   if (!isTextNode(paragraph)) {
     toHTMLElement(paragraph).focus();
@@ -308,3 +305,23 @@ export const isParagraphCode = ({paragraph}: {paragraph: HTMLElement}): boolean 
 
 export const isParagraphList = ({paragraph}: {paragraph: HTMLElement}): boolean =>
   ['ul', 'ol', 'dl'].includes(paragraph.nodeName.toLowerCase());
+
+export const setParagraphAttribute = ({
+  paragraph,
+  attributeName
+}: {
+  paragraph: HTMLElement;
+  attributeName: string;
+}): Promise<void> => {
+  return new Promise<void>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((_mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      resolve();
+    });
+
+    addObserver.observe(paragraph, {attributes: true});
+
+    paragraph.setAttribute(attributeName, '');
+  });
+};

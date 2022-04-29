@@ -1,3 +1,4 @@
+import {StyloConfigAttributes} from './attributes';
 import {Languages} from './i18n';
 import {StyloMenu} from './menu';
 import {StyloPlugin} from './plugin';
@@ -21,8 +22,5 @@ export interface StyloConfig {
    * The paragraphs that accept text. In case user / browser tries to enter text withing another type of paragraphs, Stylo will first preprend the text in a new div to avoid text nodes at the root of the contenteditable container.
    */
   textParagraphs?: string[];
-  /**
-   * Exclude attributes that should not be observed for changes
-   */
-  excludeAttributes?: string[];
+  attributes?: Partial<StyloConfigAttributes>;
 }

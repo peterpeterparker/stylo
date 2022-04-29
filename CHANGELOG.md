@@ -1,3 +1,15 @@
+# 0.0.17 (2022-04-29)
+
+### Fix
+
+- use and add an attribute `paragraph_id` (can be customized) to identify each paragraph\*
+
+### Features
+
+- more Grammarly attributes to ignore
+
+* I wish there was another solution but did not manage to properly identify which DOM elements are paragraphs or not when deletion happen. The Mutation Observer API and Dom API do not provide yet enough information or customization about it.
+
 # 0.0.16 (2022-04-24)
 
 ### Style

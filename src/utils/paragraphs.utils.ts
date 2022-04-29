@@ -1,5 +1,5 @@
 import {isTextNode, toHTMLElement} from './node.utils';
-import {findParagraph, isParagraph, isParagraphEmpty, isTargetContainer} from './paragraph.utils';
+import {findParagraph, isParagraph, isParagraphEmpty} from './paragraph.utils';
 import {getRange} from './selection.utils';
 
 export interface RemovedParagraph {
@@ -43,35 +43,50 @@ export const findAddedNodesParagraphs = ({
     );
 };
 
+const hasNodeParagraph = ({
+  removedNodes,
+  paragraphIdentifier
+}: {
+  removedNodes: NodeList;
+  paragraphIdentifier: string;
+}): boolean =>
+  Array.from(removedNodes).find(
+    (removedNode: Node) =>
+      !isTextNode(removedNode) && toHTMLElement(removedNode)?.hasAttribute(paragraphIdentifier)
+  ) !== undefined;
+
 export const findRemovedNodesParagraphs = ({
   mutations,
-  container
+  paragraphIdentifier
 }: {
   mutations: MutationRecord[] | undefined;
-  container: HTMLElement;
-}): MutationRecord[] => {
-  return mutations
+  paragraphIdentifier: string;
+}): MutationRecord[] =>
+  mutations
     .filter(({removedNodes}: MutationRecord) => removedNodes?.length > 0)
-    .filter(({target}: MutationRecord) => !isTargetContainer({target, container}));
-};
+    .filter(
+      ({removedNodes}: MutationRecord) => !hasNodeParagraph({removedNodes, paragraphIdentifier})
+    );
 
 export const findRemovedParagraphs = ({
   mutations,
-  container
+  container,
+  paragraphIdentifier
 }: {
   mutations: MutationRecord[] | undefined;
   container: HTMLElement;
+  paragraphIdentifier: string;
 }): RemovedParagraph[] => {
   if (!mutations || mutations.length <= 0) {
     return [];
   }
 
   return mutations
-    .filter(({target}: MutationRecord) => isTargetContainer({target, container}))
     .filter(({removedNodes}: MutationRecord) => removedNodes?.length > 0)
     .reduce((acc: RemovedParagraph[], {removedNodes, previousSibling}: MutationRecord) => {
       const paragraphs: Node[] = filterRemovedParagraphs({
-        nodes: Array.from(removedNodes)
+        nodes: Array.from(removedNodes),
+        paragraphIdentifier
       });
 
       return [
@@ -154,11 +169,17 @@ const filterAddedParagraphs = ({
     ) as HTMLElement[];
 };
 
-// We remove text node, should not happen we only want elements as children of the container
-const filterRemovedParagraphs = ({nodes}: {nodes: Node[]}): HTMLElement[] => {
+const filterRemovedParagraphs = ({
+  nodes,
+  paragraphIdentifier
+}: {
+  nodes: Node[];
+  paragraphIdentifier: string;
+}): HTMLElement[] => {
   return nodes
     .filter((paragraph: Node) => !isTextNode(paragraph))
-    .map((node: Node) => node as HTMLElement);
+    .map((node: Node) => node as HTMLElement)
+    .filter((element: HTMLElement) => element?.hasAttribute(paragraphIdentifier));
 };
 
 export const findSelectionParagraphs = ({

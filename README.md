@@ -250,19 +250,22 @@ Each paragraph is a direct child of the editable container.
 
 Unlike `addParagraphs` and `deleteParagraphs` that are triggered only if elements are such level are added or removed, `updateParagraphs` is triggered if the paragraphs themselves or any of their children (HTML elements and text nodes) are modified.
 
+Stylo can detect changes for paragraphs and elements that are added or updated but cannot detect deleted paragraphs without a hint. The Mutation Observer API does not provide yet enough information. To overcome this issue, Stylo set an attribute with empty value to identify what elements are paragraphs.
+
 Changes following keyboard inputs are debounced.
 
 ### Attributes
 
 Following attributes are ignored to prevent the observer to trigger and keep track of changes that are not made by the user on purpose:
 
+- paragraph_id: the attribute added to identify each paragraph
 - placeholder: the attribute used by Stylo to display the placeholder about the '/'
-- data-gramm: [Grammarly](https://www.grammarly.com/) flooding the DOM
 - class: only inline style is considered changes
 - spellcheck
 - contenteditable
+- data-gramm, data-gramm_id, data-gramm_editor and data-gr-id: [Grammarly](https://www.grammarly.com/) flooding the DOM
 
-The list of excluded attributes can be extended through the configuration ([src/types/config.ts](src/types/config.ts)).
+The list of excluded attributes and the `paragraph_id` hint can be customized through the configuration ([src/types/config.ts](src/types/config.ts)).
 
 ## Listener
 
