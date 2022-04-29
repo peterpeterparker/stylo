@@ -1,6 +1,6 @@
 import {StyloPlugin, StyloPluginCreateParagraphsParams} from '../types/plugin';
 import {createEmptyElement} from '../utils/create-element.utils';
-import {transformParagraph} from '../utils/transform-paragraph.utils';
+import {transformParagraph} from '../utils/paragraph.utils';
 
 export const hr: StyloPlugin = {
   text: 'separator',
