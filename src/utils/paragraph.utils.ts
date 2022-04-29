@@ -102,52 +102,6 @@ export const focusParagraph = ({paragraph}: {paragraph: Node | undefined}) => {
   moveCursorToEnd(paragraph);
 };
 
-export const transformParagraph = ({
-  elements,
-  paragraph,
-  container,
-  focus = 'first'
-}: {
-  elements: [HTMLElement, ...HTMLElement[]];
-  container: HTMLElement;
-  paragraph: HTMLElement;
-  focus?: 'first' | 'last';
-}) => {
-  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-    addObserver.disconnect();
-
-    const addedNodes: Node[] = mutations.reduce(
-      (acc: Node[], {addedNodes}: MutationRecord) => [...acc, ...Array.from(addedNodes)],
-      []
-    );
-
-    if (addedNodes.length <= 0) {
-      return;
-    }
-
-    const {firstChild}: Node = toHTMLElement(
-      addedNodes[focus === 'first' ? 0 : addedNodes.length - 1]
-    );
-
-    moveCursorToEnd(firstChild);
-  });
-
-  addObserver.observe(container, {childList: true, subtree: true});
-
-  const anchor: HTMLElement | null = toHTMLElement(paragraph.previousElementSibling);
-
-  // We delete present paragraph and add the new element and assumes the mutation observer will trigger both delete and add in a single mutation.
-  // Thanks to this, only one entry will be added in the undo-redo stack.
-  container.removeChild(paragraph);
-
-  if (!anchor) {
-    container.prepend(...elements);
-    return;
-  }
-
-  anchor.after(...elements);
-};
-
 export const createEmptyParagraph = ({
   paragraph,
   container

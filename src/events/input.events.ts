@@ -9,7 +9,7 @@ import {
   beforeInputTransformer,
   transformInput,
   TransformInput
-} from '../utils/transform.utils';
+} from '../utils/transform-input.utils';
 
 export class InputEvents {
   private lastBeforeInput: BeforeInputKey | undefined = undefined;
