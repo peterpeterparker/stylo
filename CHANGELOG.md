@@ -10,7 +10,7 @@
 
 ### Fix
 
-- `previousSibling` reference not correctly set on transform paragraph which leads to an incorrect undo-redo history 
+- `previousSibling` reference not correctly set on transform paragraph which leads to an incorrect undo-redo history
 
 # 0.0.17 (2022-04-29)
 
@@ -23,11 +23,11 @@
 
 - `deleteParagraph` triggered sometimes even though no paragraph was deleted
 
-Note: 
+Note:
 
 I wish there was another solution but did not manage to properly identify which DOM elements are paragraphs or not when deletion happen.
 The Mutation Observer API and Dom API do not provide yet enough information or customization about it.
-That's why this new feature to detect deleted paragraphs more accurately. 
+That's why this new feature to detect deleted paragraphs more accurately.
 
 # 0.0.16 (2022-04-24)
 

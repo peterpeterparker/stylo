@@ -378,7 +378,10 @@ export class UndoRedoEvents {
     );
 
     // Sort descending because undo-redo will remove the items in that order with their index
-    changes.sort(({index: indexA}: UndoRedoAddRemoveParagraph, {index: indexB}: UndoRedoAddRemoveParagraph) => indexB - indexA)
+    changes.sort(
+      ({index: indexA}: UndoRedoAddRemoveParagraph, {index: indexB}: UndoRedoAddRemoveParagraph) =>
+        indexB - indexA
+    );
 
     // Paragraphs removed
     const removedParagraphs: RemovedParagraph[] = findRemovedParagraphs({
