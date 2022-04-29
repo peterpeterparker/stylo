@@ -1,3 +1,9 @@
+# 0.0.18 (2022-04-29)
+
+### Fix
+
+- `previousSibling` reference not correctly set on transform paragraph which leads to an incorrect undo-redo history 
+
 # 0.0.17 (2022-04-29)
 
 ### Features
