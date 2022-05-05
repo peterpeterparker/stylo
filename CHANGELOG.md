@@ -1,3 +1,14 @@
+# 0.0.20 (2022-05-05)
+
+### Features
+
+- display button "+" when backspace or delete are used to remove the all content of a paragraph 
+
+### Fix
+
+- display button "+" on click in margin too
+- stack previous element (not node) for undo-redo update
+
 # 0.0.19 (2022-04-29)
 
 ### Fix
