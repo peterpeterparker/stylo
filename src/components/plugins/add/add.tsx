@@ -70,14 +70,14 @@ export class Add implements ComponentInterface {
       this.removePlaceholder();
     }
 
-    if (!['Enter'].includes(code)) {
-      return;
+    if (['Backspace', 'Delete'].includes(code)) {
+      this.displayOnMutations();
     }
   }
 
   @Listen('keyup', {target: 'document', passive: true})
   onKeyUp({code}: KeyboardEvent) {
-    if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(code)) {
+    if (!['ArrowDown', 'ArrowUp', 'Enter', 'Backspace', 'Delete'].includes(code)) {
       if (this.top !== undefined) {
         this.hide();
       }
@@ -86,7 +86,7 @@ export class Add implements ComponentInterface {
     }
 
     if (['ArrowDown', 'ArrowUp'].includes(code)) {
-      this.initParagraph(getSelection(containerStore.state.ref)?.anchorNode);
+      this.display(false);
       return;
     }
   }
@@ -118,12 +118,12 @@ export class Add implements ComponentInterface {
    */
   @Listen('click', {target: 'document', passive: true})
   onClick() {
-    this.initParagraph(getSelection(containerStore.state.ref)?.anchorNode);
+    this.display(false);
   }
 
   @Listen('addParagraphs', {target: 'document', passive: true})
   onAddParagraphs({detail: addedParagraphs}: CustomEvent<HTMLElement[]>) {
-    this.initParagraph(addedParagraphs[0]);
+    this.initParagraph({target: addedParagraphs[0], onlyIfEmptyParagraph: false});
   }
 
   private onFocusout = () => {
@@ -144,7 +144,35 @@ export class Add implements ComponentInterface {
     this.top = undefined;
   }
 
-  private initParagraph = (target: Node | null | undefined) => {
+  private display(onlyIfEmptyParagraph: boolean) {
+    this.initParagraph({
+      target: getSelection(containerStore.state.ref)?.anchorNode,
+      onlyIfEmptyParagraph
+    });
+  }
+
+  private displayOnMutations() {
+    const onRender = (_mutations: MutationRecord[], observer: MutationObserver) => {
+      observer.disconnect();
+
+      this.display(true);
+    };
+
+    const docObserver: MutationObserver = new MutationObserver(onRender);
+    docObserver.observe(containerStore.state.ref, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  }
+
+  private initParagraph = ({
+    target,
+    onlyIfEmptyParagraph
+  }: {
+    target: Node | null | undefined;
+    onlyIfEmptyParagraph: boolean;
+  }) => {
     if (!target) {
       this.hide();
       return;
@@ -158,6 +186,11 @@ export class Add implements ComponentInterface {
     this.paragraph = toHTMLElement(paragraph);
 
     if (!this.paragraph) {
+      this.hide();
+      return;
+    }
+
+    if (onlyIfEmptyParagraph && !isParagraphEmpty({paragraph: this.paragraph})) {
       this.hide();
       return;
     }
