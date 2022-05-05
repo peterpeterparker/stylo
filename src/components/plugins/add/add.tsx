@@ -117,8 +117,8 @@ export class Add implements ComponentInterface {
    * Hide or display the component, the "plus" button.
    */
   @Listen('click', {target: 'document', passive: true})
-  onClick({target}: MouseEvent | TouchEvent) {
-    this.initParagraph(target);
+  onClick() {
+    this.initParagraph(getSelection(containerStore.state.ref)?.anchorNode);
   }
 
   @Listen('addParagraphs', {target: 'document', passive: true})
@@ -144,7 +144,7 @@ export class Add implements ComponentInterface {
     this.top = undefined;
   }
 
-  private initParagraph = (target: EventTarget | Node | null) => {
+  private initParagraph = (target: Node | null | undefined) => {
     if (!target) {
       this.hide();
       return;
