@@ -1,3 +1,9 @@
+# 0.0.20-1 (2022-05-06)
+
+# Style
+
+- set plugins scroll properties to `auto`
+
 # 0.0.20 (2022-05-05)
 
 ### Features

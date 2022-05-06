@@ -17,7 +17,7 @@
   width: 220px;
   max-height: 220px;
 
-  overflow: scroll;
+  overflow: auto;
 
   @include variables.colors;
   @include overlay.dialog;
