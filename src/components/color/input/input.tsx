@@ -77,6 +77,7 @@ export class Input {
           type="text"
           name="color-picker"
           aria-label={this.inputAlt}
+          onClick={($event) => $event.stopPropagation()}
           onInput={($event: UIEvent) =>
             this.debounceSelectColor(($event.target as InputTargetEvent).value)
           }

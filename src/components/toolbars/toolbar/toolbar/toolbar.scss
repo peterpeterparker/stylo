@@ -20,8 +20,6 @@ div.tools {
   animation: 0s ease 0s 1 normal none running none;
   transition: opacity 0.1s ease-out;
 
-  pointer-events: none;
-
   position: absolute;
   top: var(--actions-top);
   left: var(--actions-left);

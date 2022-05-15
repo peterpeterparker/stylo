@@ -23,7 +23,10 @@ export class Button {
       <button
         onMouseDown={($event) => $event.stopPropagation()}
         onTouchStart={($event) => $event.stopPropagation()}
-        onClick={($event: UIEvent) => this.action.emit($event)}
+        onClick={($event: UIEvent) => {
+          $event.stopPropagation();
+          this.action.emit($event);
+        }}
         disabled={this.disableAction}
         class={this.cssClass}
         aria-label={this.label}>
