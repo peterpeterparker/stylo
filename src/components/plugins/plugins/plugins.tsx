@@ -43,7 +43,7 @@ export class Plugins implements ComponentInterface {
    * If user click anywhere not in the stylo-editor, hide the transform options
    */
   @Listen('click', {target: 'document', passive: true})
-  onMouseDown(_$event: MouseEvent | TouchEvent) {
+  onClick(_$event: MouseEvent | TouchEvent) {
     this.hide();
   }
 

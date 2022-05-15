@@ -184,7 +184,10 @@ export class Color {
                 : undefined
             }
             style={style}
-            onClick={() => this.pickColor(element)}></button>
+            onClick={($event) => {
+              $event.stopPropagation();
+              this.pickColor(element);
+            }}></button>
         );
       });
     } else {

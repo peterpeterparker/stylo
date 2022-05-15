@@ -193,6 +193,26 @@ export class Toolbar implements ComponentInterface {
     };
   }
 
+  @Listen('click', {target: 'document', passive: true})
+  onClick(_$event: MouseEvent | TouchEvent) {
+    this.reset(false);
+  }
+
+  @Listen('keydown', {target: 'document', passive: true})
+  onKeyDown($event: KeyboardEvent) {
+    const {code} = $event;
+
+    if (['Escape'].includes(code)) {
+      this.reset(false);
+      return;
+    }
+  }
+
+  @Listen('contextmenu', {target: 'document', passive: true})
+  onContextMenu() {
+    this.reset(false);
+  }
+
   @Listen('selectionchange', {target: 'document', passive: true})
   onSelectionChange() {
     if (
@@ -204,11 +224,6 @@ export class Toolbar implements ComponentInterface {
     }
 
     this.displayTools();
-  }
-
-  @Listen('contextmenu', {target: 'document', passive: true})
-  onContextMenu() {
-    this.reset(false);
   }
 
   @Listen('resize', {target: 'window'})
@@ -586,7 +601,13 @@ export class Toolbar implements ComponentInterface {
       : undefined;
 
     return (
-      <div class={classNames} ref={(el) => (this.tools = el as HTMLDivElement)} style={style}>
+      <div
+        class={classNames}
+        ref={(el) => (this.tools = el as HTMLDivElement)}
+        style={style}
+        onClick={($event) => $event.stopPropagation()}
+        onMouseDown={($event) => $event.preventDefault()}
+        onTouchStart={($event) => $event.preventDefault()}>
         <stylo-toolbar-triangle
           class={position === 'above' ? 'bottom' : 'top'}
           style={{
