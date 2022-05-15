@@ -8,7 +8,7 @@
 
 ### Features
 
-- display button "+" when backspace or delete are used to remove the all content of a paragraph 
+- display button "+" when backspace or delete are used to remove the all content of a paragraph
 
 ### Fix
 

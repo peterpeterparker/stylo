@@ -197,7 +197,9 @@ export class UndoRedoEvents {
     }
 
     this.undoUpdateParagraphs = this.toUpdateParagraphs([
-      ...(paragraph.previousElementSibling ? [paragraph.previousElementSibling as HTMLElement] : []),
+      ...(paragraph.previousElementSibling
+        ? [paragraph.previousElementSibling as HTMLElement]
+        : []),
       paragraph
     ]);
   }
