@@ -1,6 +1,12 @@
+# 0.0.21 (2022-05-15)
+
+### Fix
+
+- close colors and link overlays
+
 # 0.0.20-1 (2022-05-06)
 
-# Style
+### Style
 
 - set plugins scroll properties to `auto`
 
