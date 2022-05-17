@@ -34,10 +34,17 @@ export class Menus implements ComponentInterface {
 
   private paragraph: HTMLElement | undefined;
 
-  @Listen('keydown', {target: 'document', passive: true})
-  onKeyDown() {
-    this.hide();
+  componentDidLoad() {
+    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown, {passive: true});
   }
+
+  disconnectedCallback() {
+    containerStore.state.ref?.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  private onKeyDown = () => {
+    this.hide();
+  };
 
   @Listen('resize', {target: 'window'})
   onResize() {
