@@ -87,7 +87,7 @@ export class Add implements ComponentInterface {
     }
 
     if (['ArrowDown', 'ArrowUp'].includes(code)) {
-      this.display(false);
+      this.display({onlyIfEmptyParagraph: false});
       return;
     }
   }
@@ -118,8 +118,12 @@ export class Add implements ComponentInterface {
    * Hide or display the component, the "plus" button.
    */
   @Listen('click', {target: 'document', passive: true})
-  onClick() {
-    this.display(false);
+  onClick({target}: MouseEvent | TouchEvent) {
+    // We use the target only if not the container - it can happen for example if the margin is clicked, in such case we want to use the selection
+    this.display({
+      onlyIfEmptyParagraph: false,
+      target: containerStore.state.ref?.isEqualNode(target as Node) ? undefined : target as Node
+    });
   }
 
   @Listen('addParagraphs', {target: 'document', passive: true})
@@ -145,9 +149,9 @@ export class Add implements ComponentInterface {
     this.top = undefined;
   }
 
-  private display(onlyIfEmptyParagraph: boolean) {
+  private display({onlyIfEmptyParagraph, target}: {onlyIfEmptyParagraph: boolean, target?: Node}) {
     this.initParagraph({
-      target: getSelection(containerStore.state.ref)?.anchorNode,
+      target: target ?? getSelection(containerStore.state.ref)?.anchorNode,
       onlyIfEmptyParagraph
     });
   }
@@ -156,7 +160,7 @@ export class Add implements ComponentInterface {
     const onRender = (_mutations: MutationRecord[], observer: MutationObserver) => {
       observer.disconnect();
 
-      this.display(true);
+      this.display({onlyIfEmptyParagraph: true});
     };
 
     const docObserver: MutationObserver = new MutationObserver(onRender);
