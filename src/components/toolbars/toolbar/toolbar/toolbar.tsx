@@ -198,15 +198,14 @@ export class Toolbar implements ComponentInterface {
     this.reset(false);
   }
 
-  @Listen('keydown', {target: 'document', passive: true})
-  onKeyDown($event: KeyboardEvent) {
+  private onKeyDown = ($event: KeyboardEvent) => {
     const {code} = $event;
 
     if (['Escape'].includes(code)) {
       this.reset(false);
       return;
     }
-  }
+  };
 
   @Listen('contextmenu', {target: 'document', passive: true})
   onContextMenu() {
@@ -240,12 +239,14 @@ export class Toolbar implements ComponentInterface {
     const listenerElement: HTMLElement | Document = this.containerRef || document;
     listenerElement?.addEventListener('mousedown', this.startSelection, {passive: true});
     listenerElement?.addEventListener('touchstart', this.startSelection, {passive: true});
+    listenerElement?.addEventListener('keydown', this.onKeyDown, {passive: true});
   }
 
   private removeListener() {
     const listenerElement: HTMLElement | Document = this.containerRef || document;
     listenerElement?.removeEventListener('mousedown', this.startSelection);
     listenerElement?.removeEventListener('touchstart', this.startSelection);
+    listenerElement?.removeEventListener('keydown', this.onKeyDown);
   }
 
   private startSelection = ($event: MouseEvent | TouchEvent) => {

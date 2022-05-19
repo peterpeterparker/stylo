@@ -54,18 +54,19 @@ export class Add implements ComponentInterface {
   componentDidLoad() {
     window?.addEventListener('resize', () => this.hide());
     document?.addEventListener('focusout', this.onFocusout);
+    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown, {passive: true});
   }
 
   disconnectedCallback() {
     window?.removeEventListener('resize', () => this.hide());
     document?.removeEventListener('focusout', this.onFocusout);
+    containerStore.state.ref?.removeEventListener('keydown', this.onKeyDown);
   }
 
   /**
    * When "enter" is pressed, create a new paragraph and select it.
    */
-  @Listen('keydown', {target: 'document', passive: true})
-  onKeyDown({code}: KeyboardEvent) {
+  private onKeyDown = ({code}: KeyboardEvent) => {
     if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(code)) {
       this.removePlaceholder();
     }
@@ -73,7 +74,7 @@ export class Add implements ComponentInterface {
     if (['Backspace', 'Delete'].includes(code)) {
       this.displayOnMutations();
     }
-  }
+  };
 
   @Listen('keyup', {target: 'document', passive: true})
   onKeyUp({code}: KeyboardEvent) {
