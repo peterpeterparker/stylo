@@ -237,6 +237,10 @@ declare namespace LocalJSX {
           * An event emitted when user click on the shadowed button. - If selected paragraph is empty, emitted straight away - If not empty, first a new paragraph is created and then event is emitted Event is catched in `<style-plugins/>` and used to trigger the display of list of plugins.
          */
         "onListPlugins"?: (event: CustomEvent<HTMLElement | undefined>) => void;
+        /**
+          * Emits the paragraph that is selected either with mouse, touch or keyboard actions
+         */
+        "onSelectParagraph"?: (event: CustomEvent<HTMLElement>) => void;
     }
     interface StyloColor {
         /**
