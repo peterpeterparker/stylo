@@ -1,3 +1,11 @@
+# 0.0.22 (2022-05-20)
+
+### Features
+
+- detect first two paragraphs and set a class `stylo-empty` if empty
+- display "+" when code blocks or images are clicked
+- attach all keydown listener to container
+
 # 0.0.21 (2022-05-15)
 
 ### Fix
