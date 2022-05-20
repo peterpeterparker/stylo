@@ -1,3 +1,9 @@
+# 0.0.22-1 (2022-05-20)
+
+### Fix
+
+- attach container listener in components
+
 # 0.0.22 (2022-05-20)
 
 ### Features
