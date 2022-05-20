@@ -78,10 +78,10 @@ export class PlaceHolderEvents {
       paragraph.textContent === '' ||
       (paragraph.textContent.charAt(0) === '\u200B' && paragraph.textContent.length === 1)
     ) {
-      paragraph.classList.add('empty');
+      paragraph.classList.add('stylo-empty');
       return;
     }
 
-    paragraph.classList.remove('empty');
+    paragraph.classList.remove('stylo-empty');
   }
 }
