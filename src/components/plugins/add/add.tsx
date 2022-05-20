@@ -32,6 +32,12 @@ export class Add implements ComponentInterface {
   @State()
   private top: number | undefined;
 
+  /**
+   * Emits the paragraph that is selected either with mouse, touch or keyboard actions
+   */
+  @Event()
+  selectParagraph: EventEmitter<HTMLElement>;
+
   private paragraph: HTMLElement | undefined | null;
 
   /**
@@ -122,7 +128,7 @@ export class Add implements ComponentInterface {
     // We use the target only if not the container - it can happen for example if the margin is clicked, in such case we want to use the selection
     this.display({
       onlyIfEmptyParagraph: false,
-      target: containerStore.state.ref?.isEqualNode(target as Node) ? undefined : target as Node
+      target: containerStore.state.ref?.isEqualNode(target as Node) ? undefined : (target as Node)
     });
   }
 
@@ -149,7 +155,7 @@ export class Add implements ComponentInterface {
     this.top = undefined;
   }
 
-  private display({onlyIfEmptyParagraph, target}: {onlyIfEmptyParagraph: boolean, target?: Node}) {
+  private display({onlyIfEmptyParagraph, target}: {onlyIfEmptyParagraph: boolean; target?: Node}) {
     this.initParagraph({
       target: target ?? getSelection(containerStore.state.ref)?.anchorNode,
       onlyIfEmptyParagraph
@@ -203,6 +209,8 @@ export class Add implements ComponentInterface {
     this.top = this.paragraph.offsetTop;
 
     this.editPlaceholder();
+
+    this.selectParagraph.emit(this.paragraph);
   };
 
   private editPlaceholder() {
