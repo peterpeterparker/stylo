@@ -57,15 +57,34 @@ export class Add implements ComponentInterface {
 
   private readonly debouncePlaceholder: () => void = debounce(() => this.addPlaceholder(), 350);
 
+  private destroyListener: () => void | undefined;
+
   componentDidLoad() {
     window?.addEventListener('resize', () => this.hide());
     document?.addEventListener('focusout', this.onFocusout);
-    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown, {passive: true});
+
+    this.destroyListener = containerStore.onChange('ref', () => {
+      this.removeContainerListener();
+      this.addContainerListener();
+    });
+
+    this.addContainerListener();
   }
 
   disconnectedCallback() {
     window?.removeEventListener('resize', () => this.hide());
     document?.removeEventListener('focusout', this.onFocusout);
+
+    this.removeContainerListener();
+
+    this.destroyListener?.();
+  }
+
+  private addContainerListener() {
+    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown, {passive: true});
+  }
+
+  private removeContainerListener() {
     containerStore.state.ref?.removeEventListener('keydown', this.onKeyDown);
   }
 

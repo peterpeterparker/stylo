@@ -34,11 +34,28 @@ export class Menus implements ComponentInterface {
 
   private paragraph: HTMLElement | undefined;
 
+  private destroyListener: () => void | undefined;
+
   componentDidLoad() {
-    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown, {passive: true});
+    this.destroyListener = containerStore.onChange('ref', () => {
+      this.removeContainerListener();
+      this.addContainerListener();
+    });
+
+    this.addContainerListener();
   }
 
   disconnectedCallback() {
+    this.removeContainerListener();
+
+    this.destroyListener?.();
+  }
+
+  private addContainerListener() {
+    containerStore.state.ref?.addEventListener('keydown', this.onKeyDown, {passive: true});
+  }
+
+  private removeContainerListener() {
     containerStore.state.ref?.removeEventListener('keydown', this.onKeyDown);
   }
 
