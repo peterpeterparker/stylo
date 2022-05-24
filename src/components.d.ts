@@ -240,7 +240,7 @@ declare namespace LocalJSX {
         /**
           * Emits the paragraph that is selected either with mouse, touch or keyboard actions
          */
-        "onSelectParagraph"?: (event: CustomEvent<HTMLElement>) => void;
+        "onSelectParagraph"?: (event: CustomEvent<HTMLElement | undefined>) => void;
     }
     interface StyloColor {
         /**

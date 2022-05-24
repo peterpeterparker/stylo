@@ -17,12 +17,12 @@ export class PlaceHolderEvents {
     this.editorRef?.removeEventListener('selectParagraph', this.onSelectParagraph);
   }
 
-  private onSelectParagraph = ({detail}: CustomEvent<HTMLElement>) => {
+  private onSelectParagraph = ({detail}: CustomEvent<HTMLElement | undefined>) => {
     const firstParagraph: Element | undefined = containerStore.state.ref?.firstElementChild;
     const secondParagraph: Element | undefined = containerStore.state.ref?.children[1];
 
-    const first: boolean = firstParagraph && detail.isEqualNode(firstParagraph);
-    const second: boolean = secondParagraph && detail.isEqualNode(secondParagraph);
+    const first: boolean = firstParagraph && detail && detail.isEqualNode(firstParagraph);
+    const second: boolean = secondParagraph && detail && detail.isEqualNode(secondParagraph);
 
     containerStore.state.ref?.removeEventListener('keydown', this.onKeyChange);
     containerStore.state.ref?.removeEventListener('keyup', this.onKeyChange);

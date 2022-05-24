@@ -36,7 +36,7 @@ export class Add implements ComponentInterface {
    * Emits the paragraph that is selected either with mouse, touch or keyboard actions
    */
   @Event()
-  selectParagraph: EventEmitter<HTMLElement>;
+  selectParagraph: EventEmitter<HTMLElement | undefined>;
 
   private paragraph: HTMLElement | undefined | null;
 
@@ -166,6 +166,8 @@ export class Add implements ComponentInterface {
   };
 
   private hide() {
+    this.selectParagraph.emit(undefined);
+
     // On Android, keyboard display resize screen
     if (isMobile()) {
       return;
