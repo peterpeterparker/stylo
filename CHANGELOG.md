@@ -1,3 +1,9 @@
+# 0.0.22-2 (2022-05-24)
+
+### Fix
+
+- update class `stylo-empty` also when there is no selected paragraph 
+
 # 0.0.22-1 (2022-05-20)
 
 ### Fix
