@@ -1,5 +1,5 @@
 import containerStore from '../stores/container.store';
-import {isTextNode} from '../utils/node.utils';
+import {elementIndex, isTextNode} from '../utils/node.utils';
 import {findParagraph} from '../utils/paragraph.utils';
 
 export class PlaceHolderEvents {
@@ -33,6 +33,8 @@ export class PlaceHolderEvents {
     }
 
     this.classesEmpty();
+
+    this.cleanEmpty();
   };
 
   private onKeyChange = () => {
@@ -74,14 +76,29 @@ export class PlaceHolderEvents {
   }
 
   private toggleClassEmpty(paragraph: HTMLElement) {
-    if (
+    const empty: boolean =
       paragraph.textContent === '' ||
-      (paragraph.textContent.charAt(0) === '\u200B' && paragraph.textContent.length === 1)
-    ) {
+      (paragraph.textContent.charAt(0) === '\u200B' && paragraph.textContent.length === 1);
+
+    if (empty) {
       paragraph.classList.add('stylo-empty');
       return;
     }
 
     paragraph.classList.remove('stylo-empty');
+  }
+
+  /**
+   * If a paragraph is added between the two first placeholder the new div might be created with a copy of this class so we clean it
+   */
+  private cleanEmpty() {
+    const elements: NodeListOf<HTMLElement> | undefined =
+      containerStore.state.ref?.querySelectorAll('.stylo-empty');
+
+    const others: HTMLElement[] = Array.from(elements || []).filter((element: HTMLElement) => elementIndex(element) > 1);
+
+    for (const other of others) {
+      other.classList.remove('stylo-empty');
+    }
   }
 }

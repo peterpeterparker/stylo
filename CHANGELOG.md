@@ -1,3 +1,9 @@
+# 0.0.22-3 (2022-05-24)
+
+### Fix
+
+- clean class `stylo-empty` in case it would be automatically copied by the browser
+
 # 0.0.22-2 (2022-05-24)
 
 ### Fix
