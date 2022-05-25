@@ -1,3 +1,9 @@
+# 0.0.22-4 (2022-05-25)
+
+### Fix
+
+- Create link was broken because the new listener was resetting the toolbar when in fact it was effectively active 
+
 # 0.0.22-3 (2022-05-24)
 
 ### Fix
