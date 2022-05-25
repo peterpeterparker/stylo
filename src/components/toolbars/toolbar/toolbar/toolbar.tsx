@@ -195,6 +195,10 @@ export class Toolbar implements ComponentInterface {
 
   @Listen('click', {target: 'document', passive: true})
   onClick(_$event: MouseEvent | TouchEvent) {
+    if (!this.displayToolsActivated) {
+      return;
+    }
+
     this.reset(false);
   }
 
