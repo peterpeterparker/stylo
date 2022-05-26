@@ -1,3 +1,9 @@
+# 0.0.24 (2022-05-26)
+
+### Fix
+
+- color and link overlay close and glitchy toolbar display
+
 # 0.0.23-1 (2022-05-26)
 
 ### Features

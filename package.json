@@ -1,6 +1,6 @@
 {
   "name": "@papyrs/stylo",
-  "version": "0.0.23-1",
+  "version": "0.0.24",
   "description": "Another kind of rich text editor",
   "author": "David Dal Busco",
   "license": "MIT",
