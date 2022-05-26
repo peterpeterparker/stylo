@@ -1,3 +1,9 @@
+# 0.0.23-1 (2022-05-26)
+
+### Features
+
+- detect empty paragraph only for text paragraphs type
+
 # 0.0.23 (2022-05-26)
 
 ### Features

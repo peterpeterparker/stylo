@@ -79,7 +79,7 @@ export class PlaceholderEvents {
   private toggleClassEmpty(paragraph: HTMLElement) {
     const {classList, textContent, nodeName} = paragraph;
 
-    if (!configStore.state.placeholders.includes(nodeName.toLowerCase())) {
+    if (!configStore.state.textParagraphs.includes(nodeName.toLowerCase())) {
       classList.remove('stylo-placeholder-empty');
       return;
     }
