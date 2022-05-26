@@ -12,7 +12,7 @@ import {
 import {DataEvents} from '../../events/data.events';
 import {EnterEvents} from '../../events/enter.events';
 import {InputEvents} from '../../events/input.events';
-import {PlaceHolderEvents} from '../../events/place-holder.events';
+import {PlaceholderEvents} from '../../events/placeholder.events';
 import {TabEvents} from '../../events/tab.events';
 import {UndoRedoEvents} from '../../events/undo-redo.events';
 import configStore, {
@@ -62,7 +62,7 @@ export class Editor implements ComponentInterface {
 
   private readonly undoRedoEvents: UndoRedoEvents = new UndoRedoEvents();
   private readonly enterEvents: EnterEvents = new EnterEvents();
-  private readonly placeHolderEvents: PlaceHolderEvents = new PlaceHolderEvents();
+  private readonly placeHolderEvents: PlaceholderEvents = new PlaceholderEvents();
   private readonly inputEvents: InputEvents = new InputEvents();
   private readonly tabEvents: TabEvents = new TabEvents();
   private readonly dataEvents: DataEvents = new DataEvents();
