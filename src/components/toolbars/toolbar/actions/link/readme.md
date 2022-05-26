@@ -15,6 +15,7 @@
 
 | Event          | Description | Type                   |
 | -------------- | ----------- | ---------------------- |
+| `close`        |             | `CustomEvent<void>`    |
 | `linkModified` |             | `CustomEvent<boolean>` |
 
 ## Dependencies

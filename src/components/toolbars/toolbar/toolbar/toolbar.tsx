@@ -193,15 +193,6 @@ export class Toolbar implements ComponentInterface {
     };
   }
 
-  @Listen('click', {target: 'document', passive: true})
-  onClick(_$event: MouseEvent | TouchEvent) {
-    if (!this.displayToolsActivated) {
-      return;
-    }
-
-    this.reset(false);
-  }
-
   private onKeyDown = ($event: KeyboardEvent) => {
     const {code} = $event;
 
@@ -610,9 +601,7 @@ export class Toolbar implements ComponentInterface {
         class={classNames}
         ref={(el) => (this.tools = el as HTMLDivElement)}
         style={style}
-        onClick={($event) => $event.stopPropagation()}
-        onMouseDown={($event) => $event.preventDefault()}
-        onTouchStart={($event) => $event.preventDefault()}>
+        onClick={($event) => $event.stopPropagation()}>
         <stylo-toolbar-triangle
           class={position === 'above' ? 'bottom' : 'top'}
           style={{
@@ -631,9 +620,8 @@ export class Toolbar implements ComponentInterface {
           toolbarActions={this.toolbarActions}
           anchorLink={this.anchorLink}
           linkCreated={this.linkCreated}
-          onLinkModified={($event: CustomEvent<boolean>) =>
-            this.reset($event.detail)
-          }></stylo-toolbar-link>
+          onLinkModified={($event: CustomEvent<boolean>) => this.reset($event.detail)}
+          onClose={() => this.reset(false)}></stylo-toolbar-link>
       );
     }
 
@@ -647,7 +635,8 @@ export class Toolbar implements ComponentInterface {
           action={
             this.toolbarActions === ToolbarActions.BACKGROUND_COLOR ? 'background-color' : 'color'
           }
-          onExecCommand={this.onExecCommand}></stylo-toolbar-color>
+          onExecCommand={this.onExecCommand}
+          onClose={() => this.reset(false)}></stylo-toolbar-color>
       );
     }
 

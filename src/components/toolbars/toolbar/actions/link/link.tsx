@@ -27,10 +27,35 @@ export class Link implements ComponentInterface {
   @Event()
   linkModified: EventEmitter<boolean>;
 
+  @Event()
+  close: EventEmitter<void>;
+
   private input: HTMLInputElement | undefined;
 
   componentDidLoad() {
     setTimeout(() => this.input?.focus(), 250);
+  }
+
+  connectedCallback() {
+    this.addListener();
+  }
+
+  disconnectedCallback() {
+    this.removeListener();
+  }
+
+  private addListener() {
+    const listenerElement: HTMLElement | Document = this.containerRef || document;
+    listenerElement?.addEventListener('click', this.closeToolbar, {passive: true});
+  }
+
+  private removeListener() {
+    const listenerElement: HTMLElement | Document = this.containerRef || document;
+    listenerElement?.removeEventListener('click', this.closeToolbar);
+  }
+
+  private closeToolbar = () => {
+    this.close.emit();
   }
 
   private handleLinkInput($event: UIEvent) {
@@ -91,7 +116,6 @@ export class Link implements ComponentInterface {
         <input
           ref={(el) => (this.input = el as HTMLInputElement)}
           placeholder="Add a link..."
-          onClick={($event) => $event.stopPropagation()}
           onInput={($event: UIEvent) => this.handleLinkInput($event)}
           onKeyUp={($event: KeyboardEvent) => this.handleLinkEnter($event)}></input>
       </Host>

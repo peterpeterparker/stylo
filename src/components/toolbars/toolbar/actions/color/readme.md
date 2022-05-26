@@ -13,6 +13,7 @@
 
 | Event         | Description | Type                             |
 | ------------- | ----------- | -------------------------------- |
+| `close`       |             | `CustomEvent<void>`              |
 | `execCommand` |             | `CustomEvent<ExecCommandAction>` |
 
 ## Dependencies
