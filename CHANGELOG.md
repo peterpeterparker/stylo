@@ -1,3 +1,11 @@
+# 0.0.23 (2022-05-26)
+
+### Features
+
+- detect empty paragraph only for placeholders type
+- rename `stylo-empty` into `style-placeholder-empty`
+- add class for second element in content editable only if there are no other paragraphs
+
 # 0.0.22-4 (2022-05-25)
 
 ### Fix
