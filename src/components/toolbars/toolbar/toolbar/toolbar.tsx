@@ -230,6 +230,18 @@ export class Toolbar implements ComponentInterface {
     this.reset(true);
   }
 
+  private onContainerClick($event: MouseEvent | TouchEvent) {
+    if (
+      [ToolbarActions.COLOR, ToolbarActions.BACKGROUND_COLOR, ToolbarActions.LINK].includes(
+        this.toolbarActions
+      )
+    ) {
+      return;
+    }
+
+    $event.preventDefault();
+  }
+
   private addListener() {
     const listenerElement: HTMLElement | Document = this.containerRef || document;
     listenerElement?.addEventListener('mousedown', this.startSelection, {passive: true});
@@ -601,7 +613,9 @@ export class Toolbar implements ComponentInterface {
         class={classNames}
         ref={(el) => (this.tools = el as HTMLDivElement)}
         style={style}
-        onClick={($event) => $event.stopPropagation()}>
+        onClick={($event) => $event.stopPropagation()}
+        onMouseDown={($event) => this.onContainerClick($event)}
+        onTouchStart={($event) => this.onContainerClick($event)}>
         <stylo-toolbar-triangle
           class={position === 'above' ? 'bottom' : 'top'}
           style={{
