@@ -330,6 +330,7 @@ declare namespace LocalJSX {
     interface StyloToolbarColor {
         "action"?: 'color' | 'background-color';
         "containerRef"?: HTMLElement | undefined;
+        "onClose"?: (event: CustomEvent<void>) => void;
         "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
     }
     interface StyloToolbarFontSize {
@@ -340,6 +341,7 @@ declare namespace LocalJSX {
         "anchorLink"?: ToolbarAnchorLink;
         "containerRef"?: HTMLElement | undefined;
         "linkCreated"?: EventEmitter<HTMLElement>;
+        "onClose"?: (event: CustomEvent<void>) => void;
         "onLinkModified"?: (event: CustomEvent<boolean>) => void;
         "toolbarActions"?: ToolbarActions;
     }

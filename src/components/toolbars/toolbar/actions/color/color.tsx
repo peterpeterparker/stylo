@@ -22,12 +22,37 @@ export class Color {
   private colorRgb: string | undefined;
 
   @Event()
-  private execCommand: EventEmitter<ExecCommandAction>;
+  execCommand: EventEmitter<ExecCommandAction>;
+
+  @Event()
+  close: EventEmitter<void>;
 
   private range: Range | undefined;
 
   componentWillLoad() {
     this.initColor();
+  }
+
+  connectedCallback() {
+    this.addListener();
+  }
+
+  disconnectedCallback() {
+    this.removeListener();
+  }
+
+  private addListener() {
+    const listenerElement: HTMLElement | Document = this.containerRef || document;
+    listenerElement?.addEventListener('click', this.closeToolbar, {passive: true});
+  }
+
+  private removeListener() {
+    const listenerElement: HTMLElement | Document = this.containerRef || document;
+    listenerElement?.removeEventListener('click', this.closeToolbar);
+  }
+
+  private closeToolbar = () => {
+    this.close.emit();
   }
 
   private initColor() {
