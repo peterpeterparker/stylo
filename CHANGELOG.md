@@ -1,3 +1,14 @@
+# 0.0.25 (2022-05-28)
+
+### Features
+
+- clean `outerhtml` for undo-redo update too
+
+### Fix
+
+- prevent "out of range" cursor move on undo-redo
+- re-evaluate node depths when moving element from undo to redo queue
+
 # 0.0.24 (2022-05-26)
 
 ### Fix
