@@ -276,7 +276,7 @@ export class UndoRedoEvents {
 
   private toUpdateParagraphs(paragraphs: HTMLElement[]): UndoUpdateParagraphs[] {
     return paragraphs.map((paragraph: HTMLElement) => ({
-      outerHTML: paragraph.outerHTML,
+      outerHTML: this.cleanOuterHTML(paragraph),
       index: elementIndex(paragraph),
       paragraph
     }));
