@@ -9,7 +9,7 @@ import {
   UndoRedoSelection,
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
-import {findNodeAtDepths, isTextNode, toHTMLElement} from './node.utils';
+import {findNodeAtDepths, isTextNode, nodeDepths, toHTMLElement} from './node.utils';
 import {redoSelection, toUndoRedoSelection} from './undo-redo-selection.utils';
 
 export const stackUndoInput = ({
@@ -218,7 +218,7 @@ const undoRedoInput = async ({
     target: container,
     data: {
       index,
-      indexDepths,
+      indexDepths: nodeDepths({target, paragraph}),
       oldValue: previousValue,
       offset: newCaretPosition + (previousValue.length - oldValue.length)
     }
