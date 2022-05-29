@@ -28,6 +28,7 @@ import i18n from '../../stores/i18n.store';
 import undoRedoStore from '../../stores/undo-redo.store';
 import {StyloConfig} from '../../types/config';
 import {injectCSS} from '../../utils/css.utils';
+import {PasteEvents} from '../../events/paste.events';
 
 @Component({
   tag: 'stylo-editor',
@@ -66,6 +67,7 @@ export class Editor implements ComponentInterface {
   private readonly inputEvents: InputEvents = new InputEvents();
   private readonly tabEvents: TabEvents = new TabEvents();
   private readonly dataEvents: DataEvents = new DataEvents();
+  private readonly pasteEvents: PasteEvents = new PasteEvents();
 
   private attributesObserver: MutationObserver | undefined;
 
@@ -213,6 +215,7 @@ export class Editor implements ComponentInterface {
     this.placeHolderEvents.destroy();
     this.tabEvents.destroy();
     this.dataEvents.destroy();
+    this.pasteEvents.destroy();
 
     undoRedoStore.state.undo = [];
     undoRedoStore.state.redo = [];
@@ -229,6 +232,7 @@ export class Editor implements ComponentInterface {
     this.tabEvents.init();
     this.dataEvents.init({editorRef: this.el});
     this.undoRedoEvents.init();
+    this.pasteEvents.init();
   }
 
   render() {

@@ -187,6 +187,43 @@ export const addParagraph = ({
   });
 };
 
+export const addParagraphs = ({
+  paragraph,
+  container,
+  nodes
+}: {
+  container: HTMLElement;
+  paragraph: HTMLElement | undefined;
+  nodes: Node[];
+}): Promise<Node | undefined> => {
+  return new Promise<Node | undefined>((resolve) => {
+    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      addObserver.disconnect();
+
+      const mutation: MutationRecord | undefined = mutations[mutations.length - 1];
+
+      if (!mutation) {
+        resolve(undefined);
+        return;
+      }
+
+      const {addedNodes} = mutation;
+
+      resolve(addedNodes[addedNodes.length - 1]);
+    });
+
+    addObserver.observe(container, {childList: true, subtree: true});
+
+    // User has deleted all paragraphs of the container previously
+    if (!paragraph) {
+      container.append(...nodes);
+      return;
+    }
+
+    paragraph.after(...nodes);
+  });
+};
+
 export const createNewEmptyLine = ({
   paragraph,
   range
