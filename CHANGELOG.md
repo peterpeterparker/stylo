@@ -1,3 +1,9 @@
+# 0.0.26 (2022-05-29)
+
+### Features
+
+- hi-jack `parse` to clean html (remove `class` or `style`) before being added to the content and prevent leaves (no text leaf has direct child of the content editable)
+
 # 0.0.25 (2022-05-28)
 
 ### Features
