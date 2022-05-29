@@ -53,7 +53,7 @@ export class Color {
 
   private closeToolbar = () => {
     this.close.emit();
-  }
+  };
 
   private initColor() {
     const {range, selection} = getRange(this.containerRef);

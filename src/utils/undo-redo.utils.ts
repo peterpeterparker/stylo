@@ -207,10 +207,13 @@ const undoRedoInput = async ({
 
   moveCursorToOffset({
     element: text,
-    offset: Math.max(Math.min(
-      oldValue.length > newCaretPosition ? newCaretPosition : oldValue.length,
-      text.nodeValue.length
-    ), 0)
+    offset: Math.max(
+      Math.min(
+        oldValue.length > newCaretPosition ? newCaretPosition : oldValue.length,
+        text.nodeValue.length
+      ),
+      0
+    )
   });
 
   return {

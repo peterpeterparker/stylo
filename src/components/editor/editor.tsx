@@ -12,6 +12,7 @@ import {
 import {DataEvents} from '../../events/data.events';
 import {EnterEvents} from '../../events/enter.events';
 import {InputEvents} from '../../events/input.events';
+import {PasteEvents} from '../../events/paste.events';
 import {PlaceholderEvents} from '../../events/placeholder.events';
 import {TabEvents} from '../../events/tab.events';
 import {UndoRedoEvents} from '../../events/undo-redo.events';
@@ -28,7 +29,6 @@ import i18n from '../../stores/i18n.store';
 import undoRedoStore from '../../stores/undo-redo.store';
 import {StyloConfig} from '../../types/config';
 import {injectCSS} from '../../utils/css.utils';
-import {PasteEvents} from '../../events/paste.events';
 
 @Component({
   tag: 'stylo-editor',

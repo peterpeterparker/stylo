@@ -56,7 +56,7 @@ export class Link implements ComponentInterface {
 
   private closeToolbar = () => {
     this.close.emit();
-  }
+  };
 
   private handleLinkInput($event: UIEvent) {
     this.linkUrl = ($event.target as InputTargetEvent).value;

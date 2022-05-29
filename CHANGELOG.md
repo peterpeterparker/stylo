@@ -33,7 +33,7 @@
 
 ### Fix
 
-- Create link was broken because the new listener was resetting the toolbar when in fact it was effectively active 
+- Create link was broken because the new listener was resetting the toolbar when in fact it was effectively active
 
 # 0.0.22-3 (2022-05-24)
 
@@ -45,7 +45,7 @@
 
 ### Fix
 
-- update class `stylo-empty` also when there is no selected paragraph 
+- update class `stylo-empty` also when there is no selected paragraph
 
 # 0.0.22-1 (2022-05-20)
 
