@@ -2,7 +2,13 @@ import {moveCursorToEnd} from '@deckdeckgo/utils';
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {isTextNode, toHTMLElement} from '../utils/node.utils';
-import {addParagraphs, findParagraph} from '../utils/paragraph.utils';
+import {
+  addParagraphs,
+  findParagraph,
+  insertNodeInRange,
+  isParagraphEmpty,
+  transformParagraph
+} from '../utils/paragraph.utils';
 import {getRange} from '../utils/selection.utils';
 
 export class PasteEvents {
@@ -40,10 +46,53 @@ export class PasteEvents {
 
     $event.preventDefault();
 
+    console.log(div.outerHTML);
+
     // Undefined if user has removed all paragraphs of the container previously
     const paragraph: HTMLElement | undefined = toHTMLElement(
       findParagraph({element: anchor, container: containerStore.state.ref})
     );
+
+    this.cleanAttributes(div);
+    this.cleanMeta(div);
+
+    const textNodes: boolean =
+      Array.from(div.childNodes).find((node: Node) => isTextNode(node)) !== undefined;
+
+    const spanNodes: boolean =
+      Array.from(div.children).find(({nodeName}: HTMLElement) => nodeName.toLowerCase().trim() === 'span') !== undefined;
+
+    // If there is a text node or some span, we consider the paste content as part of a paragraph. e.g. copy/paste a text and a link
+    if (textNodes || spanNodes) {
+      // addParagraphs fallbacks to container append - this happens in case user delete all the content before parsing
+      if (!paragraph) {
+        addParagraphs({
+          paragraph,
+          container: containerStore.state.ref,
+          nodes: [div]
+        });
+        return;
+      }
+
+      await this.insertNodes({range, div});
+      return;
+    }
+
+    const elements: [HTMLElement, ...HTMLElement[]] = Array.from(div.children) as [
+      HTMLElement,
+      ...HTMLElement[]
+    ];
+
+    const empty: boolean = isParagraphEmpty({paragraph});
+
+    if (empty) {
+      transformParagraph({
+        elements,
+        paragraph,
+        container: containerStore.state.ref
+      });
+      return;
+    }
 
     // Extract the rest of the "line" (the paragraph) form the cursor position to end
     const moveFragment: DocumentFragment | undefined = this.splitCurrentParagraph({
@@ -51,21 +100,26 @@ export class PasteEvents {
       paragraph
     });
 
-    this.cleanAttributes(div);
-
-    const last: Node | undefined = await addParagraphs({
+    addParagraphs({
       paragraph,
       container: containerStore.state.ref,
-      nodes: [
-        ...this.preventLeaves(div).filter(
-          ({nodeName}: HTMLElement) => nodeName.toLowerCase() !== 'meta'
-        ),
-        ...(moveFragment !== undefined ? [moveFragment] : [])
-      ]
+      nodes: [...elements, ...(moveFragment !== undefined ? [moveFragment] : [])]
+    });
+  };
+
+  private async insertNodes({range, div}: {range: Range; div: HTMLDivElement}) {
+    // convert to fragment to add all nodes at the range position
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    fragment.append(...Array.from(div.childNodes));
+
+    const last: Node | undefined = await insertNodeInRange({
+      observerRoot: containerStore.state.ref,
+      range,
+      element: fragment
     });
 
     moveCursorToEnd(last);
-  };
+  }
 
   private splitCurrentParagraph({
     range,
@@ -105,21 +159,9 @@ export class PasteEvents {
     return div;
   }
 
-  private preventLeaves(div: HTMLDivElement): HTMLElement[] {
-    return Array.from(div.childNodes).reduce((acc: HTMLElement[], node: Node) => {
-      const {nodeType} = node;
-
-      if (nodeType === Node.ELEMENT_NODE) {
-        return [...acc, node as HTMLElement];
-      }
-
-      if (isTextNode(node)) {
-        const child: HTMLDivElement = document.createElement('div');
-        child.appendChild(node.cloneNode(true));
-        return [...acc, child];
-      }
-
-      return acc;
-    }, []);
+  private cleanMeta(div: HTMLDivElement): HTMLDivElement {
+    const meta: HTMLElement | null = div.querySelector('meta');
+    meta?.parentElement.removeChild(meta);
+    return div;
   }
 }
