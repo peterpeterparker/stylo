@@ -2,6 +2,7 @@ import {moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {UndoRedoAddRemoveParagraph, UndoRedoUpdateParagraph} from '../types/undo-redo';
+import {isKeyboardEnter} from '../utils/keyboard.utils';
 import {elementIndex, toHTMLElement} from '../utils/node.utils';
 import {
   addEmptyText,
@@ -26,9 +27,7 @@ export class EnterEvents {
   }
 
   private onKeyDown = async ($event: KeyboardEvent) => {
-    const {code} = $event;
-
-    if (!['Enter'].includes(code)) {
+    if (!isKeyboardEnter($event)) {
       return;
     }
 

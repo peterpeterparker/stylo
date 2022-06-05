@@ -13,6 +13,7 @@ import configStore from '../../../stores/config.store';
 import containerStore from '../../../stores/container.store';
 import i18n from '../../../stores/i18n.store';
 import {createEmptyElement} from '../../../utils/create-element.utils';
+import {isKeyboardEnter} from '../../../utils/keyboard.utils';
 import {toHTMLElement} from '../../../utils/node.utils';
 import {
   findParagraph,
@@ -91,8 +92,10 @@ export class Add implements ComponentInterface {
   /**
    * When "enter" is pressed, create a new paragraph and select it.
    */
-  private onKeyDown = ({code}: KeyboardEvent) => {
-    if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(code)) {
+  private onKeyDown = ($event: KeyboardEvent) => {
+    const {code} = $event;
+
+    if (!['ArrowDown', 'ArrowUp'].includes(code) && !isKeyboardEnter($event)) {
       this.removePlaceholder();
     }
 
@@ -102,8 +105,13 @@ export class Add implements ComponentInterface {
   };
 
   @Listen('keyup', {target: 'document', passive: true})
-  onKeyUp({code}: KeyboardEvent) {
-    if (!['ArrowDown', 'ArrowUp', 'Enter', 'Backspace', 'Delete'].includes(code)) {
+  onKeyUp($event: KeyboardEvent) {
+    const {code} = $event;
+
+    if (
+      !['ArrowDown', 'ArrowUp', 'Backspace', 'Delete'].includes(code) &&
+      !isKeyboardEnter($event)
+    ) {
       if (this.top !== undefined) {
         this.hide();
       }

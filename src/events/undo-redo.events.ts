@@ -8,6 +8,7 @@ import {
   UndoRedoSelection,
   UndoRedoUpdateParagraph
 } from '../types/undo-redo';
+import {isKeyboardEnter} from '../utils/keyboard.utils';
 import {elementIndex, nodeDepths, toHTMLElement} from '../utils/node.utils';
 import {findParagraph} from '../utils/paragraph.utils';
 import {
@@ -101,7 +102,7 @@ export class UndoRedoEvents {
   private onKeydown = async ($event: KeyboardEvent) => {
     const {key, ctrlKey, metaKey, shiftKey} = $event;
 
-    if (key === 'Enter') {
+    if (isKeyboardEnter($event)) {
       this.stackUndoInputs();
       return;
     }
