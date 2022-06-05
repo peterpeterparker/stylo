@@ -60,7 +60,9 @@ export class PasteEvents {
       Array.from(div.childNodes).find((node: Node) => isTextNode(node)) !== undefined;
 
     const spanNodes: boolean =
-      Array.from(div.children).find(({nodeName}: HTMLElement) => nodeName.toLowerCase().trim() === 'span') !== undefined;
+      Array.from(div.children).find(
+        ({nodeName}: HTMLElement) => nodeName.toLowerCase().trim() === 'span'
+      ) !== undefined;
 
     // If there is a text node or some span, we consider the paste content as part of a paragraph. e.g. copy/paste a text and a link
     if (textNodes || spanNodes) {
