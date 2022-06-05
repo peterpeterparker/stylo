@@ -1,3 +1,13 @@
+# 0.0.27 (2022-06-05)
+
+### Features
+
+- improve paste hijacker to handle texts and elements differently
+
+### Fix
+
+- japanese support (or at least try to fix it)
+
 # 0.0.26 (2022-05-29)
 
 ### Features
