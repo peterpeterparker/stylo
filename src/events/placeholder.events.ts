@@ -1,7 +1,7 @@
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {elementIndex, isTextNode} from '../utils/node.utils';
-import {findParagraph} from '../utils/paragraph.utils';
+import {findParagraph, isParagraphEmpty} from '../utils/paragraph.utils';
 
 export class PlaceholderEvents {
   private editorRef: HTMLElement | undefined;
@@ -77,15 +77,14 @@ export class PlaceholderEvents {
   }
 
   private toggleClassEmpty(paragraph: HTMLElement) {
-    const {classList, textContent, nodeName} = paragraph;
+    const {classList, nodeName} = paragraph;
 
     if (!configStore.state.textParagraphs.includes(nodeName.toLowerCase())) {
       classList.remove('stylo-placeholder-empty');
       return;
     }
 
-    const empty: boolean =
-      textContent === '' || (textContent.charAt(0) === '\u200B' && textContent.length === 1);
+    const empty: boolean = isParagraphEmpty({paragraph});
 
     const index: number = elementIndex(paragraph);
 

@@ -195,33 +195,32 @@ export const addParagraphs = ({
   container: HTMLElement;
   paragraph: HTMLElement | undefined;
   nodes: Node[];
-}): Promise<Node | undefined> => {
-  return new Promise<Node | undefined>((resolve) => {
-    const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      addObserver.disconnect();
+}) => {
+  const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+    addObserver.disconnect();
 
-      const mutation: MutationRecord | undefined = mutations[mutations.length - 1];
+    const mutation: MutationRecord | undefined = mutations[mutations.length - 1];
 
-      if (!mutation) {
-        resolve(undefined);
-        return;
-      }
-
-      const {addedNodes} = mutation;
-
-      resolve(addedNodes[addedNodes.length - 1]);
-    });
-
-    addObserver.observe(container, {childList: true, subtree: true});
-
-    // User has deleted all paragraphs of the container previously
-    if (!paragraph) {
-      container.append(...nodes);
+    if (!mutation) {
       return;
     }
 
-    paragraph.after(...nodes);
+    const {addedNodes} = mutation;
+
+    const last: Node | undefined = addedNodes[addedNodes.length - 1];
+
+    moveCursorToEnd(last);
   });
+
+  addObserver.observe(container, {childList: true, subtree: true});
+
+  // User has deleted all paragraphs of the container previously
+  if (!paragraph) {
+    container.append(...nodes);
+    return;
+  }
+
+  paragraph.after(...nodes);
 };
 
 export const createNewEmptyLine = ({
@@ -249,20 +248,32 @@ export const createNewParagraph = ({
   return insertNodeInRange({observerRoot: container, range, element: div});
 };
 
-const insertNodeInRange = ({
+export const insertNodeInRange = ({
   observerRoot,
   range,
   element
 }: {
   observerRoot: HTMLElement;
   range: Range;
-  element: HTMLElement;
+  element: HTMLElement | DocumentFragment;
 }): Promise<Node | undefined> => {
   return new Promise<Node | undefined>((resolve) => {
     const addObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       addObserver.disconnect();
 
-      resolve(mutations[0]?.addedNodes?.[0]);
+      if (mutations.length === 0) {
+        resolve(undefined);
+        return;
+      }
+
+      const {addedNodes} = mutations[mutations.length - 1];
+
+      if (!addedNodes || addedNodes.length === 0) {
+        resolve(undefined);
+        return;
+      }
+
+      resolve(addedNodes[addedNodes.length - 1]);
     });
 
     addObserver.observe(observerRoot, {childList: true, subtree: true});
