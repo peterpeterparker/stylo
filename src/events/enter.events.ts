@@ -64,6 +64,17 @@ export class EnterEvents {
 
     $event.preventDefault();
 
+    // We undo-redo stack an update of the current paragraph value
+    const undoParagraphs: UndoRedoUpdateParagraph[] = this.toUpdateParagraphs([paragraph]);
+
+    const {startOffset, endOffset} = range;
+
+    const textSelected: boolean = startOffset !== endOffset;
+
+    if (textSelected) {
+      range.extractContents();
+    }
+
     // Extract the rest of the "line" (the paragraph) form the cursor position to end
     range.collapse(true);
     range.setEndAfter(paragraph);
@@ -74,7 +85,7 @@ export class EnterEvents {
     const {shiftKey} = $event;
 
     if (shiftKey || isParagraphCode({paragraph})) {
-      await this.createLineBreak({anchor, paragraph, isEndOfParagraph, range});
+      await this.createLineBreak({anchor, paragraph, isEndOfParagraph, range, undoParagraphs});
 
       return;
     }
@@ -92,22 +103,22 @@ export class EnterEvents {
 
     await this.createParagraphWithContent({
       range,
-      paragraph
+      paragraph,
+      undoParagraphs
     });
   }
 
   private async createParagraphWithContent({
     paragraph,
-    range
+    range,
+    undoParagraphs
   }: {
     paragraph: HTMLElement;
     range: Range;
+    undoParagraphs: UndoRedoUpdateParagraph[];
   }) {
     // We have to handle undo-redo manually because we want the redo to redo everything in one block
     undoRedoStore.state.observe = false;
-
-    // We undo-redo stack an update of the current paragraph value
-    const updateParagraphs: UndoRedoUpdateParagraph[] = this.toUpdateParagraphs([paragraph]);
 
     // The new fragment is a div - i.e. is a paragraph
     const moveFragment: DocumentFragment = range.extractContents();
@@ -130,7 +141,7 @@ export class EnterEvents {
     stackUndoParagraphs({
       container: containerStore.state.ref,
       addRemoveParagraphs,
-      updateParagraphs
+      updateParagraphs: undoParagraphs
     });
 
     // We don't move the cursor, we keep the position at the beginning of the new paragraph
@@ -159,19 +170,21 @@ export class EnterEvents {
     anchor,
     paragraph,
     isEndOfParagraph,
-    range
+    range,
+    undoParagraphs
   }: {
     anchor: HTMLElement;
     paragraph: HTMLElement;
     isEndOfParagraph: boolean;
     range: Range;
+    undoParagraphs: UndoRedoUpdateParagraph[];
   }) {
     undoRedoStore.state.observe = false;
 
     stackUndoParagraphs({
       container: containerStore.state.ref,
       addRemoveParagraphs: [],
-      updateParagraphs: this.toUpdateParagraphs([paragraph])
+      updateParagraphs: undoParagraphs
     });
 
     // Reset range end we do not want to select empty text

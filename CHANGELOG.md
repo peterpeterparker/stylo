@@ -4,6 +4,7 @@
 
 - merge default list of excluded attributes with custom configuration
 - add `autocomplete` to the list of excluded attributes
+- support replace text selection on `enter` 
 
 # 0.0.27 (2022-06-05)
 
