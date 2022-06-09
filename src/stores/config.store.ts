@@ -46,7 +46,8 @@ export const DEFAULT_EXCLUDE_ATTRIBUTES = [
   'data-gramm',
   'data-gramm_id',
   'data-gramm_editor',
-  'data-gr-id'
+  'data-gr-id',
+  'autocomplete'
 ];
 
 export const DEFAULT_PARAGRAPH_IDENTIFIER: string = 'paragraph_id';

@@ -4,7 +4,7 @@ export interface StyloConfigAttributes {
    */
   paragraphIdentifier: string;
   /**
-   *  Exclude attributes that should not be observed for changes. ParagraphIdentifier will be added to the list.
+   *  Exclude attributes that should not be observed for changes. List will be merged with the DEFAULT_EXCLUDE_ATTRIBUTES list and ParagraphIdentifier will be added to the list.
    */
   exclude: string[];
 }

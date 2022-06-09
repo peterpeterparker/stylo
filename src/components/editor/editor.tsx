@@ -204,7 +204,13 @@ export class Editor implements ComponentInterface {
 
     configStore.state.attributes = {
       paragraphIdentifier,
-      exclude: [...(attributes?.exclude || DEFAULT_EXCLUDE_ATTRIBUTES), paragraphIdentifier]
+      exclude: [
+        ...new Set([
+          ...(attributes?.exclude ?? []),
+          ...DEFAULT_EXCLUDE_ATTRIBUTES,
+          paragraphIdentifier
+        ])
+      ]
     };
   }
 

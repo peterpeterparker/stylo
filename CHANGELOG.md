@@ -1,3 +1,10 @@
+# 0.0.27 (2022-06-09)
+
+### Features
+
+- merge default list of excluded attributes with custom configuration
+- add `autocomplete` to the list of excluded attributes
+
 # 0.0.27 (2022-06-05)
 
 ### Features
