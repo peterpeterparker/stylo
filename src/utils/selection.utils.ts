@@ -40,3 +40,15 @@ export const getRange = (
     range: selection.getRangeAt(0)
   };
 };
+
+export const deleteRange = (range: Range) => {
+  const {startOffset, endOffset} = range;
+
+  const textSelected: boolean = startOffset !== endOffset;
+
+  if (!textSelected) {
+    return;
+  }
+
+  range.extractContents();
+}

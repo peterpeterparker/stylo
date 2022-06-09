@@ -14,7 +14,7 @@ import {
   isParagraphList,
   prependEmptyText
 } from '../utils/paragraph.utils';
-import {getRange, getSelection} from '../utils/selection.utils';
+import {deleteRange, getRange, getSelection} from '../utils/selection.utils';
 import {stackUndoParagraphs} from '../utils/undo-redo.utils';
 
 export class EnterEvents {
@@ -67,13 +67,7 @@ export class EnterEvents {
     // We undo-redo stack an update of the current paragraph value
     const undoParagraphs: UndoRedoUpdateParagraph[] = this.toUpdateParagraphs([paragraph]);
 
-    const {startOffset, endOffset} = range;
-
-    const textSelected: boolean = startOffset !== endOffset;
-
-    if (textSelected) {
-      range.extractContents();
-    }
+    deleteRange(range);
 
     // Extract the rest of the "line" (the paragraph) form the cursor position to end
     range.collapse(true);

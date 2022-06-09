@@ -9,7 +9,7 @@ import {
   isParagraphEmpty,
   transformParagraph
 } from '../utils/paragraph.utils';
-import {getRange} from '../utils/selection.utils';
+import {deleteRange, getRange} from '../utils/selection.utils';
 
 export class PasteEvents {
   init() {
@@ -61,6 +61,8 @@ export class PasteEvents {
       Array.from(div.children).find(
         ({nodeName}: HTMLElement) => nodeName.toLowerCase().trim() === 'span'
       ) !== undefined;
+
+    deleteRange(range);
 
     // If there is a text node or some span, we consider the paste content as part of a paragraph. e.g. copy/paste a text and a link
     if (textNodes || spanNodes) {
