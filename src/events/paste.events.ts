@@ -46,8 +46,6 @@ export class PasteEvents {
 
     $event.preventDefault();
 
-    console.log(div.outerHTML);
-
     // Undefined if user has removed all paragraphs of the container previously
     const paragraph: HTMLElement | undefined = toHTMLElement(
       findParagraph({element: anchor, container: containerStore.state.ref})
