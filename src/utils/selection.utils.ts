@@ -51,4 +51,4 @@ export const deleteRange = (range: Range) => {
   }
 
   range.extractContents();
-}
+};
