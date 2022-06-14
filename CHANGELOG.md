@@ -1,3 +1,9 @@
+# 0.0.28-1 (2022-06-14)
+
+### Fix
+
+- miscellaneous fix for tab hijacker
+
 # 0.0.28 (2022-06-09)
 
 ### Features
