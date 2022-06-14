@@ -13,9 +13,9 @@ export class TabEvents {
   }
 
   private onKeyDown = ($event: KeyboardEvent) => {
-    const {key} = $event;
+    const {key, shiftKey} = $event;
 
-    if (!['Tab'].includes(key)) {
+    if (!['Tab'].includes(key) || shiftKey) {
       return;
     }
 
