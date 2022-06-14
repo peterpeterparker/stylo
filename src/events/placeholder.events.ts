@@ -10,12 +10,14 @@ export class PlaceholderEvents {
     this.editorRef = editorRef;
 
     this.editorRef?.addEventListener('selectParagraph', this.onSelectParagraph);
+    containerStore.state.ref?.addEventListener('focusin', this.onSelectParagraph, {passive: true});
 
     this.classesEmpty();
   }
 
   destroy() {
     this.editorRef?.removeEventListener('selectParagraph', this.onSelectParagraph);
+    containerStore.state.ref?.removeEventListener('focusin', this.onSelectParagraph);
   }
 
   private onSelectParagraph = ({detail}: CustomEvent<HTMLElement | undefined>) => {
