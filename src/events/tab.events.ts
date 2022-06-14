@@ -1,6 +1,7 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import {isTextNode} from '../utils/node.utils';
+import {findParagraph} from '../utils/paragraph.utils';
 import {getRange} from '../utils/selection.utils';
 
 export class TabEvents {
@@ -29,14 +30,28 @@ export class TabEvents {
       return;
     }
 
+    $event.preventDefault();
+
     const node: Node | undefined = selection?.focusNode;
 
     if (!isTextNode(node)) {
+      const paragraph: Node | undefined = findParagraph({
+        element: node,
+        container: containerStore.state.ref
+      });
+
+      if (paragraph !== undefined) {
+        this.createTabulation({range});
+        return;
+      }
+
       return;
     }
 
-    $event.preventDefault();
+    this.createTabulation({range});
+  }
 
+  private createTabulation({range}: {range: Range}) {
     const span: HTMLSpanElement = document.createElement('span');
     span.innerHTML = '\u0009';
 
