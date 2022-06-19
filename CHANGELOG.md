@@ -1,3 +1,9 @@
+# 0.0.29 (2022-06-19)
+
+### Features
+
+- add iOS and Android to `isMobile()` detection to consider such devices as Samsung Note as mobile devices too
+
 # 0.0.28-1 (2022-06-14)
 
 ### Fix
