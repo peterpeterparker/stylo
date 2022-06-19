@@ -1,4 +1,4 @@
-import {debounce, isIOS, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
+import {debounce, isIOS, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -14,6 +14,7 @@ import containerStore from '../../../stores/container.store';
 import i18n from '../../../stores/i18n.store';
 import {createEmptyElement} from '../../../utils/create-element.utils';
 import {isKeyboardEnter} from '../../../utils/keyboard.utils';
+import {isMobile} from '../../../utils/mobile.utils';
 import {toHTMLElement} from '../../../utils/node.utils';
 import {
   findParagraph,
