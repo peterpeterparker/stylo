@@ -3,7 +3,6 @@ import {
   debounce,
   getAnchorElement,
   isIOS,
-  isMobile,
   isRTL,
   unifyEvent
 } from '@deckdeckgo/utils';
@@ -32,6 +31,7 @@ import {
 import {execCommand} from '../../../../utils/execcommand.utils';
 import {execCommandNative} from '../../../../utils/execcommnad-native.utils';
 import {removeLink} from '../../../../utils/link.utils';
+import {isMobile} from '../../../../utils/mobile.utils';
 import {toHTMLElement} from '../../../../utils/node.utils';
 import {findParagraph, isParagraph} from '../../../../utils/paragraph.utils';
 import {getRange, getSelection} from '../../../../utils/selection.utils';

@@ -624,12 +624,7 @@
     <script type="module">
       import {imgMenu} from './build/index.esm.js';
 
-      const isMobile = () => {
-        const isTouchScreen = window.matchMedia('(any-pointer:coarse)').matches;
-        const isMouseScreen = window.matchMedia('(any-pointer:fine)').matches;
-
-        return isTouchScreen && !isMouseScreen;
-      };
+      const isTouchScreen = () => window.matchMedia('(any-pointer:coarse)').matches;
 
       const initStylo = () => {
         const stylo = document.querySelector('stylo-editor');
@@ -671,7 +666,7 @@
           .querySelector('section.try button')
           ?.addEventListener('click', onTry, {passive: true});
 
-        if (isMobile()) {
+        if (isTouchScreen()) {
           document
             .querySelector('section.editor article')
             ?.setAttribute('contenteditable', 'false');

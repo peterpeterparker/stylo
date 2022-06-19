@@ -1,4 +1,4 @@
-import {debounce, isMobile} from '@deckdeckgo/utils';
+import {debounce} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -29,6 +29,7 @@ import i18n from '../../stores/i18n.store';
 import undoRedoStore from '../../stores/undo-redo.store';
 import {StyloConfig} from '../../types/config';
 import {injectCSS} from '../../utils/css.utils';
+import {isMobile} from '../../utils/mobile.utils';
 
 @Component({
   tag: 'stylo-editor',
@@ -107,7 +108,7 @@ export class Editor implements ComponentInterface {
   }
 
   private applySize() {
-    if (isMobile()) {
+    if (this.mobile) {
       return;
     }
 

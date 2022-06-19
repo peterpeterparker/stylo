@@ -1,4 +1,4 @@
-import {debounce, isIOS, isMobile, moveCursorToStart} from '@deckdeckgo/utils';
+import {debounce, isIOS, moveCursorToStart} from '@deckdeckgo/utils';
 import {
   Component,
   ComponentInterface,
@@ -23,6 +23,7 @@ import {
 } from '../../../utils/paragraph.utils';
 import {getSelection} from '../../../utils/selection.utils';
 import {IconAdd} from '../../icons/add';
+import {isMobile} from '../../../utils/mobile.utils';
 
 @Component({
   tag: 'stylo-add',
