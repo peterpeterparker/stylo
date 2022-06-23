@@ -62,8 +62,10 @@ export class InputEvents {
       indexDepths: [startOffset]
     });
 
-    // We create a div - i.e. new HTML element - only if the actual target an editable paragraph that accepts text
+    // We create a div - i.e. new HTML element - only if the actual target is not an editable paragraph that accepts text
     if (configStore.state.textParagraphs?.includes(target?.nodeName.toLowerCase())) {
+      // We set the range to the start of the target because if we don't, the browser might create a text element before the target anyway
+      range.setStart(target, 0);
       return;
     }
 
