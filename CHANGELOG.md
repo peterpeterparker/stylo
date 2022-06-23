@@ -1,3 +1,9 @@
+# 0.0.29-1 (2022-06-23)
+
+### Fix
+
+- set range to start to preserve leaf if target is editable
+
 # 0.0.29 (2022-06-19)
 
 ### Features
