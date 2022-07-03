@@ -1,7 +1,7 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
-import {isTextNode, toHTMLElement} from '../utils/node.utils';
+import {isMetaContent, isPhrasingContent, isTextNode, toHTMLElement} from '../utils/node.utils';
 import {
   addParagraphs,
   findParagraph,
@@ -52,20 +52,15 @@ export class PasteEvents {
     );
 
     this.cleanAttributes(div);
-    this.cleanMeta(div);
+    this.cleanMetas(div);
 
-    const textNodes: boolean =
-      Array.from(div.childNodes).find((node: Node) => isTextNode(node)) !== undefined;
-
-    const spanNodes: boolean =
-      Array.from(div.children).find(
-        ({nodeName}: HTMLElement) => nodeName.toLowerCase().trim() === 'span'
-      ) !== undefined;
+    const notOnlyText: boolean =
+      Array.from(div.childNodes).find((node: Node) => !isPhrasingContent(node)) !== undefined;
 
     deleteRange(range);
 
-    // If there is a text node or some span, we consider the paste content as part of a paragraph. e.g. copy/paste a text and a link
-    if (textNodes || spanNodes) {
+    // If there is only text nodes and span, we consider the paste content as part of a paragraph. e.g. copy/paste a text and a link
+    if (!notOnlyText) {
       // addParagraphs fallbacks to container append - this happens in case user delete all the content before parsing
       if (!paragraph) {
         addParagraphs({
@@ -80,10 +75,17 @@ export class PasteEvents {
       return;
     }
 
-    const elements: [HTMLElement, ...HTMLElement[]] = Array.from(div.children) as [
-      HTMLElement,
-      ...HTMLElement[]
-    ];
+    const elements: [HTMLElement, ...HTMLElement[]] = Array.from(div.childNodes).map(
+      (node: Node) => {
+        if (isTextNode(node) || node.nodeName.toLowerCase().trim() === 'span') {
+          const div: HTMLDivElement = document.createElement('div');
+          div.appendChild(node);
+          return div;
+        }
+
+        return node as HTMLElement;
+      }
+    ) as [HTMLElement, ...HTMLElement[]];
 
     const empty: boolean = isParagraphEmpty({paragraph});
 
@@ -161,9 +163,14 @@ export class PasteEvents {
     return div;
   }
 
-  private cleanMeta(div: HTMLDivElement): HTMLDivElement {
-    const meta: HTMLElement | null = div.querySelector('meta');
-    meta?.parentElement.removeChild(meta);
+  // clean all meta, style and title pasted tags
+  private cleanMetas(div: HTMLDivElement): HTMLDivElement {
+    const metas: Element[] = Array.from(div.children).filter((node: HTMLElement) =>
+      isMetaContent(node)
+    );
+    for (const element of metas) {
+      element.parentElement.removeChild(element);
+    }
     return div;
   }
 }

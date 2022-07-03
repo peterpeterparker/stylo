@@ -54,3 +54,58 @@ export const findNodeAtDepths = ({
 
   return findNodeAtDepths({parent: childNode, indexDepths: rest});
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories
+export const isPhrasingContent = (node: Node): boolean =>
+  isTextNode(node) ||
+  [
+    'abbr',
+    'audio',
+    'b',
+    'bdo',
+    'br',
+    'button',
+    'canvas',
+    'cite',
+    'code',
+    'data',
+    'datalist',
+    'dfn',
+    'em',
+    'embed',
+    'i',
+    'iframe',
+    'img',
+    'input',
+    'kbd',
+    'label',
+    'mark',
+    'math',
+    'meter',
+    'noscript',
+    'object',
+    'output',
+    'picture',
+    'progress',
+    'q',
+    'ruby',
+    'samp',
+    'script',
+    'select',
+    'small',
+    'span',
+    'strong',
+    'sub',
+    'sup',
+    'svg',
+    'textarea',
+    'time',
+    'u',
+    'var',
+    'video',
+    'wbr'
+  ].includes(node.nodeName.toLowerCase()) ||
+  ['a', 'area', 'del', 'ins', 'map'].includes(node.nodeName.toLowerCase());
+
+export const isMetaContent = ({nodeName}: Node): boolean =>
+  ['base', 'link', 'meta', 'noscript', 'script', 'style', 'title'].includes(nodeName.toLowerCase());
