@@ -4,6 +4,10 @@
 
 - clean meta and support phrasing content in past hijacker
 
+### Build
+
+- bump dependencies
+
 # 0.0.29-1 (2022-06-23)
 
 ### Fix

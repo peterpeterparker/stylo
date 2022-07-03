@@ -104,6 +104,58 @@ export namespace Components {
         "mobile": boolean;
     }
 }
+export interface StyloAddCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloAddElement;
+}
+export interface StyloColorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloColorElement;
+}
+export interface StyloColorInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloColorInputElement;
+}
+export interface StyloListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloListElement;
+}
+export interface StyloMenusCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloMenusElement;
+}
+export interface StyloToolbarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarElement;
+}
+export interface StyloToolbarAlignCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarAlignElement;
+}
+export interface StyloToolbarButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarButtonElement;
+}
+export interface StyloToolbarColorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarColorElement;
+}
+export interface StyloToolbarFontSizeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarFontSizeElement;
+}
+export interface StyloToolbarLinkCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarLinkElement;
+}
+export interface StyloToolbarListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarListElement;
+}
+export interface StyloToolbarTextCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLStyloToolbarTextElement;
+}
 declare global {
     interface HTMLStyloAddElement extends Components.StyloAdd, HTMLStencilElement {
     }
@@ -232,15 +284,15 @@ declare namespace LocalJSX {
         /**
           * If user types anything else than a "/" in an empty paragraph, hide the plugins.
          */
-        "onHidePlugins"?: (event: CustomEvent<void>) => void;
+        "onHidePlugins"?: (event: StyloAddCustomEvent<void>) => void;
         /**
           * An event emitted when user click on the shadowed button. - If selected paragraph is empty, emitted straight away - If not empty, first a new paragraph is created and then event is emitted Event is catched in `<style-plugins/>` and used to trigger the display of list of plugins.
          */
-        "onListPlugins"?: (event: CustomEvent<HTMLElement | undefined>) => void;
+        "onListPlugins"?: (event: StyloAddCustomEvent<HTMLElement | undefined>) => void;
         /**
           * Emits the paragraph that is selected either with mouse, touch or keyboard actions
          */
-        "onSelectParagraph"?: (event: CustomEvent<HTMLElement | undefined>) => void;
+        "onSelectParagraph"?: (event: StyloAddCustomEvent<HTMLElement | undefined>) => void;
     }
     interface StyloColor {
         /**
@@ -258,7 +310,7 @@ declare namespace LocalJSX {
         /**
           * Emit the selected color
          */
-        "onColorChange"?: (event: CustomEvent<StyloPaletteColor>) => void;
+        "onColorChange"?: (event: StyloColorCustomEvent<StyloPaletteColor>) => void;
         /**
           * The palette of color.
          */
@@ -269,7 +321,7 @@ declare namespace LocalJSX {
         "colorRgb"?: string;
         "customColorRgb"?: string;
         "inputAlt"?: string;
-        "onSelectHexColor"?: (event: CustomEvent<StyloPaletteColor>) => void;
+        "onSelectHexColor"?: (event: StyloColorInputCustomEvent<StyloPaletteColor>) => void;
     }
     interface StyloEditor {
         /**
@@ -285,14 +337,14 @@ declare namespace LocalJSX {
         /**
           * Emit which plugin the user want to apply.
          */
-        "onApplyPlugin"?: (event: CustomEvent<StyloPlugin>) => void;
+        "onApplyPlugin"?: (event: StyloListCustomEvent<StyloPlugin>) => void;
         /**
           * Emit when user actually do not want to apply a plugin.
          */
-        "onCancelPlugins"?: (event: CustomEvent<void>) => void;
+        "onCancelPlugins"?: (event: StyloListCustomEvent<void>) => void;
     }
     interface StyloMenus {
-        "onMenuActivated"?: (event: CustomEvent<{paragraph: HTMLElement}>) => void;
+        "onMenuActivated"?: (event: StyloMenusCustomEvent<{paragraph: HTMLElement}>) => void;
     }
     interface StyloPlugins {
     }
@@ -308,46 +360,46 @@ declare namespace LocalJSX {
         /**
           * Triggered when a link is created by the user. The event detail is the container
          */
-        "onLinkCreated"?: (event: CustomEvent<HTMLElement>) => void;
+        "onLinkCreated"?: (event: StyloToolbarCustomEvent<HTMLElement>) => void;
         /**
           * Triggered when the style is modified (bold, italic, color, alignment, etc.). The event detail is the container
          */
-        "onStyleDidChange"?: (event: CustomEvent<HTMLElement>) => void;
-        "onToolbarActivated"?: (event: CustomEvent<boolean>) => void;
+        "onStyleDidChange"?: (event: StyloToolbarCustomEvent<HTMLElement>) => void;
+        "onToolbarActivated"?: (event: StyloToolbarCustomEvent<boolean>) => void;
     }
     interface StyloToolbarAlign {
         "align"?: ToolbarAlign;
         "anchorEvent"?: MouseEvent | TouchEvent;
         "containerRef"?: HTMLElement | undefined;
-        "onAlignModified"?: (event: CustomEvent<any>) => void;
+        "onAlignModified"?: (event: StyloToolbarAlignCustomEvent<any>) => void;
     }
     interface StyloToolbarButton {
         "cssClass"?: string;
         "disableAction"?: boolean;
         "label"?: string;
-        "onAction"?: (event: CustomEvent<UIEvent>) => void;
+        "onAction"?: (event: StyloToolbarButtonCustomEvent<UIEvent>) => void;
     }
     interface StyloToolbarColor {
         "action"?: 'color' | 'background-color';
         "containerRef"?: HTMLElement | undefined;
-        "onClose"?: (event: CustomEvent<void>) => void;
-        "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
+        "onClose"?: (event: StyloToolbarColorCustomEvent<void>) => void;
+        "onExecCommand"?: (event: StyloToolbarColorCustomEvent<ExecCommandAction>) => void;
     }
     interface StyloToolbarFontSize {
         "fontSize"?: ToolbarFontSize;
-        "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
+        "onExecCommand"?: (event: StyloToolbarFontSizeCustomEvent<ExecCommandAction>) => void;
     }
     interface StyloToolbarLink {
         "anchorLink"?: ToolbarAnchorLink;
         "containerRef"?: HTMLElement | undefined;
         "linkCreated"?: EventEmitter<HTMLElement>;
-        "onClose"?: (event: CustomEvent<void>) => void;
-        "onLinkModified"?: (event: CustomEvent<boolean>) => void;
+        "onClose"?: (event: StyloToolbarLinkCustomEvent<void>) => void;
+        "onLinkModified"?: (event: StyloToolbarLinkCustomEvent<boolean>) => void;
         "toolbarActions"?: ToolbarActions;
     }
     interface StyloToolbarList {
         "list"?: ToolbarList;
-        "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
+        "onExecCommand"?: (event: StyloToolbarListCustomEvent<ExecCommandAction>) => void;
     }
     interface StyloToolbarSeparator {
     }
@@ -355,7 +407,7 @@ declare namespace LocalJSX {
         "bold"?: boolean;
         "disabledTitle"?: boolean;
         "italic"?: boolean;
-        "onExecCommand"?: (event: CustomEvent<ExecCommandAction>) => void;
+        "onExecCommand"?: (event: StyloToolbarTextCustomEvent<ExecCommandAction>) => void;
         "strikethrough"?: boolean;
         "underline"?: boolean;
     }
