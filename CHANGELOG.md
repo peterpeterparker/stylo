@@ -4,6 +4,10 @@
 
 - clean meta and support phrasing content in past hijacker
 
+### Fix
+
+- undo redo input text if `target` is the container
+
 ### Build
 
 - bump dependencies

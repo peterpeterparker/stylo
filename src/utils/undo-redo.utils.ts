@@ -221,7 +221,7 @@ const undoRedoInput = async ({
     target: container,
     data: {
       index,
-      indexDepths: nodeDepths({target, paragraph}),
+      indexDepths: nodeDepths({target: text ?? target, paragraph}),
       oldValue: previousValue,
       offset: newCaretPosition + (previousValue.length - oldValue.length)
     }
