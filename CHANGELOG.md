@@ -1,3 +1,9 @@
+# 0.0.30 (2022-07-03)
+
+### Features
+
+- clean meta and support phrasing content in past hijacker
+
 # 0.0.29-1 (2022-06-23)
 
 ### Fix
