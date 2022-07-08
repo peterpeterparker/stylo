@@ -6,7 +6,7 @@ import {h2} from './h2.plugin';
 import {h3} from './h3.plugin';
 import {hr} from './hr.plugin';
 import {img} from './img.plugin';
-import {ul} from './ul.plugin';
+import {ol, ul} from './list.plugin';
 
 describe('plugins', () => {
   let container, paragraph;
@@ -144,7 +144,12 @@ describe('plugins', () => {
   });
 
   it('should render properties ul', () => {
-    expect(ul.text).toEqual('list');
+    expect(ul.text).toEqual('unordered_list');
     expect(ul.icon).toEqual('ul');
+  });
+
+  it('should render properties ol', () => {
+    expect(ol.text).toEqual('ordered_list');
+    expect(ol.icon).toEqual('ol');
   });
 });

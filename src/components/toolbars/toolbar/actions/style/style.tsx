@@ -51,10 +51,6 @@ export const Style: FunctionalComponent<StyleProps> = ({
   };
 
   const renderListAction = () => {
-    if (!configStore.state.toolbar.style.list) {
-      return undefined;
-    }
-
     return (
       <stylo-toolbar-button
         onAction={() => switchToolbarActions(ToolbarActions.LIST)}

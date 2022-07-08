@@ -4,7 +4,8 @@ export interface I18nPlugins {
   small_title: string;
   paragraph: string;
   separator: string;
-  list: string;
+  unordered_list: string;
+  ordered_list: string;
   image: string;
   code: string;
 }

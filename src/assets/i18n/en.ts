@@ -8,7 +8,8 @@ export const en: I18n = {
     small_title: 'Small title',
     paragraph: 'Paragraph',
     separator: 'Separator',
-    list: 'List',
+    unordered_list: 'Bulleted list',
+    ordered_list: 'Numbered list',
     image: 'Image',
     code: 'Code'
   },

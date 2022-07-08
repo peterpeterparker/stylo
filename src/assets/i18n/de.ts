@@ -8,7 +8,8 @@ export const de: I18n = {
     small_title: 'Kleine Überschrift',
     paragraph: 'Abschnitt',
     separator: 'Separator',
-    list: 'Liste',
+    unordered_list: 'Liste',
+    ordered_list: 'Liste (Nummern)',
     image: 'Bild',
     code: 'Code'
   },
