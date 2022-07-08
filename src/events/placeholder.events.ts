@@ -50,7 +50,8 @@ export class PlaceholderEvents {
       return;
     }
 
-    this.toggleClassEmpty(paragraph as HTMLElement);
+    // Workaround: add a bit of delay if user enters and deletes text quickly in the first paragraphs to detect the classes empty
+    setTimeout(() => this.toggleClassEmpty(paragraph as HTMLElement), 250);
   };
 
   private classesEmpty() {

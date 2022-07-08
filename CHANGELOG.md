@@ -3,6 +3,7 @@
 ### Features
 
 - filter updated paragraphs that have just been added for events `updateParagraphs`
+- workaround delay for empty placeholder
 
 # 0.0.30 (2022-07-03)
 
