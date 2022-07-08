@@ -6,7 +6,7 @@ export * from './plugins/h2.plugin';
 export * from './plugins/h3.plugin';
 export * from './plugins/hr.plugin';
 export * from './plugins/img.plugin';
-export * from './plugins/ul.plugin';
+export * from './plugins/list.plugin';
 export * from './types/config';
 export * from './types/i18n';
 export * from './types/icon';

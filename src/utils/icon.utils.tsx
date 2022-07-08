@@ -2,7 +2,8 @@ import {h, JSX} from '@stencil/core';
 import {IconCode} from '../components/icons/code';
 import {IconEllipsisHorizontal} from '../components/icons/ellipsis-horizontal';
 import {IconImages} from '../components/icons/images';
-import {IconList} from '../components/icons/list';
+import {IconOl} from '../components/icons/ol';
+import {IconUl} from '../components/icons/ul';
 import {StyloIcon} from '../types/icon';
 
 export const renderIcon = (icon: StyloIcon): JSX.IntrinsicElements | undefined => {
@@ -10,7 +11,9 @@ export const renderIcon = (icon: StyloIcon): JSX.IntrinsicElements | undefined =
     case 'code':
       return <IconCode></IconCode>;
     case 'ul':
-      return <IconList></IconList>;
+      return <IconUl></IconUl>;
+    case 'ol':
+      return <IconOl></IconOl>;
     case 'hr':
       return <IconEllipsisHorizontal></IconEllipsisHorizontal>;
     case 'img':

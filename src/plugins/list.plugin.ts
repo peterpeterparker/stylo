@@ -9,7 +9,7 @@ const createListItem = (): HTMLLIElement => {
 };
 
 export const ul: StyloPlugin = {
-  text: 'list',
+  text: 'unordered_list',
   icon: 'ul',
   createParagraphs: async ({container, paragraph}: StyloPluginCreateParagraphsParams) => {
     const ul: HTMLUListElement = document.createElement('ul');
@@ -18,6 +18,22 @@ export const ul: StyloPlugin = {
 
     await transformParagraph({
       elements: [ul, createEmptyElement({nodeName: 'div'})],
+      paragraph,
+      container
+    });
+  }
+};
+
+export const ol: StyloPlugin = {
+  text: 'ordered_list',
+  icon: 'ol',
+  createParagraphs: async ({container, paragraph}: StyloPluginCreateParagraphsParams) => {
+    const ol: HTMLOListElement = document.createElement('ol');
+
+    ol.append(createListItem());
+
+    await transformParagraph({
+      elements: [ol, createEmptyElement({nodeName: 'div'})],
       paragraph,
       container
     });

@@ -8,7 +8,8 @@ export const nl: I18n = {
     small_title: 'Kleine titel',
     paragraph: 'Paragraaf',
     separator: 'cheidingsteken',
-    list: 'Lijst',
+    unordered_list: 'Lijst',
+    ordered_list: 'Lijst (nummers)',
     image: 'Afbeelding',
     code: 'Code'
   },

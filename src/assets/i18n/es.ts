@@ -8,7 +8,8 @@ export const es: I18n = {
     small_title: 'Título pequeño',
     paragraph: 'Párrafo',
     separator: 'Separador',
-    list: 'Lista',
+    unordered_list: 'Lista con viñetas',
+    ordered_list: 'Lista numerada',
     image: 'Imagen',
     code: 'Código'
   },
