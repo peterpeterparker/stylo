@@ -1,3 +1,9 @@
+# 0.0.31 (2022-07-08)
+
+### Features
+
+- filter updated paragraphs that have just been added for events `updateParagraphs`
+
 # 0.0.30 (2022-07-03)
 
 ### Features

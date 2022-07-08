@@ -43,18 +43,18 @@ export class DataEvents {
   }
 
   private onTreeMutation = async (mutations: MutationRecord[]) => {
-    await this.addParagraphs(mutations);
+    const addedParagraphs: HTMLElement[] = await this.addParagraphs(mutations);
     this.deleteParagraphs(mutations);
-    this.updateAddedNodesParagraphs(mutations);
+    this.updateAddedNodesParagraphs({addedParagraphs, mutations});
   };
 
   private onAttributesMutation = (mutations: MutationRecord[]) => {
-    this.updateParagraphs(
-      filterAttributesMutations({
+    this.updateParagraphs({
+      mutations: filterAttributesMutations({
         mutations,
         excludeAttributes: configStore.state.attributes.exclude
       })
-    );
+    });
   };
 
   private onDataMutation = (mutations: MutationRecord[]) => {
@@ -62,9 +62,9 @@ export class DataEvents {
     this.debounceUpdateInput();
   };
 
-  private async addParagraphs(mutations: MutationRecord[]) {
+  private async addParagraphs(mutations: MutationRecord[]): Promise<HTMLElement[]> {
     if (!containerStore.state.ref) {
-      return;
+      return [];
     }
 
     const addedParagraphs: HTMLElement[] = findAddedParagraphs({
@@ -73,7 +73,7 @@ export class DataEvents {
     });
 
     if (addedParagraphs.length <= 0) {
-      return;
+      return [];
     }
 
     await Promise.all(
@@ -86,6 +86,8 @@ export class DataEvents {
     );
 
     emitAddParagraphs({editorRef: this.editorRef, addedParagraphs});
+
+    return addedParagraphs;
   }
 
   private deleteParagraphs(mutations: MutationRecord[]) {
@@ -125,7 +127,13 @@ export class DataEvents {
     emitDeleteParagraphs({editorRef: this.editorRef, removedParagraphs});
   }
 
-  private updateAddedNodesParagraphs(mutations: MutationRecord[]) {
+  private updateAddedNodesParagraphs({
+    mutations,
+    addedParagraphs
+  }: {
+    mutations: MutationRecord[];
+    addedParagraphs: HTMLElement[];
+  }) {
     if (!containerStore.state.ref) {
       return;
     }
@@ -143,7 +151,10 @@ export class DataEvents {
       paragraphIdentifier: configStore.state.attributes.paragraphIdentifier
     });
 
-    this.updateParagraphs([...addedNodesMutations, ...removedNodesMutations]);
+    this.updateParagraphs({
+      mutations: [...addedNodesMutations, ...removedNodesMutations],
+      addedParagraphs
+    });
   }
 
   private updateData() {
@@ -154,10 +165,16 @@ export class DataEvents {
     const mutations: MutationRecord[] = [...this.stackDataMutations];
     this.stackDataMutations = [];
 
-    this.updateParagraphs(mutations);
+    this.updateParagraphs({mutations});
   }
 
-  private updateParagraphs(mutations: MutationRecord[]) {
+  private updateParagraphs({
+    mutations,
+    addedParagraphs = []
+  }: {
+    mutations: MutationRecord[];
+    addedParagraphs?: HTMLElement[];
+  }) {
     if (!containerStore.state.ref) {
       return;
     }
@@ -171,6 +188,20 @@ export class DataEvents {
       return;
     }
 
-    emitUpdateParagraphs({editorRef: this.editorRef, updatedParagraphs});
+    // Browser might report an update for a node that might have just been added. We do not consider these as updates.
+    // Useful when client persist paragraphs because the updated node might not be persisted yet since it was just added and emitted as such.
+    const justAdded = (element: HTMLElement): boolean =>
+      addedParagraphs.find((addedParagraph: HTMLElement) => addedParagraph.isSameNode(element)) !==
+      undefined;
+
+    const existingUpdatedParagraphs: HTMLElement[] = updatedParagraphs.filter(
+      (element: HTMLElement) => !justAdded(element)
+    );
+
+    if (existingUpdatedParagraphs.length <= 0) {
+      return;
+    }
+
+    emitUpdateParagraphs({editorRef: this.editorRef, updatedParagraphs: existingUpdatedParagraphs});
   }
 }
