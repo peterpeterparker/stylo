@@ -1,3 +1,9 @@
+# 0.0.32 (2022-07-08)
+
+### Features
+
+- ordered list plugin
+
 # 0.0.31 (2022-07-08)
 
 ### Features
