@@ -145,6 +145,8 @@ const replaceBacktick = (): Promise<void> => {
 };
 
 /**
+ * On Swiss French keyboard - i.e. when backtick is entered with "Shift + key":
+ *
  * - Chrome renders the backtick in the new mark therefore we have to delete it the new element
  * - Firefox renders the new mark and renders the backtick at the begin of the previous text element
  */
@@ -155,6 +157,12 @@ const replaceBacktickText = (): Promise<void> => {
         changeObserver.disconnect();
 
         const target: Node = mutations[0].target;
+
+        // On us keyboard, the backtick is already removed
+        if (!target.nodeValue.includes('`')) {
+          resolve();
+          return;
+        }
 
         undoRedoStore.state.observe = false;
 
