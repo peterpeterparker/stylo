@@ -1,3 +1,9 @@
+# 0.0.33 (2022-07-09)
+
+### Features
+
+- backtick support for us keyboards
+
 # 0.0.32 (2022-07-08)
 
 ### Features
