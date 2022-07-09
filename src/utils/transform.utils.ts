@@ -45,7 +45,8 @@ export const beforeInputTransformer: TransformInput[] = [
       return document.createElement('mark');
     },
     active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '`',
+    shouldTrim: ({nodeValue}: Node) =>
+      nodeValue.charAt(nodeValue.length - 1) === '`' || nodeValue.charAt(0) === '`',
     trim: (): number => '`'.length,
     postTransform: () => replaceBacktick()
   },
@@ -68,7 +69,8 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return parseInt(fontWeight) > 400 || fontWeight === 'bold';
     },
-    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '*',
+    shouldTrim: ({nodeValue}: Node) =>
+      nodeValue.charAt(nodeValue.length - 1) === '*' || nodeValue.charAt(0) === '*',
     trim: (): number => '*'.length
   },
   {
@@ -331,6 +333,11 @@ const splitText = ({
   return new Promise<Node>((resolve) => {
     const changeObserver: MutationObserver = new MutationObserver(async () => {
       changeObserver.disconnect();
+
+      if (!transformInput.shouldTrim(newText)) {
+        resolve(newText);
+        return;
+      }
 
       const node: Node = await removeChar({target: newText, index: 1});
 
