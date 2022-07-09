@@ -237,18 +237,19 @@ const createNode = ({
 
     if (active(parent)) {
       // We are in a bold node, therefore we want to exit it
-      const newText: Text = document.createTextNode('\u200B');
-      parent.after(newText);
-    } else {
-      // We create the new node
-      const newNode: HTMLElement = transform();
-      newNode.innerHTML = '\u200B';
+      return;
+    }
 
-      if (target.nextSibling) {
-        parent.insertBefore(newNode, target.nextSibling);
-      } else {
-        parent.appendChild(newNode);
-      }
+    // We create the new node and a node afterwards if last node of the paragraph so user can escape by clicking the arrow right
+    const newNode: HTMLElement = transform();
+    newNode.innerHTML = '\u200B';
+
+    const newText: Text = document.createTextNode('\u200B');
+
+    if (target.nextSibling) {
+      parent.insertBefore(newNode, target.nextSibling);
+    } else {
+      parent.append(newNode, newText);
     }
   });
 };
