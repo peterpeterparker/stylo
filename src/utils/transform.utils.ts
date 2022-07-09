@@ -21,7 +21,14 @@ export interface TransformInput {
   transform: () => HTMLElement;
   postTransform?: () => Promise<void>;
   active: (parent: HTMLElement) => boolean;
-  shouldTrim: (target: Node) => boolean;
+  shouldTrimText: (target: Node) => boolean;
+  shouldTrimSplit: ({
+    target,
+    startOffset
+  }: {
+    target: Node;
+    startOffset: number | undefined;
+  }) => boolean;
   trim: () => number;
 }
 
@@ -46,7 +53,10 @@ export const beforeInputTransformer: TransformInput[] = [
       return document.createElement('mark');
     },
     active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '`',
+    shouldTrimText: ({nodeValue}: Node) =>
+      nodeValue.charAt(nodeValue.length - 1) === '`' || nodeValue.charAt(0) === '`',
+    shouldTrimSplit: ({target, startOffset}: {target: Node; startOffset: number | undefined}) =>
+      startOffset !== undefined && target.nodeValue.charAt(startOffset - 1) === '`',
     trim: (): number => '`'.length,
     postTransform: () => replaceBacktick()
   },
@@ -69,7 +79,10 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return parseInt(fontWeight) > 400 || fontWeight === 'bold';
     },
-    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '*',
+    shouldTrimText: ({nodeValue}: Node) =>
+      nodeValue.charAt(nodeValue.length - 1) === '*' || nodeValue.charAt(0) === '*',
+    shouldTrimSplit: ({target, startOffset}: {target: Node; startOffset: number | undefined}) =>
+      startOffset !== undefined && target.nodeValue.charAt(startOffset - 1) === '*',
     trim: (): number => '*'.length
   },
   {
@@ -91,32 +104,23 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return fontStyle === 'italic';
     },
-    shouldTrim: (_target: Node) => false,
+    shouldTrimText: (_target: Node) => false,
+    shouldTrimSplit: () => false,
     trim: (): number => ''.length
   }
 ];
 
 export const transformInput = async ({
   $event,
-  transformInput
+  transformInput,
+  target,
+  parent
 }: {
   $event: KeyboardEvent | InputEvent;
   transformInput: TransformInput;
+  target: Node;
+  parent: HTMLElement;
 }) => {
-  const selection: Selection | null = getSelection(containerStore.state.ref);
-
-  if (!selection) {
-    return;
-  }
-
-  const {focusNode: target} = selection;
-
-  if (!target) {
-    return;
-  }
-
-  const parent: HTMLElement = toHTMLElement(target);
-
   // Check if we can transform or end tag
   if (!canTransform({target, parent, transformInput})) {
     return;
@@ -127,8 +131,8 @@ export const transformInput = async ({
   // Disable undo-redo observer as we are about to play with the DOM
   undoRedoStore.state.observe = false;
 
-  // We might remove the last character, a * or ` if present in text
-  await updateText({target, transformInput});
+  // We might remove the character, a * or `, if present
+  await updateText({target, parent, transformInput});
 
   // We had fun, we can observe again the undo redo store to stack the next bold element we are about to create
   undoRedoStore.state.observe = true;
@@ -170,18 +174,17 @@ const replaceBacktickText = (): Promise<void> => {
 
         undoRedoStore.state.observe = true;
 
+        const parent: HTMLElement | undefined | null = toHTMLElement(target);
+        const mark: boolean = parent?.nodeName.toLowerCase() === 'mark';
+
         if (isFirefox()) {
-          // Firefox acts a bit weirdly
-          const parent: HTMLElement | undefined | null = toHTMLElement(target);
-          moveCursorToEnd(
-            parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling
-          );
+          moveCursorToEnd(mark ? parent.nextSibling : target.nextSibling);
 
           resolve();
           return;
         }
 
-        moveCursorToEnd(target);
+        moveCursorToEnd(mark ? target : target.nextSibling);
 
         resolve();
       }
@@ -237,18 +240,19 @@ const createNode = ({
 
     if (active(parent)) {
       // We are in a bold node, therefore we want to exit it
-      const newText: Text = document.createTextNode('\u200B');
-      parent.after(newText);
-    } else {
-      // We create the new node
-      const newNode: HTMLElement = transform();
-      newNode.innerHTML = '\u200B';
+      return;
+    }
 
-      if (target.nextSibling) {
-        parent.insertBefore(newNode, target.nextSibling);
-      } else {
-        parent.appendChild(newNode);
-      }
+    // We create the new node and a node afterwards if last node of the paragraph so user can escape by clicking the arrow right
+    const newNode: HTMLElement = transform();
+    newNode.innerHTML = '\u200B';
+
+    const newText: Text = document.createTextNode('\u200B');
+
+    if (target.nextSibling) {
+      parent.insertBefore(newNode, target.nextSibling);
+    } else {
+      parent.append(newNode, newText);
     }
   });
 };
@@ -276,25 +280,105 @@ const canTransform = ({
 
 const updateText = ({
   target,
-  transformInput: {trim, shouldTrim}
+  transformInput,
+  parent
 }: {
   target: Node;
+  parent: HTMLElement;
   transformInput: TransformInput;
 }): Promise<void> => {
   return new Promise<void>(async (resolve) => {
-    if (!shouldTrim(target)) {
-      resolve();
+    const index: number = caretPosition({target});
+
+    // Exact same length, so we remove the last characters
+    if (target.nodeValue.length === index) {
+      if (!transformInput.shouldTrimText(target)) {
+        resolve();
+        return;
+      }
+
+      const changeObserver: MutationObserver = new MutationObserver(() => {
+        changeObserver.disconnect();
+
+        resolve();
+      });
+
+      changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
+
+      target.nodeValue = target.nodeValue.substring(
+        0,
+        target.nodeValue.length - transformInput.trim()
+      );
+
       return;
     }
 
-    const changeObserver: MutationObserver = new MutationObserver(() => {
+    // The end results will be text followed by a span bold and then the remaining text
+    const newText: Node = await splitText({target, index, transformInput});
+
+    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       changeObserver.disconnect();
+
+      moveCursorToEnd(mutations[1]?.addedNodes[0]);
 
       resolve();
     });
 
+    changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
+
+    if (target.nextSibling) {
+      parent.insertBefore(newText, target.nextSibling);
+    } else {
+      parent.appendChild(newText);
+    }
+  });
+};
+
+const splitText = ({
+  target,
+  index,
+  transformInput
+}: {
+  target: Node;
+  index: number;
+  transformInput: TransformInput;
+}): Promise<Node> => {
+  return new Promise<Node>((resolve) => {
+    const changeObserver: MutationObserver = new MutationObserver(async () => {
+      changeObserver.disconnect();
+
+      if (!transformInput.shouldTrimText(newText)) {
+        resolve(newText);
+        return;
+      }
+
+      const node: Node = await removeChar({target: newText, index: 1});
+
+      resolve(node);
+    });
+
+    changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
+
+    const startOffset: number | undefined = getSelection(containerStore.state.ref)?.getRangeAt(
+      0
+    )?.startOffset;
+
+    const newText: Text = (target as Text).splitText(
+      index - (transformInput.shouldTrimSplit({target, startOffset}) ? transformInput.trim() : 0)
+    );
+  });
+};
+
+const removeChar = ({target, index}: {target: Node; index: number}): Promise<Node> => {
+  return new Promise<Node>((resolve) => {
+    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      changeObserver.disconnect();
+
+      resolve(mutations[0].target);
+    });
+
     changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
-    target.nodeValue = target.nodeValue.substring(0, target.nodeValue.length - trim());
+    target.nodeValue = target.nodeValue.slice(index);
   });
 };
