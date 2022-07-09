@@ -2,7 +2,6 @@ import {caretPosition, isFirefox, isIOS, isSafari, moveCursorToEnd} from '@deckd
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {toHTMLElement} from './node.utils';
-import {getSelection} from './selection.utils';
 
 export interface InputKey {
   key: string;
@@ -98,25 +97,15 @@ export const beforeInputTransformer: TransformInput[] = [
 
 export const transformInput = async ({
   $event,
-  transformInput
+  transformInput,
+  target,
+  parent
 }: {
   $event: KeyboardEvent | InputEvent;
   transformInput: TransformInput;
+  target: Node;
+  parent: HTMLElement;
 }) => {
-  const selection: Selection | null = getSelection(containerStore.state.ref);
-
-  if (!selection) {
-    return;
-  }
-
-  const {focusNode: target} = selection;
-
-  if (!target) {
-    return;
-  }
-
-  const parent: HTMLElement = toHTMLElement(target);
-
   // Check if we can transform or end tag
   if (!canTransform({target, parent, transformInput})) {
     return;
@@ -172,7 +161,7 @@ const replaceBacktickText = (): Promise<void> => {
 
         if (isFirefox()) {
           // Firefox acts a bit weirdly
-        const parent: HTMLElement | undefined | null = toHTMLElement(target);
+          const parent: HTMLElement | undefined | null = toHTMLElement(target);
           moveCursorToEnd(
             parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling
           );

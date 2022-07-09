@@ -3,7 +3,7 @@ import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
 import {findNodeAtDepths, toHTMLElement} from '../utils/node.utils';
 import {createNewParagraph, findParagraph, isStartNode} from '../utils/paragraph.utils';
-import {getRange} from '../utils/selection.utils';
+import {getRange, getSelection} from '../utils/selection.utils';
 import {
   beforeInputTransformer,
   InputKey,
@@ -91,13 +91,32 @@ export class InputEvents {
   private async transformInput($event: KeyboardEvent) {
     const {key} = $event;
 
+    const selection: Selection | null = getSelection(containerStore.state.ref);
+
+    if (!selection) {
+      return;
+    }
+
+    const {focusNode: target} = selection;
+
+    const parent: HTMLElement = toHTMLElement(target);
+
+    const isActive: boolean = beforeInputTransformer.find(
+      ({active}: TransformInput) => active(parent)
+    ) !== undefined;
+
+    // We are in an active mark up, therefore we do not check to transform. User can escape by moving to next text node
+    if (isActive) {
+      return;
+    }
+
     const transformer: TransformInput | undefined = beforeInputTransformer.find(
       ({match}: TransformInput) =>
         match({key: {key}, lastKey: this.lastKey, lastBeforeInput: this.lastBeforeInput})
     );
 
     if (transformer !== undefined) {
-      await transformInput({$event, transformInput: transformer});
+      await transformInput({$event, transformInput: transformer, target, parent});
 
       await transformer.postTransform?.();
 
