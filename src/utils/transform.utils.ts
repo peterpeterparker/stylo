@@ -4,12 +4,20 @@ import undoRedoStore from '../stores/undo-redo.store';
 import {toHTMLElement} from './node.utils';
 import {getSelection} from './selection.utils';
 
-export interface BeforeInputKey {
+export interface InputKey {
   key: string;
 }
 
 export interface TransformInput {
-  match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => boolean;
+  match: ({
+    lastBeforeInput,
+    lastKey,
+    key
+  }: {
+    lastBeforeInput: InputKey | undefined;
+    key: InputKey;
+    lastKey: InputKey | undefined;
+  }) => boolean;
   transform: () => HTMLElement;
   postTransform?: () => Promise<void>;
   active: (parent: HTMLElement) => boolean;
@@ -19,12 +27,20 @@ export interface TransformInput {
 
 export const beforeInputTransformer: TransformInput[] = [
   {
-    match: ({key, lastKey}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => {
+    match: ({
+      key,
+      lastKey,
+      lastBeforeInput
+    }: {
+      lastKey: InputKey | undefined;
+      key: InputKey;
+      lastBeforeInput: InputKey | undefined;
+    }) => {
       if (isIOS()) {
-        return ['‘', '’', '´'].includes(lastKey?.key) && key.key === ' ';
+        return ['‘', '’', '´'].includes(lastBeforeInput?.key) && key.key === ' ';
       }
 
-      return key.key === '`';
+      return key.key === '`' && [' ', 'Dead'].includes(lastKey?.key);
     },
     transform: (): HTMLElement => {
       return document.createElement('mark');
@@ -35,8 +51,14 @@ export const beforeInputTransformer: TransformInput[] = [
     postTransform: () => replaceBacktick()
   },
   {
-    match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) =>
-      lastKey?.key === '*' && key.key === '*',
+    match: ({
+      lastKey,
+      key
+    }: {
+      lastKey: InputKey | undefined;
+      key: InputKey;
+      lastBeforeInput: InputKey | undefined;
+    }) => lastKey?.key === '*' && key.key === '*',
     transform: (): HTMLElement => {
       const span: HTMLSpanElement = document.createElement('span');
       span.style.fontWeight = 'bold';
@@ -51,8 +73,14 @@ export const beforeInputTransformer: TransformInput[] = [
     trim: (): number => '*'.length
   },
   {
-    match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) =>
-      lastKey?.key === ' ' && key.key === '_',
+    match: ({
+      lastBeforeInput,
+      key
+    }: {
+      lastKey: InputKey | undefined;
+      key: InputKey;
+      lastBeforeInput: InputKey | undefined;
+    }) => lastBeforeInput?.key === ' ' && key.key === '_',
     transform: (): HTMLElement => {
       const span: HTMLSpanElement = document.createElement('span');
       span.style.fontStyle = 'italic';
@@ -259,9 +287,6 @@ const updateText = ({
 
     changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
-    target.nodeValue = target.nodeValue.substring(
-      0,
-      target.nodeValue.length - trim()
-    );
+    target.nodeValue = target.nodeValue.substring(0, target.nodeValue.length - trim());
   });
 };
