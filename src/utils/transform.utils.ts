@@ -1,7 +1,7 @@
 import {caretPosition, isFirefox, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
-import {isTextNode, toHTMLElement} from './node.utils';
+import {toHTMLElement} from './node.utils';
 import {getSelection} from './selection.utils';
 
 export interface BeforeInputKey {
@@ -105,41 +105,14 @@ const replaceBacktick = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  if (isFirefox()) {
-    return replaceBacktickFirefox();
-  }
-
-  return replaceBacktickChrome();
+  return replaceBacktickText();
 };
 
 /**
- * Firefox renders the new mark and let the backtick in the previous text element
+ * - Chrome renders the backtick in the new mark therefore we have to delete it the new element
+ * - Firefox renders the new mark and renders the backtick at the begin of the previous text element
  */
-const replaceBacktickFirefox = async (): Promise<void> => {
-  const markElement: Node | null = getSelection(containerStore.state.ref)?.anchorNode;
-  const previousSibling: Node | null = markElement?.previousSibling;
-
-  if (!previousSibling) {
-    return;
-  }
-
-  const text: Node = isTextNode(previousSibling) ? previousSibling : previousSibling.firstChild;
-
-  if (text.nodeValue.charAt(text.nodeValue.length - 1) !== '`') {
-    return;
-  }
-
-  undoRedoStore.state.observe = false;
-
-  await removeLastChar({target: text});
-
-  undoRedoStore.state.observe = true;
-};
-
-/**
- * Chrome renders the backtick in the new mark therefore we have to delete it the new element
- */
-const replaceBacktickChrome = (): Promise<void> => {
+const replaceBacktickText = (): Promise<void> => {
   return new Promise<void>((resolve) => {
     const changeObserver: MutationObserver = new MutationObserver(
       async (mutations: MutationRecord[]) => {
@@ -152,6 +125,15 @@ const replaceBacktickChrome = (): Promise<void> => {
         await replaceChar({target, searchValue: '`', replaceValue: ''});
 
         undoRedoStore.state.observe = true;
+
+        if (isFirefox()) {
+          // Firefox acts a bit weirdly
+          const parent: HTMLElement | undefined | null = toHTMLElement(target);
+          moveCursorToEnd(parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling);
+
+          resolve();
+          return;
+        }
 
         moveCursorToEnd(target);
 
@@ -182,20 +164,6 @@ const replaceChar = ({
     changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
     target.nodeValue = target.nodeValue.replace(searchValue, replaceValue);
-  });
-};
-
-const removeLastChar = ({target}: {target: Node}): Promise<Node> => {
-  return new Promise<Node>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      changeObserver.disconnect();
-
-      resolve(mutations[0].target);
-    });
-
-    changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
-
-    target.nodeValue = target.nodeValue.slice(0, target.nodeValue.length - 1);
   });
 };
 
