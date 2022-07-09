@@ -159,18 +159,17 @@ const replaceBacktickText = (): Promise<void> => {
 
         undoRedoStore.state.observe = true;
 
+        const parent: HTMLElement | undefined | null = toHTMLElement(target);
+        const mark: boolean = parent?.nodeName.toLowerCase() === 'mark';
+
         if (isFirefox()) {
-          // Firefox acts a bit weirdly
-          const parent: HTMLElement | undefined | null = toHTMLElement(target);
-          moveCursorToEnd(
-            parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling
-          );
+          moveCursorToEnd(mark ? parent.nextSibling : target.nextSibling);
 
           resolve();
           return;
         }
 
-        moveCursorToEnd(target);
+        moveCursorToEnd(mark ? target : target.nextSibling);
 
         resolve();
       }
@@ -302,8 +301,10 @@ const updateText = ({
     // The end results will be text followed by a span bold and then the remaining text
     const newText: Node = await splitText({target, index, transformInput});
 
-    const changeObserver: MutationObserver = new MutationObserver(() => {
+    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       changeObserver.disconnect();
+
+      moveCursorToEnd(mutations[1]?.addedNodes[0]);
 
       resolve();
     });
