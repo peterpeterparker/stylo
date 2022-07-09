@@ -1,3 +1,9 @@
+# 0.0.33-1 (2022-07-09)
+
+### Fix
+
+- backtick after various tests on various keyboards types
+
 # 0.0.33 (2022-07-09)
 
 ### Features
