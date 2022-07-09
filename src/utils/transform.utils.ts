@@ -2,6 +2,7 @@ import {caretPosition, isFirefox, isIOS, isSafari, moveCursorToEnd} from '@deckd
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {toHTMLElement} from './node.utils';
+import {getSelection} from './selection.utils';
 
 export interface InputKey {
   key: string;
@@ -20,7 +21,14 @@ export interface TransformInput {
   transform: () => HTMLElement;
   postTransform?: () => Promise<void>;
   active: (parent: HTMLElement) => boolean;
-  shouldTrim: (target: Node) => boolean;
+  shouldTrimText: (target: Node) => boolean;
+  shouldTrimSplit: ({
+    target,
+    startOffset
+  }: {
+    target: Node;
+    startOffset: number | undefined;
+  }) => boolean;
   trim: () => number;
 }
 
@@ -45,8 +53,10 @@ export const beforeInputTransformer: TransformInput[] = [
       return document.createElement('mark');
     },
     active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-    shouldTrim: ({nodeValue}: Node) =>
+    shouldTrimText: ({nodeValue}: Node) =>
       nodeValue.charAt(nodeValue.length - 1) === '`' || nodeValue.charAt(0) === '`',
+    shouldTrimSplit: ({target, startOffset}: {target: Node; startOffset: number | undefined}) =>
+      startOffset !== undefined && target.nodeValue.charAt(startOffset - 1) === '`',
     trim: (): number => '`'.length,
     postTransform: () => replaceBacktick()
   },
@@ -69,8 +79,10 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return parseInt(fontWeight) > 400 || fontWeight === 'bold';
     },
-    shouldTrim: ({nodeValue}: Node) =>
+    shouldTrimText: ({nodeValue}: Node) =>
       nodeValue.charAt(nodeValue.length - 1) === '*' || nodeValue.charAt(0) === '*',
+    shouldTrimSplit: ({target, startOffset}: {target: Node; startOffset: number | undefined}) =>
+      startOffset !== undefined && target.nodeValue.charAt(startOffset - 1) === '*',
     trim: (): number => '*'.length
   },
   {
@@ -92,7 +104,8 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return fontStyle === 'italic';
     },
-    shouldTrim: (_target: Node) => false,
+    shouldTrimText: (_target: Node) => false,
+    shouldTrimSplit: () => false,
     trim: (): number => ''.length
   }
 ];
@@ -279,7 +292,7 @@ const updateText = ({
 
     // Exact same length, so we remove the last characters
     if (target.nodeValue.length === index) {
-      if (!transformInput.shouldTrim(target)) {
+      if (!transformInput.shouldTrimText(target)) {
         resolve();
         return;
       }
@@ -334,7 +347,7 @@ const splitText = ({
     const changeObserver: MutationObserver = new MutationObserver(async () => {
       changeObserver.disconnect();
 
-      if (!transformInput.shouldTrim(newText)) {
+      if (!transformInput.shouldTrimText(newText)) {
         resolve(newText);
         return;
       }
@@ -346,7 +359,13 @@ const splitText = ({
 
     changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
 
-    const newText: Text = (target as Text).splitText(index - transformInput.trim());
+    const startOffset: number | undefined = getSelection(containerStore.state.ref)?.getRangeAt(
+      0
+    )?.startOffset;
+
+    const newText: Text = (target as Text).splitText(
+      index - (transformInput.shouldTrimSplit({target, startOffset}) ? transformInput.trim() : 0)
+    );
   });
 };
 
