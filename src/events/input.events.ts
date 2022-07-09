@@ -27,10 +27,14 @@ export class InputEvents {
   private onBeforeInput = async ($event: InputEvent) => {
     await this.preventTextLeaves($event);
 
-    await this.transformInput($event);
+    // Use for comparison purpose in transformInput
+    const {data: key} = $event;
+    this.lastBeforeInput = {key};
   };
 
-  private onKeyDown = ($event: KeyboardEvent) => {
+  private onKeyDown = async ($event: KeyboardEvent) => {
+    await this.transformInput($event);
+
     // This should be an on keydown listener because Firefox do not provide the same range in before input
     this.deleteSelection($event);
   };
@@ -83,23 +87,22 @@ export class InputEvents {
     moveCursorToEnd(div);
   }
 
-  private async transformInput($event: InputEvent) {
-    const {data} = $event;
+  private async transformInput($event: KeyboardEvent) {
+    const {key} = $event;
 
     const transformer: TransformInput | undefined = beforeInputTransformer.find(
-      ({match}: TransformInput) => match({key: {key: data}, lastKey: this.lastBeforeInput})
+      ({match}: TransformInput) => match({key: {key}, lastKey: this.lastBeforeInput})
     );
 
-    if (transformer !== undefined) {
-      await transformInput({$event, transformInput: transformer});
-
-      await transformer.postTransform?.();
-
-      this.lastBeforeInput = undefined;
+    if (!transformer) {
       return;
     }
 
-    this.lastBeforeInput = {key: data};
+    await transformInput({$event, transformInput: transformer});
+
+    await transformer.postTransform?.();
+
+    this.lastBeforeInput = undefined;
   }
 
   private deleteSelection($event: KeyboardEvent) {

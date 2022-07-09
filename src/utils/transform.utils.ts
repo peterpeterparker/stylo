@@ -1,4 +1,4 @@
-import {caretPosition, isFirefox, isIOS, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
+import {caretPosition, isFirefox, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {isTextNode, toHTMLElement} from './node.utils';
@@ -18,22 +18,14 @@ export interface TransformInput {
 
 export const beforeInputTransformer: TransformInput[] = [
   {
-    match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => {
-      if (isIOS()) {
-        return ['‘', '’'].includes(lastKey?.key) && key.key === ' ';
-      }
-
-      if (isSafari()) {
-        return lastKey?.key === null && key.key === '`';
-      }
-
-      return lastKey?.key === '`' && key.key === '`';
+    match: ({key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => {
+      return key.key === '`';
     },
     transform: (): HTMLElement => {
       return document.createElement('mark');
     },
     active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-    trim: (): number => (isSafari() && !isIOS() ? 0 : '`'.length),
+    trim: (): number => '`'.length,
     postTransform: () => replaceBacktick()
   },
   {
@@ -87,17 +79,17 @@ export const transformInput = async ({
     return;
   }
 
-  $event.preventDefault();
-
-  // Disable undo-redo observer as we are about to play with the DOM
-  undoRedoStore.state.observe = false;
-
   const parent: HTMLElement = toHTMLElement(target);
 
   // Check if we can transform or end tag
   if (!canTransform({target, parent, transformInput})) {
     return;
   }
+
+  $event.preventDefault();
+
+  // Disable undo-redo observer as we are about to play with the DOM
+  undoRedoStore.state.observe = false;
 
   // We eiter remove the last character, a *, or split the text around the selection and *
   await updateText({target, parent, transformInput});
@@ -150,10 +142,10 @@ const replaceBacktickFirefox = async (): Promise<void> => {
 const replaceBacktickChrome = (): Promise<void> => {
   return new Promise<void>((resolve) => {
     const changeObserver: MutationObserver = new MutationObserver(
-      async (mutation: MutationRecord[]) => {
+      async (mutations: MutationRecord[]) => {
         changeObserver.disconnect();
 
-        const target: Node = mutation[0].target;
+        const target: Node = mutations[0].target;
 
         undoRedoStore.state.observe = false;
 
