@@ -1,44 +1,64 @@
 import {caretPosition, isFirefox, isIOS, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
-import {isTextNode, toHTMLElement} from './node.utils';
+import {toHTMLElement} from './node.utils';
 import {getSelection} from './selection.utils';
 
-export interface BeforeInputKey {
+export interface InputKey {
   key: string;
 }
 
 export interface TransformInput {
-  match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => boolean;
+  match: ({
+    lastBeforeInput,
+    lastKey,
+    key
+  }: {
+    lastBeforeInput: InputKey | undefined;
+    key: InputKey;
+    lastKey: InputKey | undefined;
+  }) => boolean;
   transform: () => HTMLElement;
   postTransform?: () => Promise<void>;
   active: (parent: HTMLElement) => boolean;
+  shouldTrim: (target: Node) => boolean;
   trim: () => number;
 }
 
 export const beforeInputTransformer: TransformInput[] = [
   {
-    match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => {
+    match: ({
+      key,
+      lastKey,
+      lastBeforeInput
+    }: {
+      lastKey: InputKey | undefined;
+      key: InputKey;
+      lastBeforeInput: InputKey | undefined;
+    }) => {
       if (isIOS()) {
-        return ['‘', '’'].includes(lastKey?.key) && key.key === ' ';
+        return ['‘', '’', '´'].includes(lastBeforeInput?.key) && key.key === ' ';
       }
 
-      if (isSafari()) {
-        return lastKey?.key === null && key.key === '`';
-      }
-
-      return lastKey?.key === '`' && key.key === '`';
+      return key.key === '`' && [' ', 'Dead'].includes(lastKey?.key);
     },
     transform: (): HTMLElement => {
       return document.createElement('mark');
     },
     active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
-    trim: (): number => (isSafari() && !isIOS() ? 0 : '`'.length),
+    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '`',
+    trim: (): number => '`'.length,
     postTransform: () => replaceBacktick()
   },
   {
-    match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) =>
-      lastKey?.key === '*' && key.key === '*',
+    match: ({
+      lastKey,
+      key
+    }: {
+      lastKey: InputKey | undefined;
+      key: InputKey;
+      lastBeforeInput: InputKey | undefined;
+    }) => lastKey?.key === '*' && key.key === '*',
     transform: (): HTMLElement => {
       const span: HTMLSpanElement = document.createElement('span');
       span.style.fontWeight = 'bold';
@@ -49,11 +69,18 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return parseInt(fontWeight) > 400 || fontWeight === 'bold';
     },
+    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '*',
     trim: (): number => '*'.length
   },
   {
-    match: ({lastKey, key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) =>
-      lastKey?.key === ' ' && key.key === '_',
+    match: ({
+      lastBeforeInput,
+      key
+    }: {
+      lastKey: InputKey | undefined;
+      key: InputKey;
+      lastBeforeInput: InputKey | undefined;
+    }) => lastBeforeInput?.key === ' ' && key.key === '_',
     transform: (): HTMLElement => {
       const span: HTMLSpanElement = document.createElement('span');
       span.style.fontStyle = 'italic';
@@ -64,6 +91,7 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return fontStyle === 'italic';
     },
+    shouldTrim: (_target: Node) => false,
     trim: (): number => ''.length
   }
 ];
@@ -87,11 +115,6 @@ export const transformInput = async ({
     return;
   }
 
-  $event.preventDefault();
-
-  // Disable undo-redo observer as we are about to play with the DOM
-  undoRedoStore.state.observe = false;
-
   const parent: HTMLElement = toHTMLElement(target);
 
   // Check if we can transform or end tag
@@ -99,8 +122,13 @@ export const transformInput = async ({
     return;
   }
 
-  // We eiter remove the last character, a *, or split the text around the selection and *
-  await updateText({target, parent, transformInput});
+  $event.preventDefault();
+
+  // Disable undo-redo observer as we are about to play with the DOM
+  undoRedoStore.state.observe = false;
+
+  // We might remove the last character, a * or ` if present in text
+  await updateText({target, transformInput});
 
   // We had fun, we can observe again the undo redo store to stack the next bold element we are about to create
   undoRedoStore.state.observe = true;
@@ -113,53 +141,45 @@ const replaceBacktick = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  if (isFirefox()) {
-    return replaceBacktickFirefox();
-  }
-
-  return replaceBacktickChrome();
+  return replaceBacktickText();
 };
 
 /**
- * Firefox renders the new mark and let the backtick in the previous text element
+ * On Swiss French keyboard - i.e. when backtick is entered with "Shift + key":
+ *
+ * - Chrome renders the backtick in the new mark therefore we have to delete it the new element
+ * - Firefox renders the new mark and renders the backtick at the begin of the previous text element
  */
-const replaceBacktickFirefox = async (): Promise<void> => {
-  const markElement: Node | null = getSelection(containerStore.state.ref)?.anchorNode;
-  const previousSibling: Node | null = markElement?.previousSibling;
-
-  if (!previousSibling) {
-    return;
-  }
-
-  const text: Node = isTextNode(previousSibling) ? previousSibling : previousSibling.firstChild;
-
-  if (text.nodeValue.charAt(text.nodeValue.length - 1) !== '`') {
-    return;
-  }
-
-  undoRedoStore.state.observe = false;
-
-  await removeLastChar({target: text});
-
-  undoRedoStore.state.observe = true;
-};
-
-/**
- * Chrome renders the backtick in the new mark therefore we have to delete it the new element
- */
-const replaceBacktickChrome = (): Promise<void> => {
+const replaceBacktickText = (): Promise<void> => {
   return new Promise<void>((resolve) => {
     const changeObserver: MutationObserver = new MutationObserver(
-      async (mutation: MutationRecord[]) => {
+      async (mutations: MutationRecord[]) => {
         changeObserver.disconnect();
 
-        const target: Node = mutation[0].target;
+        const target: Node = mutations[0].target;
+
+        // On us keyboard, the backtick is already removed
+        if (!target.nodeValue.includes('`')) {
+          resolve();
+          return;
+        }
 
         undoRedoStore.state.observe = false;
 
         await replaceChar({target, searchValue: '`', replaceValue: ''});
 
         undoRedoStore.state.observe = true;
+
+        if (isFirefox()) {
+          // Firefox acts a bit weirdly
+          const parent: HTMLElement | undefined | null = toHTMLElement(target);
+          moveCursorToEnd(
+            parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling
+          );
+
+          resolve();
+          return;
+        }
 
         moveCursorToEnd(target);
 
@@ -190,20 +210,6 @@ const replaceChar = ({
     changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
     target.nodeValue = target.nodeValue.replace(searchValue, replaceValue);
-  });
-};
-
-const removeLastChar = ({target}: {target: Node}): Promise<Node> => {
-  return new Promise<Node>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      changeObserver.disconnect();
-
-      resolve(mutations[0].target);
-    });
-
-    changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
-
-    target.nodeValue = target.nodeValue.slice(0, target.nodeValue.length - 1);
   });
 };
 
@@ -270,36 +276,16 @@ const canTransform = ({
 
 const updateText = ({
   target,
-  parent,
-  transformInput
+  transformInput: {trim, shouldTrim}
 }: {
   target: Node;
-  parent: HTMLElement;
   transformInput: TransformInput;
 }): Promise<void> => {
   return new Promise<void>(async (resolve) => {
-    const index: number = caretPosition({target});
-
-    // Exact same length, so we remove the last characters
-    if (target.nodeValue.length === index) {
-      const changeObserver: MutationObserver = new MutationObserver(() => {
-        changeObserver.disconnect();
-
-        resolve();
-      });
-
-      changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
-
-      target.nodeValue = target.nodeValue.substring(
-        0,
-        target.nodeValue.length - transformInput.trim()
-      );
-
+    if (!shouldTrim(target)) {
+      resolve();
       return;
     }
-
-    // The end results will be text followed by a span bold and then the remaining text
-    const newText: Node = await splitText({target, index, transformInput});
 
     const changeObserver: MutationObserver = new MutationObserver(() => {
       changeObserver.disconnect();
@@ -307,50 +293,8 @@ const updateText = ({
       resolve();
     });
 
-    changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
-
-    if (target.nextSibling) {
-      parent.insertBefore(newText, target.nextSibling);
-    } else {
-      parent.appendChild(newText);
-    }
-  });
-};
-
-const splitText = ({
-  target,
-  index,
-  transformInput
-}: {
-  target: Node;
-  index: number;
-  transformInput: TransformInput;
-}): Promise<Node> => {
-  return new Promise<Node>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver(async () => {
-      changeObserver.disconnect();
-
-      const node: Node = await removeChar({target: newText, index: 1});
-
-      resolve(node);
-    });
-
-    changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
-
-    const newText: Text = (target as Text).splitText(index - transformInput.trim());
-  });
-};
-
-const removeChar = ({target, index}: {target: Node; index: number}): Promise<Node> => {
-  return new Promise<Node>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      changeObserver.disconnect();
-
-      resolve(mutations[0].target);
-    });
-
     changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
-    target.nodeValue = target.nodeValue.slice(index);
+    target.nodeValue = target.nodeValue.substring(0, target.nodeValue.length - trim());
   });
 };

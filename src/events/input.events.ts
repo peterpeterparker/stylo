@@ -5,14 +5,15 @@ import {findNodeAtDepths, toHTMLElement} from '../utils/node.utils';
 import {createNewParagraph, findParagraph, isStartNode} from '../utils/paragraph.utils';
 import {getRange} from '../utils/selection.utils';
 import {
-  BeforeInputKey,
   beforeInputTransformer,
+  InputKey,
   transformInput,
   TransformInput
 } from '../utils/transform.utils';
 
 export class InputEvents {
-  private lastBeforeInput: BeforeInputKey | undefined = undefined;
+  private lastBeforeInput: InputKey | undefined = undefined;
+  private lastKey: InputKey | undefined = undefined;
 
   init() {
     containerStore.state.ref?.addEventListener('beforeinput', this.onBeforeInput);
@@ -27,10 +28,14 @@ export class InputEvents {
   private onBeforeInput = async ($event: InputEvent) => {
     await this.preventTextLeaves($event);
 
-    await this.transformInput($event);
+    // Use for comparison purpose in transformInput
+    const {data: key} = $event;
+    this.lastBeforeInput = {key};
   };
 
-  private onKeyDown = ($event: KeyboardEvent) => {
+  private onKeyDown = async ($event: KeyboardEvent) => {
+    await this.transformInput($event);
+
     // This should be an on keydown listener because Firefox do not provide the same range in before input
     this.deleteSelection($event);
   };
@@ -83,11 +88,12 @@ export class InputEvents {
     moveCursorToEnd(div);
   }
 
-  private async transformInput($event: InputEvent) {
-    const {data} = $event;
+  private async transformInput($event: KeyboardEvent) {
+    const {key} = $event;
 
     const transformer: TransformInput | undefined = beforeInputTransformer.find(
-      ({match}: TransformInput) => match({key: {key: data}, lastKey: this.lastBeforeInput})
+      ({match}: TransformInput) =>
+        match({key: {key}, lastKey: this.lastKey, lastBeforeInput: this.lastBeforeInput})
     );
 
     if (transformer !== undefined) {
@@ -95,11 +101,11 @@ export class InputEvents {
 
       await transformer.postTransform?.();
 
-      this.lastBeforeInput = undefined;
+      this.lastKey = undefined;
       return;
     }
 
-    this.lastBeforeInput = {key: data};
+    this.lastKey = {key};
   }
 
   private deleteSelection($event: KeyboardEvent) {
