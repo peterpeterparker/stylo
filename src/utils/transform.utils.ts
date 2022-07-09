@@ -1,4 +1,4 @@
-import {caretPosition, isFirefox, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
+import {caretPosition, isFirefox, isIOS, isSafari, moveCursorToEnd} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {toHTMLElement} from './node.utils';
@@ -18,7 +18,11 @@ export interface TransformInput {
 
 export const beforeInputTransformer: TransformInput[] = [
   {
-    match: ({key}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => {
+    match: ({key, lastKey}: {lastKey: BeforeInputKey | undefined; key: BeforeInputKey}) => {
+      if (isIOS()) {
+        return ['‘', '’', '´'].includes(lastKey?.key) && key.key === ' ';
+      }
+
       return key.key === '`';
     },
     transform: (): HTMLElement => {
