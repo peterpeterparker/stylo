@@ -13,6 +13,7 @@ export interface TransformInput {
   transform: () => HTMLElement;
   postTransform?: () => Promise<void>;
   active: (parent: HTMLElement) => boolean;
+  shouldTrim: (target: Node) => boolean;
   trim: () => number;
 }
 
@@ -29,6 +30,7 @@ export const beforeInputTransformer: TransformInput[] = [
       return document.createElement('mark');
     },
     active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
+    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '`',
     trim: (): number => '`'.length,
     postTransform: () => replaceBacktick()
   },
@@ -45,6 +47,7 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return parseInt(fontWeight) > 400 || fontWeight === 'bold';
     },
+    shouldTrim: ({nodeValue}: Node) => nodeValue.charAt(nodeValue.length - 1) === '*',
     trim: (): number => '*'.length
   },
   {
@@ -60,6 +63,7 @@ export const beforeInputTransformer: TransformInput[] = [
 
       return fontStyle === 'italic';
     },
+    shouldTrim: (_target: Node) => false,
     trim: (): number => ''.length
   }
 ];
@@ -95,8 +99,8 @@ export const transformInput = async ({
   // Disable undo-redo observer as we are about to play with the DOM
   undoRedoStore.state.observe = false;
 
-  // We eiter remove the last character, a *, or split the text around the selection and *
-  await updateText({target, parent, transformInput});
+  // We might remove the last character, a * or ` if present in text
+  await updateText({target, transformInput});
 
   // We had fun, we can observe again the undo redo store to stack the next bold element we are about to create
   undoRedoStore.state.observe = true;
@@ -133,7 +137,9 @@ const replaceBacktickText = (): Promise<void> => {
         if (isFirefox()) {
           // Firefox acts a bit weirdly
           const parent: HTMLElement | undefined | null = toHTMLElement(target);
-          moveCursorToEnd(parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling);
+          moveCursorToEnd(
+            parent?.nodeName.toLowerCase() === 'mark' ? parent.nextSibling : target.nextSibling
+          );
 
           resolve();
           return;
@@ -234,36 +240,16 @@ const canTransform = ({
 
 const updateText = ({
   target,
-  parent,
-  transformInput
+  transformInput: {trim, shouldTrim}
 }: {
   target: Node;
-  parent: HTMLElement;
   transformInput: TransformInput;
 }): Promise<void> => {
   return new Promise<void>(async (resolve) => {
-    const index: number = caretPosition({target});
-
-    // Exact same length, so we remove the last characters
-    if (target.nodeValue.length === index) {
-      const changeObserver: MutationObserver = new MutationObserver(() => {
-        changeObserver.disconnect();
-
-        resolve();
-      });
-
-      changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
-
-      target.nodeValue = target.nodeValue.substring(
-        0,
-        target.nodeValue.length - transformInput.trim()
-      );
-
+    if (!shouldTrim(target)) {
+      resolve();
       return;
     }
-
-    // The end results will be text followed by a span bold and then the remaining text
-    const newText: Node = await splitText({target, index, transformInput});
 
     const changeObserver: MutationObserver = new MutationObserver(() => {
       changeObserver.disconnect();
@@ -271,50 +257,11 @@ const updateText = ({
       resolve();
     });
 
-    changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
-
-    if (target.nextSibling) {
-      parent.insertBefore(newText, target.nextSibling);
-    } else {
-      parent.appendChild(newText);
-    }
-  });
-};
-
-const splitText = ({
-  target,
-  index,
-  transformInput
-}: {
-  target: Node;
-  index: number;
-  transformInput: TransformInput;
-}): Promise<Node> => {
-  return new Promise<Node>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver(async () => {
-      changeObserver.disconnect();
-
-      const node: Node = await removeChar({target: newText, index: 1});
-
-      resolve(node);
-    });
-
-    changeObserver.observe(containerStore.state.ref, {childList: true, subtree: true});
-
-    const newText: Text = (target as Text).splitText(index - transformInput.trim());
-  });
-};
-
-const removeChar = ({target, index}: {target: Node; index: number}): Promise<Node> => {
-  return new Promise<Node>((resolve) => {
-    const changeObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
-      changeObserver.disconnect();
-
-      resolve(mutations[0].target);
-    });
-
     changeObserver.observe(containerStore.state.ref, {characterData: true, subtree: true});
 
-    target.nodeValue = target.nodeValue.slice(index);
+    target.nodeValue = target.nodeValue.substring(
+      0,
+      target.nodeValue.length - trim()
+    );
   });
 };
