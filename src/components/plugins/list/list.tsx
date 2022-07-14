@@ -53,6 +53,19 @@ export class List implements ComponentInterface {
     this.plugins = [...configStore.state.plugins];
   }
 
+  componentDidUpdate() {
+    this.focusOnUpdate();
+  }
+
+  private focusOnUpdate() {
+    // If only one plugin button is displayed, focus it
+    const buttons: NodeListOf<HTMLButtonElement> = this.el.shadowRoot.querySelectorAll('button');
+
+    if (buttons.length === 1) {
+      buttons[0].focus();
+    }
+  }
+
   private emitPlugin($event: UIEvent, plugin: StyloPlugin) {
     $event.stopPropagation();
 
@@ -72,7 +85,7 @@ export class List implements ComponentInterface {
   }
 
   private reset() {
-    this.filter = "";
+    this.filter = '';
     this.plugins = [...configStore.state.plugins];
   }
 
@@ -101,7 +114,7 @@ export class List implements ComponentInterface {
     }
 
     this.filterPlugins($event);
-  }
+  };
 
   @Method()
   async focusFirstButton() {
@@ -193,15 +206,19 @@ export class List implements ComponentInterface {
     const textValue: string = i18n.state.plugins[text] ?? i18n.state.custom[text] ?? text;
 
     if (this.filter.length > 0) {
-      const rgxSplit = new RegExp(this.filter + '(.*)', "gi");
+      const rgxSplit = new RegExp(this.filter + '(.*)', 'gi');
       const split = textValue.split(rgxSplit);
 
-      const rgxFilter = new RegExp(this.filter, "gi");
+      const rgxFilter = new RegExp(this.filter, 'gi');
       const filter = textValue.match(rgxFilter);
 
-      return <Fragment>
-        {split[0] ?? ''}<strong>{filter[0] ?? ''}</strong>{split[1] ?? ''}
-      </Fragment>
+      return (
+        <Fragment>
+          {split[0] ?? ''}
+          <strong>{filter[0] ?? ''}</strong>
+          {split[1] ?? ''}
+        </Fragment>
+      );
     }
 
     return textValue;
