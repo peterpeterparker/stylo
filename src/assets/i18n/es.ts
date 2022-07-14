@@ -11,7 +11,8 @@ export const es: I18n = {
     unordered_list: 'Lista con viñetas',
     ordered_list: 'Lista numerada',
     image: 'Imagen',
-    code: 'Código'
+    code: 'Código',
+    no_matches: 'Sin resultados'
   },
   add: {
     placeholder: 'Presione "/" para complementos',

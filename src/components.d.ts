@@ -49,6 +49,7 @@ export namespace Components {
         "containerRef": HTMLElement | undefined;
     }
     interface StyloList {
+        "display": boolean;
         "focusFirstButton": () => Promise<void>;
     }
     interface StyloMenus {
@@ -334,6 +335,7 @@ declare namespace LocalJSX {
         "containerRef"?: HTMLElement | undefined;
     }
     interface StyloList {
+        "display"?: boolean;
         /**
           * Emit which plugin the user want to apply.
          */

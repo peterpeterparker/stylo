@@ -11,7 +11,8 @@ export const en: I18n = {
     unordered_list: 'Bulleted list',
     ordered_list: 'Numbered list',
     image: 'Image',
-    code: 'Code'
+    code: 'Code',
+    no_matches: 'No matches'
   },
   add: {
     placeholder: 'Press "/" for plugins',

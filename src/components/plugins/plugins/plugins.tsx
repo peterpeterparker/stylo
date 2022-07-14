@@ -207,7 +207,7 @@ export class Plugins implements ComponentInterface {
         onApplyPlugin={async ({detail}: CustomEvent<StyloPlugin>) =>
           await this.onApplyPlugin(detail)
         }
-        onCancelPlugins={() => this.onCancelPlugins()}></stylo-list>
+        onCancelPlugins={() => this.onCancelPlugins()} display={this.display}></stylo-list>
     );
   }
 }
