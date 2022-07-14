@@ -39,6 +39,9 @@ export class List implements ComponentInterface {
   @Event()
   cancelPlugins: EventEmitter<void>;
 
+  /**
+   * @internal
+   */
   @Prop()
   display: boolean = false;
 
