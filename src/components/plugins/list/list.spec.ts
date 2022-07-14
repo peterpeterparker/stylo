@@ -12,21 +12,27 @@ describe('list', () => {
        <stylo-list>
        <mock:shadow-root>
          <button>
-           <span class="placeholder">
-             H1
-           </span>
+           <div class="icon">
+             <span class="placeholder">
+               H1
+             </span>
+           </div>
            Huge title
          </button>
          <button>
-           <span class="placeholder">
-             H2
-           </span>
+           <div class="icon">
+             <span class="placeholder">
+               H2
+             </span>
+           </div>
            Large title
          </button>
          <button>
-           <span class="placeholder">
-             H3
-           </span>
+           <div class="icon">
+             <span class="placeholder">
+               H3
+             </span>
+           </div>
            Small title
          </button>
          <button>
