@@ -1,3 +1,17 @@
+# 0.0.34 (2022-07-14)
+
+### Features
+
+- filter plugins with keyboards
+
+e.g.
+
+1. Large title
+2. Small title
+3. Paragraph
+
+Type "title" to only display the two first plugins. If one plugin only is filter, it gets the focus automatically.
+
 # 0.0.33-1 (2022-07-09)
 
 ### Fix
