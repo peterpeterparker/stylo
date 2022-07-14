@@ -11,7 +11,8 @@ export const nl: I18n = {
     unordered_list: 'Lijst',
     ordered_list: 'Lijst (nummers)',
     image: 'Afbeelding',
-    code: 'Code'
+    code: 'Code',
+    no_matches: 'No matches'
   },
   add: {
     placeholder: 'Druk op "/" voor plug-ins',

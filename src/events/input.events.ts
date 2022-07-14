@@ -101,9 +101,8 @@ export class InputEvents {
 
     const parent: HTMLElement = toHTMLElement(target);
 
-    const isActive: boolean = beforeInputTransformer.find(
-      ({active}: TransformInput) => active(parent)
-    ) !== undefined;
+    const isActive: boolean =
+      beforeInputTransformer.find(({active}: TransformInput) => active(parent)) !== undefined;
 
     // We are in an active mark up, therefore we do not check to transform. User can escape by moving to next text node
     if (isActive) {

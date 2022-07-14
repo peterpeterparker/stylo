@@ -36,6 +36,8 @@ button {
 
   color: var(--stylo-toolbar-button-color, black);
 
+  white-space: pre;
+
   &:hover,
   &:focus {
     background: var(--background-active);
@@ -67,4 +69,19 @@ span.placeholder {
 
 span.placeholder::first-letter {
   font-size: 125%;
+}
+
+div.icon {
+  display: flex;
+}
+
+.empty {
+  padding: 10px 16px 6px;
+
+  strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+  }
 }

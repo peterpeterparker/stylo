@@ -8,6 +8,7 @@ export interface I18nPlugins {
   ordered_list: string;
   image: string;
   code: string;
+  no_matches: string;
 }
 
 export interface I18nAdd {

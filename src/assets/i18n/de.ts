@@ -11,7 +11,8 @@ export const de: I18n = {
     unordered_list: 'Liste',
     ordered_list: 'Liste (Nummern)',
     image: 'Bild',
-    code: 'Code'
+    code: 'Code',
+    no_matches: 'Keine Treffer'
   },
   add: {
     placeholder: 'Drücken Sie "/" für Plugins',
