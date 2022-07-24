@@ -340,8 +340,8 @@ export const isParagraphCode = ({paragraph}: {paragraph: HTMLElement}): boolean 
   return ['code', 'pre'].includes(paragraph.nodeName.toLowerCase());
 };
 
-export const isParagraphList = ({paragraph}: {paragraph: HTMLElement}): boolean =>
-  ['ul', 'ol', 'dl'].includes(paragraph.nodeName.toLowerCase());
+export const isParagraphList = ({paragraph: {nodeName}}: {paragraph: Node}): boolean =>
+  ['ul', 'ol', 'dl'].includes(nodeName.toLowerCase());
 
 export const setParagraphAttribute = ({
   paragraph,
