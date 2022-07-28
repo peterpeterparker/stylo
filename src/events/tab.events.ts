@@ -20,17 +20,17 @@ export class TabEvents {
       return;
     }
 
+    $event.preventDefault();
+
     await this.catchTab($event);
   };
 
-  private async catchTab($event: KeyboardEvent) {
+  private async catchTab({shiftKey}: KeyboardEvent) {
     const {range, selection} = getRange(containerStore.state.ref);
 
     if (!range) {
       return;
     }
-
-    const {shiftKey} = $event;
 
     const node: Node | undefined = selection?.focusNode;
 
@@ -40,7 +40,7 @@ export class TabEvents {
     });
 
     if (paragraph && isParagraphList({paragraph})) {
-      await this.createSublist({$event, paragraph, node, range, shiftKey});
+      await this.createSublist({paragraph, node, range, shiftKey});
       return;
     }
 
@@ -49,22 +49,18 @@ export class TabEvents {
       return;
     }
 
-    this.createTabulation({range, $event, node, paragraph});
+    this.createTabulation({range, node, paragraph});
   }
 
   private createTabulation({
     range,
-    $event,
     node,
     paragraph
   }: {
     range: Range;
-    $event: KeyboardEvent;
     node: Node | undefined;
     paragraph: Node | undefined;
   }) {
-    $event.preventDefault();
-
     if (!isTextNode(node)) {
       if (paragraph !== undefined) {
         this.insertSpanTabulation({range});
@@ -91,9 +87,7 @@ export class TabEvents {
     node,
     range,
     shiftKey,
-    $event
   }: {
-    $event: KeyboardEvent;
     paragraph: Node;
     node: Node | undefined;
     range: Range;
@@ -111,7 +105,7 @@ export class TabEvents {
         });
 
     if (!li) {
-      this.createTabulation({range, $event, node, paragraph});
+      this.createTabulation({range, node, paragraph});
       return;
     }
 
@@ -124,7 +118,7 @@ export class TabEvents {
         });
 
     if (!ul) {
-      this.createTabulation({range, $event, node, paragraph});
+      this.createTabulation({range, node, paragraph});
       return;
     }
 
@@ -136,8 +130,6 @@ export class TabEvents {
 
       // Li is the sole child element, we can replace the ul
       if (ul.childNodes.length === 1) {
-        $event.preventDefault();
-
         // Extract li
         const newRange: Range = new Range();
         newRange.selectNode(li);
@@ -160,21 +152,20 @@ export class TabEvents {
 
     const {endOffset, commonAncestorContainer} = range;
 
+    const empty: boolean = commonAncestorContainer.textContent.length === 0;
     const cursorEnd: boolean = endOffset === commonAncestorContainer.textContent.length;
     const lastChild: boolean = commonAncestorContainer.isSameNode(this.findLastChild(li));
 
-    if (!cursorEnd || !lastChild) {
-      this.createTabulation({range, $event, node, paragraph});
+    if ((!cursorEnd || !lastChild) && !empty) {
+      this.createTabulation({range, node, paragraph});
       return;
     }
 
     // We do not want to index list that has a single element
     if (ul.childNodes.length === 1) {
-      this.createTabulation({range, $event, node, paragraph});
+      this.createTabulation({range, node, paragraph});
       return;
     }
-
-    $event.preventDefault();
 
     // Clone li and append it to a new sublist, a new ul
     const newRange: Range = new Range();
