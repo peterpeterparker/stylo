@@ -109,3 +109,6 @@ export const isPhrasingContent = (node: Node): boolean =>
 
 export const isMetaContent = ({nodeName}: Node): boolean =>
   ['base', 'link', 'meta', 'noscript', 'script', 'style', 'title'].includes(nodeName.toLowerCase());
+
+export const isNodeList = ({node: {nodeName}}: {node: Node}): boolean =>
+  ['ul', 'ol', 'dl'].includes(nodeName.toLowerCase());

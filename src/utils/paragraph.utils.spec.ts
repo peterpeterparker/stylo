@@ -4,7 +4,6 @@ import {
   isParagraph,
   isParagraphCode,
   isParagraphEmpty,
-  isParagraphList,
   isParagraphNotEditable,
   isStartNode
 } from './paragraph.utils';
@@ -183,20 +182,6 @@ describe('paragraph utils', () => {
 
     const ddg = document.createElement('deckgo-highlight-code');
     expect(isParagraphCode({paragraph: ddg})).toBeTruthy();
-  });
-
-  test('should be a list paragraph', () => {
-    const paragraph = document.createElement('div');
-    expect(isParagraphList({paragraph})).toBeFalsy();
-
-    const ul = document.createElement('ul');
-    expect(isParagraphList({paragraph: ul})).toBeTruthy();
-
-    const ol = document.createElement('ol');
-    expect(isParagraphList({paragraph: ol})).toBeTruthy();
-
-    const dl = document.createElement('dl');
-    expect(isParagraphList({paragraph: dl})).toBeTruthy();
   });
 
   test('should be an editable paragraph', () => {

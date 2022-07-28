@@ -3,7 +3,7 @@ import containerStore from '../stores/container.store';
 import undoRedoStore from '../stores/undo-redo.store';
 import {UndoRedoAddRemoveParagraph, UndoRedoUpdateParagraph} from '../types/undo-redo';
 import {isKeyboardEnter} from '../utils/keyboard.utils';
-import {elementIndex, toHTMLElement} from '../utils/node.utils';
+import {elementIndex, isNodeList, toHTMLElement} from '../utils/node.utils';
 import {
   addEmptyText,
   addParagraph,
@@ -11,7 +11,6 @@ import {
   createNewEmptyLine,
   findParagraph,
   isParagraphCode,
-  isParagraphList,
   prependEmptyText
 } from '../utils/paragraph.utils';
 import {deleteRange, getRange, getSelection} from '../utils/selection.utils';
@@ -58,7 +57,7 @@ export class EnterEvents {
     }
 
     // In "list" we use return to create new lines
-    if (isParagraphList({paragraph})) {
+    if (isNodeList({node: paragraph})) {
       return;
     }
 

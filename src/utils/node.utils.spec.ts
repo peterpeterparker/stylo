@@ -1,6 +1,6 @@
 import {
   elementIndex,
-  findNodeAtDepths,
+  findNodeAtDepths, isNodeList,
   isTextNode,
   nodeDepths,
   nodeIndex,
@@ -115,5 +115,19 @@ describe('node utils', () => {
         'name'
       )
     ).toEqual('child3');
+  });
+
+  it('should be a list node', () => {
+    const paragraph = document.createElement('div');
+    expect(isNodeList({node: paragraph})).toBeFalsy();
+
+    const ul = document.createElement('ul');
+    expect(isNodeList({node: ul})).toBeTruthy();
+
+    const ol = document.createElement('ol');
+    expect(isNodeList({node: ol})).toBeTruthy();
+
+    const dl = document.createElement('dl');
+    expect(isNodeList({node: dl})).toBeTruthy();
   });
 });

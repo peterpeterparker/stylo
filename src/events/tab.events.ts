@@ -1,7 +1,7 @@
 import {moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
-import {isTextNode, nodeIndex} from '../utils/node.utils';
-import {findParagraph, isParagraph, isParagraphList} from '../utils/paragraph.utils';
+import {isNodeList, isTextNode, nodeIndex} from '../utils/node.utils';
+import {findParagraph, isParagraph} from '../utils/paragraph.utils';
 import {getRange} from '../utils/selection.utils';
 
 export class TabEvents {
@@ -39,7 +39,7 @@ export class TabEvents {
       container: containerStore.state.ref
     });
 
-    if (paragraph && isParagraphList({paragraph})) {
+    if (paragraph && isNodeList({node: paragraph})) {
       await this.createSublist({paragraph, node, range, shiftKey});
       return;
     }
@@ -94,7 +94,7 @@ export class TabEvents {
     shiftKey: boolean;
   }): Promise<void> {
     // If list contains a single child that is just text then browser returns the list as focus node
-    const focusNodeIsList: boolean = node !== undefined && isParagraphList({paragraph: node});
+    const focusNodeIsList: boolean = node !== undefined && isNodeList({node: node});
 
     const li: Node | undefined = focusNodeIsList
       ? node.firstChild
@@ -195,7 +195,7 @@ export class TabEvents {
     observer.observe(paragraph, {childList: true, subtree: true});
 
     // Previous sibling is a list so, we can move the li there
-    if (isParagraphList({paragraph: li.previousSibling})) {
+    if (isNodeList({node: li.previousSibling})) {
       li.previousSibling.appendChild(li);
       return;
     }
