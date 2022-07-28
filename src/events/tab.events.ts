@@ -205,7 +205,7 @@ export class TabEvents {
     observer.observe(paragraph, {childList: true, subtree: true});
 
     // Previous sibling is a list so, we can move the li there
-    if (isNodeList({node: li.previousSibling})) {
+    if (li.previousSibling && isNodeList({node: li.previousSibling})) {
       li.previousSibling.appendChild(li);
       return;
     }
