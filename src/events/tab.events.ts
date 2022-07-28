@@ -86,7 +86,7 @@ export class TabEvents {
     paragraph,
     node,
     range,
-    shiftKey,
+    shiftKey
   }: {
     paragraph: Node;
     node: Node | undefined;
@@ -132,7 +132,9 @@ export class TabEvents {
       const observer: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
         observer.disconnect();
 
-        const addedFirstNode: Node | undefined = mutations.find(({addedNodes}: MutationRecord) => addedNodes.length > 0)?.addedNodes[0];
+        const addedFirstNode: Node | undefined = mutations.find(
+          ({addedNodes}: MutationRecord) => addedNodes.length > 0
+        )?.addedNodes[0];
 
         // Move cursor to new li
         moveCursorToStart(addedFirstNode);
@@ -141,7 +143,7 @@ export class TabEvents {
       observer.observe(paragraph, {childList: true, subtree: true});
 
       const newRange: Range = new Range();
-      newRange.setStartBefore(li)
+      newRange.setStartBefore(li);
       newRange.setEndAfter(ul.lastChild);
 
       const liIndex: number = nodeIndex(li);
@@ -181,7 +183,9 @@ export class TabEvents {
     const observer: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
       observer.disconnect();
 
-      const addedFirstNode: Node | undefined = mutations.find(({addedNodes}: MutationRecord) => addedNodes.length > 0)?.addedNodes[0];
+      const addedFirstNode: Node | undefined = mutations.find(
+        ({addedNodes}: MutationRecord) => addedNodes.length > 0
+      )?.addedNodes[0];
 
       // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
       if (addedFirstNode.textContent.length === 0) {

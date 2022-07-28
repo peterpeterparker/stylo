@@ -1,6 +1,7 @@
 import {
   elementIndex,
-  findNodeAtDepths, isNodeList,
+  findNodeAtDepths,
+  isNodeList,
   isTextNode,
   nodeDepths,
   nodeIndex,
