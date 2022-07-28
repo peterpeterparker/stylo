@@ -177,6 +177,29 @@ export class TabEvents {
       return;
     }
 
+    // Move cursor end or start to added child
+    const observer: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+      observer.disconnect();
+
+      const addedFirstNode: Node | undefined = mutations.find(({addedNodes}: MutationRecord) => addedNodes.length > 0)?.addedNodes[0];
+
+      // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
+      if (addedFirstNode.textContent.length === 0) {
+        moveCursorToStart(addedFirstNode);
+        return;
+      }
+
+      moveCursorToEnd(addedFirstNode);
+    });
+
+    observer.observe(paragraph, {childList: true, subtree: true});
+
+    // Previous sibling is a list so, we can move the li there
+    if (isParagraphList({paragraph: li.previousSibling})) {
+      li.previousSibling.appendChild(li);
+      return;
+    }
+
     // Clone li and append it to a new sublist, a new ul
     const newRange: Range = new Range();
     newRange.selectNode(li);
@@ -184,21 +207,6 @@ export class TabEvents {
     const contents: DocumentFragment = newRange.cloneContents();
     const newUl: HTMLUListElement = document.createElement('ul');
     newUl.append(contents);
-
-    // Move cursor end to newly created list
-    const observer: MutationObserver = new MutationObserver(() => {
-      observer.disconnect();
-
-      // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
-      if (newUl.firstElementChild.textContent.length === 0) {
-        moveCursorToStart(newUl.firstChild);
-        return;
-      }
-
-      moveCursorToEnd(newUl.firstChild);
-    });
-
-    observer.observe(paragraph, {childList: true, subtree: true});
 
     // Replace li with new ul
     ul.replaceChild(newUl, li);
