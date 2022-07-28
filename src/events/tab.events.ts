@@ -175,6 +175,9 @@ export class TabEvents {
 
     // We do not want to index list that has a single element
     if (ul.childNodes.length === 1) {
+
+      console.log(empty)
+
       this.createTabulation({range, node, paragraph});
       return;
     }
@@ -187,13 +190,19 @@ export class TabEvents {
         ({addedNodes}: MutationRecord) => addedNodes.length > 0
       )?.addedNodes[0];
 
-      // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
-      if (addedFirstNode.textContent.length === 0) {
-        moveCursorToStart(addedFirstNode);
+      if (!addedFirstNode) {
         return;
       }
 
-      moveCursorToEnd(addedFirstNode);
+      const focusNode: Node | null = isNodeList({node: addedFirstNode}) ? addedFirstNode.firstChild : addedFirstNode;
+
+      // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
+      if (addedFirstNode.textContent.length === 0) {
+        moveCursorToStart(focusNode);
+        return;
+      }
+
+      moveCursorToEnd(focusNode);
     });
 
     observer.observe(paragraph, {childList: true, subtree: true});
