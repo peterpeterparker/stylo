@@ -175,9 +175,6 @@ export class TabEvents {
 
     // We do not want to index list that has a single element
     if (ul.childNodes.length === 1) {
-
-      console.log(empty)
-
       this.createTabulation({range, node, paragraph});
       return;
     }
