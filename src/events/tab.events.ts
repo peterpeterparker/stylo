@@ -189,7 +189,12 @@ export class TabEvents {
     const observer: MutationObserver = new MutationObserver(() => {
       observer.disconnect();
 
-      // Move cursor to new li
+      // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
+      if (newUl.firstElementChild.textContent.length === 0) {
+        moveCursorToStart(newUl.firstChild);
+        return;
+      }
+
       moveCursorToEnd(newUl.firstChild);
     });
 
