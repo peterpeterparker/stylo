@@ -1,6 +1,6 @@
-import {moveCursorToEnd} from '@deckdeckgo/utils';
+import {moveCursorToEnd, moveCursorToStart} from '@deckdeckgo/utils';
 import containerStore from '../stores/container.store';
-import {isTextNode} from '../utils/node.utils';
+import {isTextNode, nodeIndex} from '../utils/node.utils';
 import {findParagraph, isParagraph, isParagraphList} from '../utils/paragraph.utils';
 import {getRange} from '../utils/selection.utils';
 
@@ -128,24 +128,34 @@ export class TabEvents {
         return;
       }
 
-      // Li is the sole child element, we can replace the ul
-      if (ul.childNodes.length === 1) {
-        // Extract li
-        const newRange: Range = new Range();
-        newRange.selectNode(li);
+      // Move cursor end to newly created list
+      const observer: MutationObserver = new MutationObserver((mutations: MutationRecord[]) => {
+        observer.disconnect();
 
-        const contents: DocumentFragment = newRange.cloneContents();
+        const addedFirstNode: Node | undefined = mutations.find(({addedNodes}: MutationRecord) => addedNodes.length > 0)?.addedNodes[0];
 
+        // Move cursor to new li
+        moveCursorToStart(addedFirstNode);
+      });
+
+      observer.observe(paragraph, {childList: true, subtree: true});
+
+      const newRange: Range = new Range();
+      newRange.setStartBefore(li)
+      newRange.setEndAfter(ul.lastChild);
+
+      const liIndex: number = nodeIndex(li);
+
+      const contents: DocumentFragment = newRange.extractContents();
+
+      // If we shift-tab first li of the ul, we want to replace the all ul
+      if (liIndex === 0) {
         ul.parentElement.replaceChild(contents, ul);
         return;
       }
 
-      // Ul has many children so we m
-      // TODO:
-      // ul
-      //   li
-      //   li <- we tab here
-      //   li
+      // Else we want to bring the other li from the selected to end of this ul one level higher
+      ul.parentElement.insertBefore(contents, ul.nextSibling);
 
       return;
     }
@@ -186,7 +196,7 @@ export class TabEvents {
     observer.observe(paragraph, {childList: true, subtree: true});
 
     // Replace li with new ul
-    li.parentElement.replaceChild(newUl, li);
+    ul.replaceChild(newUl, li);
   }
 
   private findParentElement({
