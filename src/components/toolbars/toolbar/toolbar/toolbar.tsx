@@ -590,8 +590,6 @@ export class Toolbar implements ComponentInterface {
   };
 
   private execCommand(action: ExecCommandAction) {
-    console.log(action);
-
     // onSelectionChange is triggered if DOM changes, we still need to detect attributes changes to refresh style
     this.onAttributesChangesInitStyle();
 
