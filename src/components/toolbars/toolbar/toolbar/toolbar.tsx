@@ -212,7 +212,7 @@ export class Toolbar implements ComponentInterface {
       return;
     }
 
-    if (!['b', 'i', 'u'].includes(key)) {
+    if (!['b', 'i', 'u', 'k'].includes(key)) {
       return;
     }
 
@@ -228,6 +228,9 @@ export class Toolbar implements ComponentInterface {
         break;
       case 'u':
         this.execCommand(actionUnderline);
+        break;
+      case 'k':
+        this.openLink();
         break;
     }
   }
