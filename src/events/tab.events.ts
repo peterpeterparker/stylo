@@ -96,7 +96,10 @@ export class TabEvents {
     // If list contains a single child that is just text then browser returns the list as focus node
     const focusNodeIsList: boolean = node !== undefined && isNodeList({node: node});
 
-    const paragraphListNodeName: 'ul' | 'ol' | 'dl' = paragraph.nodeName.toLowerCase() as 'ul' | 'ol' | 'dl';
+    const paragraphListNodeName: 'ul' | 'ol' | 'dl' = paragraph.nodeName.toLowerCase() as
+      | 'ul'
+      | 'ol'
+      | 'dl';
 
     const li: Node | undefined = focusNodeIsList
       ? node.firstChild
@@ -193,7 +196,9 @@ export class TabEvents {
         return;
       }
 
-      const focusNode: Node | null = isNodeList({node: addedFirstNode}) ? addedFirstNode.firstChild : addedFirstNode;
+      const focusNode: Node | null = isNodeList({node: addedFirstNode})
+        ? addedFirstNode.firstChild
+        : addedFirstNode;
 
       // Move cursor to new li. If empty we move to start because maybe it contains a br a last child.
       if (addedFirstNode.textContent.length === 0) {
