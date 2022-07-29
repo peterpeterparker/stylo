@@ -96,6 +96,8 @@ export class TabEvents {
     // If list contains a single child that is just text then browser returns the list as focus node
     const focusNodeIsList: boolean = node !== undefined && isNodeList({node: node});
 
+    const paragraphListNodeName: 'ul' | 'ol' | 'dl' = paragraph.nodeName.toLowerCase() as 'ul' | 'ol' | 'dl';
+
     const li: Node | undefined = focusNodeIsList
       ? node.firstChild
       : this.findParentElement({
@@ -114,7 +116,7 @@ export class TabEvents {
       : this.findParentElement({
           element: node,
           paragraph,
-          nodeName: 'ul'
+          nodeName: paragraphListNodeName
         });
 
     if (!ul) {
@@ -215,7 +217,7 @@ export class TabEvents {
     newRange.selectNode(li);
 
     const contents: DocumentFragment = newRange.cloneContents();
-    const newUl: HTMLUListElement = document.createElement('ul');
+    const newUl: HTMLElement = document.createElement(paragraphListNodeName);
     newUl.append(contents);
 
     // Replace li with new ul
