@@ -28,7 +28,8 @@ import {
   ToolbarFontSize,
   ToolbarList
 } from '../../../../types/toolbar';
-import {execCommand} from '../../../../utils/execcommand.utils';
+import {actionBold, actionItalic, actionUnderline} from '../../../../utils/execcomand-text.utils';
+import {execCommand as execCommandCustom} from '../../../../utils/execcommand.utils';
 import {execCommandNative} from '../../../../utils/execcommnad-native.utils';
 import {removeLink} from '../../../../utils/link.utils';
 import {isMobile} from '../../../../utils/mobile.utils';
@@ -200,7 +201,39 @@ export class Toolbar implements ComponentInterface {
       this.reset(false);
       return;
     }
+
+    this.styleKeyboardShortcuts($event);
   };
+
+  private styleKeyboardShortcuts($event: KeyboardEvent) {
+    const {metaKey, ctrlKey, key} = $event;
+
+    if (!metaKey && !ctrlKey) {
+      return;
+    }
+
+    if (!['b', 'i', 'u', 'k'].includes(key)) {
+      return;
+    }
+
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    switch (key) {
+      case 'b':
+        this.execCommand(actionBold);
+        break;
+      case 'i':
+        this.execCommand(actionItalic);
+        break;
+      case 'u':
+        this.execCommand(actionUnderline);
+        break;
+      case 'k':
+        this.openLink();
+        break;
+    }
+  }
 
   @Listen('contextmenu', {target: 'document', passive: true})
   onContextMenu() {
@@ -246,7 +279,7 @@ export class Toolbar implements ComponentInterface {
     const listenerElement: HTMLElement | Document = this.containerRef || document;
     listenerElement?.addEventListener('mousedown', this.startSelection, {passive: true});
     listenerElement?.addEventListener('touchstart', this.startSelection, {passive: true});
-    listenerElement?.addEventListener('keydown', this.onKeyDown, {passive: true});
+    listenerElement?.addEventListener('keydown', this.onKeyDown);
   }
 
   private removeListener() {
@@ -553,20 +586,22 @@ export class Toolbar implements ComponentInterface {
   private switchToolbarActions = (actions: ToolbarActions) => (this.toolbarActions = actions);
 
   private onExecCommand = ($event: CustomEvent<ExecCommandAction>) => {
-    if (!$event || !$event.detail) {
-      return;
-    }
+    this.execCommand($event.detail);
+  };
 
+  private execCommand(action: ExecCommandAction) {
     // onSelectionChange is triggered if DOM changes, we still need to detect attributes changes to refresh style
     this.onAttributesChangesInitStyle();
 
     if (configStore.state.toolbar.command === 'native') {
-      execCommandNative($event.detail);
+      execCommandNative(action);
     } else {
-      execCommand(this.selection, $event.detail, this.containerRef);
+      execCommandCustom(this.selection, action, this.containerRef);
     }
 
-    if ($event.detail.cmd === 'list' || isIOS()) {
+    const {cmd} = action;
+
+    if (cmd === 'list' || isIOS()) {
       this.reset(true);
     }
 
@@ -575,7 +610,7 @@ export class Toolbar implements ComponentInterface {
     }
 
     this.styleDidChange.emit(toHTMLElement(this.selectionParagraph));
-  };
+  }
 
   private onAttributesChangesInitStyle() {
     const anchorNode: HTMLElement | null = getAnchorElement(this.selection);
