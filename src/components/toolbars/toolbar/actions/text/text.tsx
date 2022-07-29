@@ -1,6 +1,12 @@
 import {Component, Event, EventEmitter, h, Host, Prop} from '@stencil/core';
 import i18n from '../../../../../stores/i18n.store';
 import {ExecCommandAction} from '../../../../../types/execcommand';
+import {
+  actionBold,
+  actionItalic,
+  actionStrikeThrough,
+  actionUnderline
+} from '../../../../../utils/execcomand-text.utils';
 
 @Component({
   tag: 'stylo-toolbar-text',
@@ -29,56 +35,25 @@ export class Text {
   private styleBold($event: UIEvent) {
     $event.stopPropagation();
 
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'font-weight',
-        value: 'bold',
-        initial: (element: HTMLElement | null) => element && element.style['font-weight'] === 'bold'
-      }
-    });
+    this.execCommand.emit(actionBold);
   }
 
   private styleItalic($event: UIEvent) {
     $event.stopPropagation();
 
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'font-style',
-        value: 'italic',
-        initial: (element: HTMLElement | null) =>
-          element && element.style['font-style'] === 'italic'
-      }
-    });
+    this.execCommand.emit(actionItalic);
   }
 
   private styleUnderline($event: UIEvent) {
     $event.stopPropagation();
 
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'text-decoration',
-        value: 'underline',
-        initial: (element: HTMLElement | null) =>
-          element && element.style['text-decoration'] === 'underline'
-      }
-    });
+    this.execCommand.emit(actionUnderline);
   }
 
   private styleStrikeThrough($event: UIEvent) {
     $event.stopPropagation();
 
-    this.execCommand.emit({
-      cmd: 'style',
-      detail: {
-        style: 'text-decoration',
-        value: 'line-through',
-        initial: (element: HTMLElement | null) =>
-          element && element.style['text-decoration'] === 'line-through'
-      }
-    });
+    this.execCommand.emit(actionStrikeThrough);
   }
 
   render() {
