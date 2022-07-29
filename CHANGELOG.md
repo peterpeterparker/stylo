@@ -1,3 +1,9 @@
+# 0.0.35-1 (2022-07-29)
+
+### Fix
+
+- tab support for `ol` and `dl` list as well (not just `ul`)
+
 # 0.0.35 (2022-07-28)
 
 ### Features
