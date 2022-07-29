@@ -1,3 +1,9 @@
+# 0.0.36 (2022-07-29)
+
+## Features
+
+- keyboard shortcuts: control or command-{B, I, U, K} for bold, italic, underline, insert hyperlink
+
 # 0.0.35-1 (2022-07-29)
 
 ### Fix
