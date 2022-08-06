@@ -43,7 +43,7 @@ export interface I18Menus {
   img_delete: string;
 }
 
-export type Languages = 'en' | 'es' | 'de' | 'nl';
+export type Languages = 'en' | 'es' | 'de' | 'nl' | 'ja';
 
 export interface I18n {
   lang: Languages;
