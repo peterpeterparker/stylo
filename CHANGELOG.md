@@ -1,3 +1,9 @@
+# 0.0.37 (2022-08-06)
+
+## Features
+
+- japanese translation
+
 # 0.0.36 (2022-07-29)
 
 ## Features
