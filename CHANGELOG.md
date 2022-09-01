@@ -1,12 +1,18 @@
+# 0.0.37-1 (2022-09-01)
+
+### Chore
+
+- clean `console.log` in release
+
 # 0.0.37 (2022-08-06)
 
-## Features
+### Features
 
 - japanese translation
 
 # 0.0.36 (2022-07-29)
 
-## Features
+### Features
 
 - keyboard shortcuts: control or command-{B, I, U, K} for bold, italic, underline, insert hyperlink
 
