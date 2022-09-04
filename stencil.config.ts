@@ -31,5 +31,8 @@ export const config: Config = {
   devServer: {
     openBrowser: false
   },
-  testing: {setupFilesAfterEnv: ['<rootDir>/src/jest-setup.ts']}
+  testing: {setupFilesAfterEnv: ['<rootDir>/src/jest-setup.ts']},
+  extras: {
+    experimentalImportInjection: true
+  }
 };
