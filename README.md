@@ -82,7 +82,7 @@ Afterwards you will need to load - i.e. import - the component in your applicati
 
 #### Loader
 
-Lazy load the components with the help of a loader.
+Lazy load the components with the help of a loader. This is the recommended solution to load Stylo in [vite](https://vitejs.dev/) projects.
 
 ```js
 import {defineCustomElements} from '@papyrs/stylo/dist/loader';

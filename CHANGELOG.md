@@ -1,3 +1,22 @@
+# 0.0.38 (2022-09-04)
+
+### Build
+
+- fix usage of the library in `vite` projects
+
+e.g. `import` in `SvelteKit`:
+
+```
+<script lang="ts">
+    import {defineCustomElements} from '@papyrs/stylo/dist/loader';
+    defineCustomElements();
+
+    import {createEmptyElement} from '@papyrs/stylo';
+</script>
+
+<stylo-editor></stylo-editor>
+```
+
 # 0.0.37-1 (2022-09-01)
 
 ### Chore
