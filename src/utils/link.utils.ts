@@ -4,7 +4,7 @@ import {getRange} from './selection.utils';
 
 export const createLink = ({range, linkUrl}: {range: Range; linkUrl: string}) => {
   const fragment: DocumentFragment = range.extractContents();
-  const a: HTMLAnchorElement = createLinkElement({fragment, linkUrl});
+  const a: HTMLAnchorElement = createLinkElementForFragment({fragment, linkUrl});
 
   range.insertNode(a);
 };
@@ -39,18 +39,23 @@ const removeFirefoxLink = (selection: Selection) => {
   container.parentElement.removeChild(container);
 };
 
-const createLinkElement = ({
+const createLinkElementForFragment = ({
   fragment,
   linkUrl
 }: {
   fragment: DocumentFragment;
   linkUrl: string;
 }): HTMLAnchorElement => {
-  const a: HTMLAnchorElement = document.createElement('a');
+  const a: HTMLAnchorElement = createLinkElement({linkUrl});
   a.appendChild(fragment);
-  a.href = linkUrl;
+  return a;
+};
 
+export const createLinkElement = ({linkUrl}: {linkUrl: string}): HTMLAnchorElement => {
+  const a: HTMLAnchorElement = document.createElement('a');
+  a.href = linkUrl;
   a.rel = 'noopener noreferrer';
+  a.target = '_blank';
 
   return a;
 };
