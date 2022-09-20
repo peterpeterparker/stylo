@@ -6,7 +6,7 @@
 
 | Property       | Attribute | Description                                                                                                         | Type                                                                                                                                                     | Default     |
 | -------------- | --------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; command?: "native" \| "custom"; style?: { list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; }; }` | `undefined` |
+| `config`       | --        | If used in a standalone mode, the configuration can also be set. It will be applied over the default configuration. | `{ palette?: StyloPalette[]; command?: "custom" \| "native"; style?: { list: boolean; align: boolean; fontSize: boolean; backgroundColor: boolean; }; }` | `undefined` |
 | `containerRef` | --        | To attach the inline editor event listeners to a specific container instead of the document                         | `HTMLElement`                                                                                                                                            | `undefined` |
 
 ## Events

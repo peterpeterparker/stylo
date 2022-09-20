@@ -1,3 +1,14 @@
+# 0.0.39 (2022-09-20)
+
+### Features
+
+- if user paste a link as plain text then convert it to link automatically
+- generate link with inline editor with the `target=_blank`
+
+### Build
+
+- bump Stencil
+
 # 0.0.38 (2022-09-04)
 
 ### Build
