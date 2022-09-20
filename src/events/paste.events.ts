@@ -10,6 +10,7 @@ import {
   transformParagraph
 } from '../utils/paragraph.utils';
 import {deleteRange, getRange} from '../utils/selection.utils';
+import {createLinkElement} from "../utils/link.utils";
 
 export class PasteEvents {
   init() {
@@ -49,10 +50,7 @@ export class PasteEvents {
 
       // If user paste a link as plain text we convert it to link
       if (isUrl(text)) {
-        const a: HTMLAnchorElement = document.createElement('a');
-        a.href = text;
-        a.target = "_blank";
-        a.setAttribute('rel', 'noopener noreferrer');
+        const a: HTMLAnchorElement = createLinkElement({linkUrl: text});
         a.innerHTML = text;
         div.append(a);
       }
