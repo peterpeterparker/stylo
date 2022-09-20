@@ -26,8 +26,40 @@ export class PasteEvents {
     const div = document.createElement('div');
     div.innerHTML = pasteHTML;
 
+    console.log(
+      $event.clipboardData.getData('text/plain'),
+      '---',
+      $event.clipboardData.getData('text/html')
+    );
+
     // User either paste a non-html content or paste text with adapt style - i.e. paste text/plain within a paragraph
-    if (div.children.length <= 0) {
+    const plainText: boolean = div.children.length <= 0;
+
+    if (plainText) {
+      const text: string = $event.clipboardData.getData('text/plain');
+
+      const isUrl = (text: string): boolean => {
+        try {
+          const {protocol} = new URL(text);
+          return ['http:', 'https:'].includes(protocol);
+        } catch (_) {
+          return false;
+        }
+      };
+
+      // If user paste a link as plain text we convert it to link
+      if (isUrl(text)) {
+        const a: HTMLAnchorElement = document.createElement('a');
+        a.href = text;
+        a.target = "_blank";
+        a.setAttribute('rel', 'noopener noreferrer');
+        a.innerHTML = text;
+        div.append(a);
+      }
+    }
+
+    // It's still plain text and we did not extract any urls
+    if (plainText && div.children.length <= 0) {
       return;
     }
 
