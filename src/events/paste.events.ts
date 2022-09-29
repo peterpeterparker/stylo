@@ -27,12 +27,6 @@ export class PasteEvents {
     const div = document.createElement('div');
     div.innerHTML = pasteHTML;
 
-    console.log(
-      $event.clipboardData.getData('text/plain'),
-      '---',
-      $event.clipboardData.getData('text/html')
-    );
-
     // User either paste a non-html content or paste text with adapt style - i.e. paste text/plain within a paragraph
     const plainText: boolean = div.children.length <= 0;
 
