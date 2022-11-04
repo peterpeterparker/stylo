@@ -32,12 +32,12 @@
     "copy:site": "node ./scripts/copy.site.js"
   },
   "devDependencies": {
-    "@stencil/core": "^2.18.0",
+    "@stencil/core": "^2.19.2",
     "@stencil/postcss": "^2.1.0",
     "@stencil/sass": "^2.0.0",
     "@stencil/store": "^2.0.1",
     "@types/jest": "^27.4.1",
-    "autoprefixer": "^10.4.11",
+    "autoprefixer": "^10.4.13",
     "blob-polyfill": "^7.0.20220408",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",
