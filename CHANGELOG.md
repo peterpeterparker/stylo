@@ -1,3 +1,13 @@
+# 0.0.40 (2022-11-04)
+
+### Chore
+
+- remove unexpected console.log
+
+### Build
+
+- bump Stencil
+
 # 0.0.39 (2022-09-20)
 
 ### Features
