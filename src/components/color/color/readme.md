@@ -140,7 +140,7 @@ export const DEFAULT_PALETTE: StyloPalette[] = [
 
 | Name                                          | Description                                                            |
 | --------------------------------------------- | ---------------------------------------------------------------------- |
-| `--stylo-color-button-border-radius`          | Button border-radius @default 2px                                      |
+| `--stylo-color-button-border-radius`          | Button border-radius @default 1px                                      |
 | `--stylo-color-button-height`                 | Button height @default 28px                                            |
 | `--stylo-color-button-margin`                 | Button margin @default 4px                                             |
 | `--stylo-color-button-outline`                | Button outline @default none                                           |
