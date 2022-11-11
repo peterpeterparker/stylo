@@ -162,7 +162,8 @@ export class Add implements ComponentInterface {
 
   @Listen('addParagraphs', {target: 'document', passive: true})
   onAddParagraphs({detail: addedParagraphs}: CustomEvent<HTMLElement[]>) {
-    this.initParagraph({target: addedParagraphs[0], onlyIfEmptyParagraph: false});
+    const { length, [length - 1]: last } = addedParagraphs;
+    this.initParagraph({target: last, onlyIfEmptyParagraph: false});
   }
 
   private onFocusout = () => {
@@ -227,6 +228,11 @@ export class Add implements ComponentInterface {
     this.paragraph = toHTMLElement(paragraph);
 
     if (!this.paragraph) {
+      this.hide();
+      return;
+    }
+
+    if (isParagraphNotEditable({paragraph: this.paragraph})) {
       this.hide();
       return;
     }
