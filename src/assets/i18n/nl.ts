@@ -12,7 +12,8 @@ export const nl: I18n = {
     ordered_list: 'Lijst (nummers)',
     image: 'Afbeelding',
     code: 'Code',
-    no_matches: 'No matches'
+    no_matches: 'No matches',
+    blockquote: 'Blokcitaat'
   },
   add: {
     placeholder: 'Druk op "/" voor plug-ins',

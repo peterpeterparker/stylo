@@ -1,4 +1,5 @@
 import {h, JSX} from '@stencil/core';
+import {IconBlockquote} from '../components/icons/blockquote';
 import {IconCode} from '../components/icons/code';
 import {IconEllipsisHorizontal} from '../components/icons/ellipsis-horizontal';
 import {IconImages} from '../components/icons/images';
@@ -18,6 +19,8 @@ export const renderIcon = (icon: StyloIcon): JSX.IntrinsicElements | undefined =
       return <IconEllipsisHorizontal></IconEllipsisHorizontal>;
     case 'img':
       return <IconImages></IconImages>;
+    case 'blockquote':
+      return <IconBlockquote></IconBlockquote>;
     default:
       return undefined;
   }

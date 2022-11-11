@@ -12,7 +12,8 @@ export const es: I18n = {
     ordered_list: 'Lista numerada',
     image: 'Imagen',
     code: 'Código',
-    no_matches: 'Sin resultados'
+    no_matches: 'Sin resultados',
+    blockquote: 'Cita en bloque'
   },
   add: {
     placeholder: 'Presione "/" para complementos',

@@ -9,6 +9,7 @@ export interface I18nPlugins {
   image: string;
   code: string;
   no_matches: string;
+  blockquote: string;
 }
 
 export interface I18nAdd {

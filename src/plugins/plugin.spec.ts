@@ -1,5 +1,6 @@
 import {Blob} from 'blob-polyfill';
 import {StyloPlugin} from '../types/plugin';
+import {blockquote} from './blockquote.plugin';
 import {code} from './code.plugin';
 import {h1} from './h1.plugin';
 import {h2} from './h2.plugin';
@@ -60,6 +61,8 @@ describe('plugins', () => {
   it('should transform to h1', () => expectTransform({plugin: h1, firstNodeName: 'h1'}));
   it('should transform to h2', () => expectTransform({plugin: h2, firstNodeName: 'h2'}));
   it('should transform to h3', () => expectTransform({plugin: h3, firstNodeName: 'h3'}));
+  it('should transform to blockquote', () =>
+    expectTransform({plugin: blockquote, firstNodeName: 'blockquote'}));
 
   it('should transform to hr', () => {
     expectTransform({plugin: hr, firstNodeName: 'hr'});

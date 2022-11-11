@@ -12,7 +12,8 @@ export const en: I18n = {
     ordered_list: 'Numbered list',
     image: 'Image',
     code: 'Code',
-    no_matches: 'No matches'
+    no_matches: 'No matches',
+    blockquote: 'Blockquote'
   },
   add: {
     placeholder: 'Press "/" for plugins',
