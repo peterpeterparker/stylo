@@ -4,7 +4,7 @@ import {transformParagraph} from '../utils/paragraph.utils';
 
 export const blockquote: StyloPlugin = {
   text: 'blockquote',
-  icon: `<span class='placeholder'>Blockquote</span>`,
+  icon: 'blockquote',
   createParagraphs: async ({container, paragraph}: StyloPluginCreateParagraphsParams) =>
     transformParagraph({
       elements: [createEmptyElement({nodeName: 'blockquote'})],

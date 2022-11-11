@@ -5,6 +5,7 @@ import {IconImages} from '../components/icons/images';
 import {IconOl} from '../components/icons/ol';
 import {IconUl} from '../components/icons/ul';
 import {StyloIcon} from '../types/icon';
+import {IconBlockquote} from "../components/icons/blockquote";
 
 export const renderIcon = (icon: StyloIcon): JSX.IntrinsicElements | undefined => {
   switch (icon) {
@@ -18,6 +19,8 @@ export const renderIcon = (icon: StyloIcon): JSX.IntrinsicElements | undefined =
       return <IconEllipsisHorizontal></IconEllipsisHorizontal>;
     case 'img':
       return <IconImages></IconImages>;
+    case 'blockquote':
+      return <IconBlockquote></IconBlockquote>;
     default:
       return undefined;
   }
