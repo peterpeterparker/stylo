@@ -4,6 +4,7 @@ export * from './plugins/code.plugin';
 export * from './plugins/h1.plugin';
 export * from './plugins/h2.plugin';
 export * from './plugins/h3.plugin';
+export * from './plugins/blockquote.plugin';
 export * from './plugins/hr.plugin';
 export * from './plugins/img.plugin';
 export * from './plugins/list.plugin';
