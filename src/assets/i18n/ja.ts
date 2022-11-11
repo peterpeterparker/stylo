@@ -12,7 +12,8 @@ export const ja: I18n = {
     ordered_list: '番号付きリスト',
     image: '画像',
     code: 'コード',
-    no_matches: '該当なし'
+    no_matches: '該当なし',
+    blockquote: '引用符'
   },
   add: {
     placeholder: '「/」を押してプラグインを表示',

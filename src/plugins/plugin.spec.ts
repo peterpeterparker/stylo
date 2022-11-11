@@ -7,6 +7,7 @@ import {h3} from './h3.plugin';
 import {hr} from './hr.plugin';
 import {img} from './img.plugin';
 import {ol, ul} from './list.plugin';
+import {blockquote} from './blockquote.plugin';
 
 describe('plugins', () => {
   let container, paragraph;
@@ -60,6 +61,7 @@ describe('plugins', () => {
   it('should transform to h1', () => expectTransform({plugin: h1, firstNodeName: 'h1'}));
   it('should transform to h2', () => expectTransform({plugin: h2, firstNodeName: 'h2'}));
   it('should transform to h3', () => expectTransform({plugin: h3, firstNodeName: 'h3'}));
+  it('should transform to blockquote', () => expectTransform({plugin: blockquote, firstNodeName: 'blockquote'}));
 
   it('should transform to hr', () => {
     expectTransform({plugin: hr, firstNodeName: 'hr'});

@@ -4,6 +4,7 @@ import {h1} from '../plugins/h1.plugin';
 import {h2} from '../plugins/h2.plugin';
 import {h3} from '../plugins/h3.plugin';
 import {hr} from '../plugins/hr.plugin';
+import {blockquote} from '../plugins/blockquote.plugin';
 import {img} from '../plugins/img.plugin';
 import {ol, ul} from '../plugins/list.plugin';
 import {StyloConfigAttributes} from '../types/attributes';
@@ -21,7 +22,7 @@ interface ConfigStore {
   attributes: StyloConfigAttributes;
 }
 
-export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, ol, img, code, hr];
+export const DEFAULT_PLUGINS: StyloPlugin[] = [h1, h2, h3, ul, ol, blockquote, img, code, hr];
 
 export const DEFAULT_TOOLBAR: StyloConfigToolbar = {
   palette: DEFAULT_PALETTE,
@@ -36,7 +37,7 @@ export const DEFAULT_TOOLBAR: StyloConfigToolbar = {
 
 export const DEFAULT_PLACEHOLDERS = ['div', 'p', 'span'];
 
-export const DEFAULT_TEXT_PARAGRAPHS = ['h1', 'h2', 'h3', 'div', 'p'];
+export const DEFAULT_TEXT_PARAGRAPHS = ['h1', 'h2', 'h3', 'div', 'p', 'blockquote'];
 
 export const DEFAULT_EXCLUDE_ATTRIBUTES = [
   'placeholder',

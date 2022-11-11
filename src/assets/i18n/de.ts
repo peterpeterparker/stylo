@@ -12,7 +12,8 @@ export const de: I18n = {
     ordered_list: 'Liste (Nummern)',
     image: 'Bild',
     code: 'Code',
-    no_matches: 'Keine Treffer'
+    no_matches: 'Keine Treffer',
+    blockquote: 'Blockzitat'
   },
   add: {
     placeholder: 'Drücken Sie "/" für Plugins',
