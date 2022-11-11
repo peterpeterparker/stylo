@@ -55,9 +55,9 @@ button {
 
   /**
    * @prop --stylo-color-button-border-radius: Button border-radius
-   * @default 2px
+   * @default 1px
    */
-  border-radius: var(--stylo-color-button-border-radius, 2px);
+  border-radius: var(--stylo-color-button-border-radius, 1px);
 
   background: var(--stylo-palette-color-hex);
 
