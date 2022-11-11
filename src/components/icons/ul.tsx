@@ -1,13 +1,14 @@
 import {FunctionalComponent, h} from '@stencil/core';
 
+// Source: https://fonts.google.com/icons?selected=Material%20Icons%20Outlined%3Aformat_list_bulleted%3A
 export const IconUl: FunctionalComponent = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <circle cx="92" cy="256" r="28" style={{fill: 'currentColor'}} />
-    <circle cx="92" cy="132" r="28" style={{fill: 'currentColor'}} />
-    <circle cx="92" cy="380" r="28" style={{fill: 'currentColor'}} />
-    <path
-      style={{fill: 'currentColor'}}
-      d="M432 240H191.5c-8.8 0-16 7.2-16 16s7.2 16 16 16H432c8.8 0 16-7.2 16-16s-7.2-16-16-16zM432 364H191.5c-8.8 0-16 7.2-16 16s7.2 16 16 16H432c8.8 0 16-7.2 16-16s-7.2-16-16-16zM191.5 148H432c8.8 0 16-7.2 16-16s-7.2-16-16-16H191.5c-8.8 0-16 7.2-16 16s7.2 16 16 16z"
-    />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="24px"
+    viewBox="0 0 24 24"
+    width="24px"
+    fill="currentColor">
+    <path d="M0 0h24v24H0V0z" fill="none" />
+    <path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z" />
   </svg>
 );
