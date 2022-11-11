@@ -1,35 +1,14 @@
 import {FunctionalComponent, h} from '@stencil/core';
 
+// Source: https://fonts.google.com/icons?selected=Material%20Icons%3Aformat_align_left%3A
 export const IconAlignLeft: FunctionalComponent = () => (
   <svg
-    width="100%"
-    height="100%"
-    viewBox="0 0 512 512"
-    style={{
-      fillRule: 'evenodd',
-      clipRule: 'evenodd',
-      strokeLinecap: 'round',
-      strokeLinejoin: 'round'
-    }}>
-    <path
-      d="M96,331l160,0"
-      style={{fill: 'none', fillRule: 'nonzero', stroke: 'currentColor', strokeWidth: '25.3px'}}
-    />
-    <path
-      d="M96,185l160,0"
-      style={{fill: 'none', fillRule: 'nonzero', stroke: 'currentColor', strokeWidth: '25.3px'}}
-    />
-    <path
-      d="M96,258l320,0"
-      style={{fill: 'none', fillRule: 'nonzero', stroke: 'currentColor', strokeWidth: '32px'}}
-    />
-    <path
-      d="M96,112l320,0"
-      style={{fill: 'none', fillRule: 'nonzero', stroke: 'currentColor', strokeWidth: '32px'}}
-    />
-    <path
-      d="M96,400l320,0"
-      style={{fill: 'none', fillRule: 'nonzero', stroke: 'currentColor', strokeWidth: '32px'}}
-    />
+    xmlns="http://www.w3.org/2000/svg"
+    height="24px"
+    viewBox="0 0 24 24"
+    width="24px"
+    fill="currentColor">
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z" />
   </svg>
 );
