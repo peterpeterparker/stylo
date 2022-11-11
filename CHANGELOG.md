@@ -1,3 +1,19 @@
+# 0.0.41 (2022-11-11)
+
+### Features
+
+- `blockquote` plugin
+- select last added paragraph after action
+
+### Style
+
+- review icons
+- smaller border radius in color picker
+
+### Fix
+
+- prevent undefined error when detecting active element
+
 # 0.0.40 (2022-11-04)
 
 ### Chore
