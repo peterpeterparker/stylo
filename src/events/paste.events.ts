@@ -1,6 +1,7 @@
 import {moveCursorToEnd} from '@deckdeckgo/utils';
 import configStore from '../stores/config.store';
 import containerStore from '../stores/container.store';
+import {createLinkElement} from '../utils/link.utils';
 import {isMetaContent, isPhrasingContent, isTextNode, toHTMLElement} from '../utils/node.utils';
 import {
   addParagraphs,
@@ -10,7 +11,6 @@ import {
   transformParagraph
 } from '../utils/paragraph.utils';
 import {deleteRange, getRange} from '../utils/selection.utils';
-import {createLinkElement} from "../utils/link.utils";
 
 export class PasteEvents {
   init() {

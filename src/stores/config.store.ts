@@ -1,10 +1,10 @@
 import {createStore} from '@stencil/store';
+import {blockquote} from '../plugins/blockquote.plugin';
 import {code} from '../plugins/code.plugin';
 import {h1} from '../plugins/h1.plugin';
 import {h2} from '../plugins/h2.plugin';
 import {h3} from '../plugins/h3.plugin';
 import {hr} from '../plugins/hr.plugin';
-import {blockquote} from '../plugins/blockquote.plugin';
 import {img} from '../plugins/img.plugin';
 import {ol, ul} from '../plugins/list.plugin';
 import {StyloConfigAttributes} from '../types/attributes';

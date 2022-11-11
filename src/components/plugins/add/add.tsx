@@ -162,7 +162,7 @@ export class Add implements ComponentInterface {
 
   @Listen('addParagraphs', {target: 'document', passive: true})
   onAddParagraphs({detail: addedParagraphs}: CustomEvent<HTMLElement[]>) {
-    const { length, [length - 1]: last } = addedParagraphs;
+    const {length, [length - 1]: last} = addedParagraphs;
     this.initParagraph({target: last, onlyIfEmptyParagraph: false});
   }
 
