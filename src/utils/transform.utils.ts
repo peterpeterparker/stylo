@@ -20,7 +20,7 @@ export interface TransformInput {
   }) => boolean;
   transform: () => HTMLElement;
   postTransform?: () => Promise<void>;
-  active: (parent: HTMLElement) => boolean;
+  active: (parent: HTMLElement | undefined | null) => boolean;
   shouldTrimText: (target: Node) => boolean;
   shouldTrimSplit: ({
     target,
@@ -52,7 +52,7 @@ export const beforeInputTransformer: TransformInput[] = [
     transform: (): HTMLElement => {
       return document.createElement('mark');
     },
-    active: ({nodeName}: HTMLElement) => nodeName.toLowerCase() === 'mark',
+    active: (element: HTMLElement | undefined | null) => element?.nodeName.toLowerCase() === 'mark',
     shouldTrimText: ({nodeValue}: Node) =>
       nodeValue.charAt(nodeValue.length - 1) === '`' || nodeValue.charAt(0) === '`',
     shouldTrimSplit: ({target, startOffset}: {target: Node; startOffset: number | undefined}) =>
@@ -74,7 +74,11 @@ export const beforeInputTransformer: TransformInput[] = [
       span.style.fontWeight = 'bold';
       return span;
     },
-    active: (parent: HTMLElement) => {
+    active: (parent: HTMLElement | undefined | null) => {
+      if (!parent) {
+        return false;
+      }
+
       const {fontWeight}: CSSStyleDeclaration = window.getComputedStyle(parent);
 
       return parseInt(fontWeight) > 400 || fontWeight === 'bold';
@@ -99,7 +103,11 @@ export const beforeInputTransformer: TransformInput[] = [
       span.style.fontStyle = 'italic';
       return span;
     },
-    active: (parent: HTMLElement) => {
+    active: (parent: HTMLElement | undefined | null) => {
+      if (!parent) {
+        return false;
+      }
+
       const {fontStyle}: CSSStyleDeclaration = window.getComputedStyle(parent);
 
       return fontStyle === 'italic';
