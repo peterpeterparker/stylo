@@ -1,6 +1,6 @@
 import {I18n} from '../../types/i18n';
 
-export const en: I18n = {
+export const zhCn: I18n = {
   lang: 'zh-cn',
   plugins: {
     huge_title: '特大标题',

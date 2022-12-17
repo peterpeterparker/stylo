@@ -28,6 +28,11 @@ const jaI18n = async (): Promise<I18n> => {
   return ja;
 };
 
+const zhCnI18n = async (): Promise<I18n> => {
+  const {zhCn} = await import(`../assets/i18n/zh-cn`);
+  return zhCn;
+};
+
 const enI18n = (): I18n => en;
 
 onChange('lang', async (lang: Languages) => {
@@ -45,6 +50,9 @@ onChange('lang', async (lang: Languages) => {
       break;
     case 'ja':
       bundle = await jaI18n();
+      break;
+    case 'zh-cn':
+      bundle = await zhCnI18n();
       break;
     default:
       bundle = enI18n();
