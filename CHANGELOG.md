@@ -1,3 +1,9 @@
+# 0.0.42 (2022-12-17)
+
+### Features
+
+- support for simplified Chinese
+
 # 0.0.41 (2022-11-11)
 
 ### Features
