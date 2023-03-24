@@ -20,20 +20,59 @@ button {
   justify-content: center;
   align-items: center;
 
-  border-radius: 50%;
+  /**
+   * @prop --stylo-add-background-color: The background-color of the button
+   * @default 0.2rem
+   */
 
-  width: 1.4rem;
-  height: 1.4rem;
+  background-color: var(--stylo-add-background-color, none);
+  /**
+   * @prop --stylo-add-border-radius: The border-radius of the button
+   * @default 50%
+   */
+  border-radius: var(--stylo-add-border-radius, 50%);
 
+  /**
+   * @prop --stylo-add-border: The border of the button
+   * @default none
+   */
+  border: var(--stylo-add-border, none);
+  /**
+   * @prop --stylo-add-size: The size of the button
+   * @default 1.4rem
+   */
+  width: var(--stylo-add-size, 1.4rem);
+  height: var(--stylo-add-size, 1.4rem);
+
+  /**
+   * @prop --stylo-add-size: The padding of the button
+   * @default 0.2rem
+   */
+  padding: var(--stylo-add-padding, 0.2rem);
+
+  /**
+   * @prop --stylo-add-color: The color of the button
+   * @default 0.2rem
+   */
   color: var(--stylo-add-color, var(--medium));
 
   &:hover,
   &:focus {
-    color: var(--light-contrast);
+    /**
+   * @prop --stylo-add-color-hover: The hover color of the button
+   * @default 0.2rem
+   */
+    color: var(--stylo-add-color-hover, var(--light-contrast));
+
+    /**
+   * @prop --stylo-add-background-color-hover: The hover background-color of the button
+   * @default 0.2rem
+   */
+    background-color: var(--stylo-add-background-color-hover, none);
   }
 }
 
 svg {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 100%;
+  height: 100%;
 }
