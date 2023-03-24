@@ -1,8 +1,8 @@
 import {h, JSX} from '@stencil/core';
 import {IconBlockquote} from '../components/icons/blockquote';
 import {IconCode} from '../components/icons/code';
-import {IconEllipsisHorizontal} from '../components/icons/more';
 import {IconImage} from '../components/icons/image';
+import {IconEllipsisHorizontal} from '../components/icons/more';
 import {IconOl} from '../components/icons/ol';
 import {IconUl} from '../components/icons/ul';
 import {StyloIcon} from '../types/icon';
