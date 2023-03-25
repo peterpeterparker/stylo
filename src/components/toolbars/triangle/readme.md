@@ -8,6 +8,14 @@
 | -------- | --------- | ----------- | --------- | ----------- |
 | `mobile` | `mobile`  |             | `boolean` | `undefined` |
 
+## CSS Custom Properties
+
+| Name                           | Description                                           |
+| ------------------------------ | ----------------------------------------------------- |
+| `--stylo-triangle-background`  | The background-color of the triangle @default --white |
+| `--stylo-triangle-drop-shadow` | drop-shaddow of the triangle @default 2               |
+| `--stylo-triangle-width`       | The width of the triangle @default 2                  |
+
 ## Dependencies
 
 ### Used by

@@ -3,8 +3,8 @@
 :host(.top) {
   div.triangle {
     bottom: unset;
-    top: -34px;
-    transform: scale(0.7) translate(50%, 0);
+    top: 0px;
+    transform: rotate(180deg) translate(50%, 100%);
   }
 }
 
@@ -12,25 +12,29 @@ div.triangle {
   z-index: 1;
 
   position: absolute;
-  bottom: -34px;
-  left: var(--stylo-toolbar-triangle-start);
+  width: 0;
+  height: 0;
+  bottom: 0px;
+  left: max(var(--stylo-toolbar-triangle-start), calc(var(--stylo-triangle-width, 40px) / 2));
 
-  width: 40px;
-  height: 40px;
-  overflow: hidden;
+  background: transparent;
+  /**
+   * @prop --stylo-triangle-width: The width of the triangle
+   * @default 2
+   */
+  /**
+   * @prop --stylo-triangle-background: The background-color of the triangle
+   * @default --white
+   */
+  border-left: calc(var(--stylo-triangle-width, 24px) / 2) solid transparent;
+  border-right: calc(var(--stylo-triangle-width, 24px) / 2) solid transparent;
+  border-top: calc(var(--stylo-triangle-width, 24px) / 2) solid
+    var(--stylo-triangle-background, --white);
+  transform: translate(-50%, 100%);
 
-  transform: scale(0.7) rotate(180deg) translate(50%, 0);
-
-  &:after {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    background: white;
-    transform: rotate(45deg);
-    top: 28px;
-    left: 8px;
-
-    @include overlay.overlay;
-  }
+  /**
+   * @prop --stylo-triangle-drop-shadow: drop-shaddow of the triangle
+   * @default 2
+   */
+  filter: drop-shadow(var(--stylo-triangle-drop-shadow));
 }
