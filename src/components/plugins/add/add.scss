@@ -22,10 +22,9 @@ button {
 
   /**
    * @prop --stylo-add-background-color: The background-color of the button
-   * @default 0.2rem
    */
+  background: var(--stylo-add-background);
 
-  background-color: var(--stylo-add-background-color, none);
   /**
    * @prop --stylo-add-border-radius: The border-radius of the button
    * @default 50%
@@ -34,9 +33,9 @@ button {
 
   /**
    * @prop --stylo-add-border: The border of the button
-   * @default none
    */
-  border: var(--stylo-add-border, none);
+  border: var(--stylo-add-border);
+
   /**
    * @prop --stylo-add-size: The size of the button
    * @default 1.4rem
@@ -52,7 +51,7 @@ button {
 
   /**
    * @prop --stylo-add-color: The color of the button
-   * @default 0.2rem
+   * @default var(--medium)
    */
   color: var(--stylo-add-color, var(--medium));
 
@@ -60,15 +59,14 @@ button {
   &:focus {
     /**
    * @prop --stylo-add-color-hover: The hover color of the button
-   * @default 0.2rem
+   * @default var(--light-contrast)
    */
     color: var(--stylo-add-color-hover, var(--light-contrast));
 
     /**
    * @prop --stylo-add-background-color-hover: The hover background-color of the button
-   * @default 0.2rem
    */
-    background-color: var(--stylo-add-background-color-hover, none);
+    background: var(--stylo-add-background-hover);
   }
 }
 

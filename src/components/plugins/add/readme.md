@@ -12,15 +12,15 @@
 
 ## CSS Custom Properties
 
-| Name                                 | Description                                              |
-| ------------------------------------ | -------------------------------------------------------- |
-| `--stylo-add-background-color`       | The background-color of the button @default 0.2rem       |
-| `--stylo-add-background-color-hover` | The hover background-color of the button @default 0.2rem |
-| `--stylo-add-border`                 | The border of the button @default none                   |
-| `--stylo-add-border-radius`          | The border-radius of the button @default 50%             |
-| `--stylo-add-color`                  | The color of the button @default 0.2rem                  |
-| `--stylo-add-color-hover`            | The hover color of the button @default 0.2rem            |
-| `--stylo-add-size`                   | The size of the button @default 1.4rem                   |
+| Name                                 | Description                                                  |
+| ------------------------------------ | ------------------------------------------------------------ |
+| `--stylo-add-background-color`       | The background-color of the button                           |
+| `--stylo-add-background-color-hover` | The hover background-color of the button                     |
+| `--stylo-add-border`                 | The border of the button                                     |
+| `--stylo-add-border-radius`          | The border-radius of the button @default 50%                 |
+| `--stylo-add-color`                  | The color of the button @default var(--medium)               |
+| `--stylo-add-color-hover`            | The hover color of the button @default var(--light-contrast) |
+| `--stylo-add-size`                   | The size of the button @default 1.4rem                       |
 
 ## Dependencies
 
