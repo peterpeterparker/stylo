@@ -10,11 +10,10 @@
 
 ## CSS Custom Properties
 
-| Name                           | Description                                           |
-| ------------------------------ | ----------------------------------------------------- |
-| `--stylo-triangle-background`  | The background-color of the triangle @default --white |
-| `--stylo-triangle-drop-shadow` | drop-shaddow of the triangle @default 2               |
-| `--stylo-triangle-width`       | The width of the triangle @default 2                  |
+| Name                           | Description                             |
+| ------------------------------ | --------------------------------------- |
+| `--stylo-triangle-drop-shadow` | drop-shadow of the triangle             |
+| `--stylo-triangle-width`       | The width of the triangle @default 22px |
 
 ## Dependencies
 

@@ -1,9 +1,7 @@
-@use "../../../themes/overlay";
-
 :host(.top) {
   div.triangle {
     bottom: unset;
-    top: 0px;
+    top: 0;
     transform: rotate(180deg) translate(50%, 100%);
   }
 }
@@ -11,30 +9,27 @@
 div.triangle {
   z-index: 1;
 
+  /**
+   * @prop --stylo-triangle-width: The width of the triangle
+   * @default 22px
+   */
+  --triangle-width: var(--stylo-triangle-width, 22px);
+
   position: absolute;
   width: 0;
   height: 0;
-  bottom: 0px;
-  left: max(var(--stylo-toolbar-triangle-start), calc(var(--stylo-triangle-width, 40px) / 2));
-
-  background: transparent;
-  /**
-   * @prop --stylo-triangle-width: The width of the triangle
-   * @default 2
-   */
-  /**
-   * @prop --stylo-triangle-background: The background-color of the triangle
-   * @default --white
-   */
-  border-left: calc(var(--stylo-triangle-width, 24px) / 2) solid transparent;
-  border-right: calc(var(--stylo-triangle-width, 24px) / 2) solid transparent;
-  border-top: calc(var(--stylo-triangle-width, 24px) / 2) solid
-    var(--stylo-triangle-background, --white);
+  bottom: 0;
+  left: var(--stylo-toolbar-triangle-start);
   transform: translate(-50%, 100%);
 
+  background: transparent;
+
+  border-left: calc(var(--triangle-width) / 2) solid transparent;
+  border-right: calc(var(--triangle-width) / 2) solid transparent;
+  border-top: calc(var(--triangle-width) / 2) solid var(--stylo-background, var(--white));
+
   /**
-   * @prop --stylo-triangle-drop-shadow: drop-shaddow of the triangle
-   * @default 2
+   * @prop --stylo-triangle-drop-shadow: drop-shadow of the triangle
    */
   filter: drop-shadow(var(--stylo-triangle-drop-shadow));
 }
