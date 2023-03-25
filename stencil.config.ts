@@ -19,7 +19,7 @@ export const config: Config = {
     },
     {
       type: 'dist-custom-elements',
-      autoDefineCustomElements: true
+      customElementsExportBehavior: 'auto-define-custom-elements',
     }
   ],
   plugins: [
@@ -33,6 +33,6 @@ export const config: Config = {
   },
   testing: {setupFilesAfterEnv: ['<rootDir>/src/jest-setup.ts']},
   extras: {
-    experimentalImportInjection: true
+    enableImportInjection: true
   }
 };
