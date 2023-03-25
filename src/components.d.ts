@@ -11,6 +11,12 @@ import { StyloPlugin } from "./types/plugin";
 import { StyloConfigToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
 import { ExecCommandAction } from "./types/execcommand";
 import { EventEmitter } from "@stencil/core";
+export { StyloPalette, StyloPaletteColor } from "./types/palette";
+export { StyloConfig } from "./types/config";
+export { StyloPlugin } from "./types/plugin";
+export { StyloConfigToolbar, ToolbarActions, ToolbarAlign, ToolbarAnchorLink, ToolbarFontSize, ToolbarList } from "./types/toolbar";
+export { ExecCommandAction } from "./types/execcommand";
+export { EventEmitter } from "@stencil/core";
 export namespace Components {
     interface StyloAdd {
     }
