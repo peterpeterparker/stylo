@@ -118,7 +118,7 @@ export class Menus implements ComponentInterface {
 
         <stylo-toolbar-triangle
           style={{
-            '--stylo-toolbar-triangle-start': `50%`
+            '--stylo-toolbar-triangle-center': `50%`
           }}></stylo-toolbar-triangle>
       </Host>
     );

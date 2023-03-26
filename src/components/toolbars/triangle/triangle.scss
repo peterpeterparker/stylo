@@ -14,19 +14,21 @@ div.triangle {
    * @default 22px
    */
   --triangle-width: var(--stylo-triangle-width, 22px);
+  --triangle-half-width: calc(var(--triangle-width) / 2);
+  --triangle-start: calc(var(--stylo-toolbar-triangle-center) - var(--triangle-half-width));
 
   position: absolute;
   width: 0;
   height: 0;
   bottom: 0;
-  left: var(--stylo-toolbar-triangle-start);
-  transform: translate(-50%, 100%);
+  left: var(--triangle-start, var(--stylo-toolbar-triangle-start));
+  transform: translate(0, 100%);
 
   background: transparent;
 
-  border-left: calc(var(--triangle-width) / 2) solid transparent;
-  border-right: calc(var(--triangle-width) / 2) solid transparent;
-  border-top: calc(var(--triangle-width) / 2) solid var(--stylo-background, var(--white));
+  border-left: var(--triangle-half-width) solid transparent;
+  border-right: var(--triangle-half-width) solid transparent;
+  border-top: var(--triangle-half-width) solid var(--stylo-background, var(--white));
 
   /**
    * @prop --stylo-triangle-drop-shadow: drop-shadow of the triangle
