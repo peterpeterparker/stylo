@@ -35,6 +35,7 @@
 | `--stylo-toolbar-min-width`               | The width of the toolbar @default 280px                                            |
 | `--stylo-toolbar-separator-background`    | The background of the separator @default #f4f5f8                                   |
 | `--stylo-toolbar-triangle-box-shadow`     | The box-shadow of the triangle @default 0 0 8px 0 rgba(0, 0, 0, 0.1)               |
+| `--stylo-toolbar-triangle-center`         | The center position of the triangle (overwrite --stylo-toolbar-triangle-start)     |
 | `--stylo-toolbar-triangle-start`          | The left position of the triangle @default 8px                                     |
 | `--stylo-toolbar-zindex`                  | The z-Index of the toolbar @default 2                                              |
 
